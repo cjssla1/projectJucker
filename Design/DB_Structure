@@ -1,0 +1,29 @@
+
+DB 이름 : stock
+
+테이블 
+
+이름
+rawData
+구성 요소
+  형식          이름
+str(utf-8)     name     #주식이름
+int            end      #종가
+int            start    #시가
+int            high     #고가
+int            low      #저가
+int            tran     #거래량
+str            day      #날짜
+
+
+
+
+이름
+predictValue
+구성 요소
+  형식          이름
+str(utf-8)      name     #주식이름
+int             exprice  #예측가격
+str             exday    #예측날짜
+
+
