@@ -1,10 +1,13 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import sqlite3
+from inputDB import *
 
 def craw() :
+    db = DBconn()
+    
     url = 'https://finance.naver.com/sise/sise_market_sum.nhn'
-    driver = webdriver.Chrome('C:/Users/w9879/OneDrive/바탕 화면/4학년/캡스톤디자인/chromedriver/chromedriver.exe')
+    driver = webdriver.Chrome('/usr/bin/chromedriver')
+    #driver = webdriver.Chrome('C:/Users/w9879/OneDrive/바탕 화면/4학년/캡스톤디자인/chromedriver/chromedriver')
     driver.get(url)
 
     driver.find_element_by_css_selector('#option4').click()  # 시가총액(억)
@@ -17,8 +20,14 @@ def craw() :
     driver.find_element_by_css_selector('#option21').click() # 상장주식수(천주)
     driver.find_element_by_css_selector('#contentarea_left > div.box_type_m > form > div > div > div > a:nth-child(1) > img').click() # 적용하기
 
-    t_data = []
-    n_data = []
+    t_data = [] # title
+    n_data = [] # number
+    name = ''
+    end = 0
+    start = 0
+    high = 0
+    low = 0
+    tran = 0
 
     for i in range(1, 2) :
         url = 'https://finance.naver.com/sise/sise_market_sum.nhn?&page=' + str(i)
@@ -37,11 +46,17 @@ def craw() :
 
     for i in range(0, len(n_data)) :
         n_data[i] = n_data[i].strip()
+        n_data[i] = n_data[i].replace(",", "")
 
-    print(n_data)
+    
+    for j in range(0, len(t_data)) :
+        name = str(t_data[j])
+        end = int(n_data[j*8])
+        start = int(n_data[j*8+5])
+        high = int(n_data[j*8+6])
+        low = int(n_data[j*8+7])
+        tran = int(n_data[j*8+4])
+        db.insert(name, end, start, high, low, tran)
 
-    con = sqlite3.connect('C:/Users/w9879/OneDrive/바탕 화면/4학년/캡스톤디자인/DB/stock.db')
-    cur = con.cursor()
-
-    print(len(t_data))
-    print(len(n_data))
+if __name__ == "__main__" :
+    craw()
