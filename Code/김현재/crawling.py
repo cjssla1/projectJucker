@@ -45,6 +45,5 @@ j = 0
 for S_name in save_name :
     db.insert(S_name, save_index, j)
     j += 5
-#print(save_name)
-#print(save_index)
+
 driver.quit()
