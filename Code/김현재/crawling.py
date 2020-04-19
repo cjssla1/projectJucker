@@ -1,8 +1,10 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup as bs
 import requests
+from crawlingDB import *
 
-driver = webdriver.Chrome('C:/Users/khj40/Desktop/학교/4학년 1학기/캡스톤디자인/chromedriver')
+#driver = webdriver.Chrome('C:/Users/khj40/Desktop/학교/4학년 1학기/캡스톤디자인/chromedriver')
+driver = webdriver.Chrome('/usr/bin/chromedriver')
 driver.get('https://finance.naver.com/sise/sise_market_sum.nhn?&page=1')
 
 driver.find_element_by_css_selector('#option4').click() # 시가총액(억) 해제
@@ -17,6 +19,8 @@ driver.find_element_by_css_selector('#contentarea_left > div.box_type_m > form >
 
 save_name = []
 save_index = []
+
+db = DB()
 
 for i in range (1, 33, 1) :
     url = driver.get('https://finance.naver.com/sise/sise_market_sum.nhn?&page=' + str(i))
@@ -35,8 +39,12 @@ for i in range (1, 33, 1) :
         if x % 8 >= 1 and x % 8 <= 3 : # 필요없는 지표 제거
             continue
         else :
-            save_index.append(index[x].text)
+            save_index.append(index[x].text.replace(",",""))
 
-print(save_name)
-print(save_index)
+j = 0
+for S_name in save_name :
+    db.insert(S_name, save_index, j)
+    j += 5
+#print(save_name)
+#print(save_index)
 driver.quit()
