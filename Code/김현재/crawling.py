@@ -1,6 +1,7 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup as bs
 import requests
+import time
 from crawlingDB import *
 
 #driver = webdriver.Chrome('C:/Users/khj40/Desktop/학교/4학년 1학기/캡스톤디자인/chromedriver')
@@ -19,6 +20,7 @@ driver.find_element_by_css_selector('#contentarea_left > div.box_type_m > form >
 
 save_name = []
 save_index = []
+day = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
 
 db = DB()
 
@@ -43,7 +45,7 @@ for i in range (1, 33, 1) :
 
 j = 0
 for S_name in save_name :
-    db.insert(S_name, save_index, j)
+    db.insert(S_name, save_index, j, day)
     j += 5
 
 driver.quit()
