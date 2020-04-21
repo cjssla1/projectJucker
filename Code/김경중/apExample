@@ -1,0 +1,39 @@
+cgi을 이용하여 아파치에서 파이썬을 사용하는 방법
+
+1. 아파치 환경 설정을 위해 파일을 연다.
+sudo nano /etc/apache2/sites-enabled/000-default.conf
+
+2. 파일내용의 다음 줄 아래에 다음 내용을 추가한다.
+DocumentRoot /var/www/html 의 아래에
+
+<Directory /var/www/html>
+  AddHandler cgi-script .py
+  Options ExecCGI
+</Directory>
+
+
+/var/www/html 부분은 홈페이지 파일들이 기본적으로 저장되는 루트.
+
+3. 실제 예시
+hello.py (cgi를 통해 py확장자 실행가능)
+
+#!/usr/bin/python3
+#웹에 한글 넣기 위해 필요함
+import sys
+import codecs
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+
+print("content-type:text/html; charset=UTF-8\n")
+print('''<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title> 테스트입니다</title>
+    </head>
+    <body>
+        <p>내용입니다.</p>
+    </body>
+</html>
+''')
+
+html의 내용을 프린트문으로 감싸며 바뀌는 변수는 .format 형식을 이용해 넣어 줄 수 있어 동적 페이지 생성 가능
