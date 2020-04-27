@@ -11,8 +11,8 @@
 	}
 
 	#div_logo{
-	width: 800px;
-	height: 50px;
+	width: 1100px;
+	height: 52px;
 	position: absolute;
 	left: 100px;
 	top: 20px;
@@ -28,6 +28,7 @@
 	top: 20px;
 	background-color:#333;
 	text-align:center;
+
 	}
 
 	#div_RealTimeStockPrice{
@@ -112,6 +113,7 @@
     border-collapse: collapse;
     text-align: left;
     line-height: 1.5;
+	
 
 	}
 	table.type09 thead th {
@@ -136,31 +138,21 @@
 <body>
 	<div id="div_root">
 	<div id="div_logo"> 
-		<a href="main.html">
-		<img src ="logo.jpg" height="50">
+		<a href="main.php">
+		<img src ="logo.jpeg" height="50">
 		</a>
 	</div>
 	<div id="div_menu">
 		<ul>
-		  <li><a href="#home">추천게시판</a></li>
-		  <li><a href="#news">자유게시판</a></li>
+		  <li><a href="RecommendBoard.html">추천게시판</a></li>
+		  <li><a href="board.html">자유게시판</a></li>
 		  <li><a href="#contact">예측 정보</a></li>
-		  <li><a class="active" href="main.html">Home</a></li>
+		  <li><a class="active" href="main.php">Home</a></li>
 		</ul>
 	</div>
 	<div id="div_RealTimeStockPrice">상위 실시간 주가
-		<?php
-		$mysql_host = 'localhost';
-		$mysql_user = 'admin';
-		$mysql_password = '3946';
-		$mysql_db = 'mydb';
-	
-		$conn = mysql_connect($mysql_host,$mysql_user,$mysql_password);
-		$dbconn = mysql_select_db($mysql_db,$conn);
-		mysql_query("set names utf8");
-		$query = select name, current, aggregate, tran from stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC limit 10;
-		$result = mysql_query($query);
- 		<table class="type09">
+		
+ 		<table class="type09" width = "500">
 			<thead>
 			<tr>
 				<th scope="cols">종목명</th>
@@ -170,30 +162,55 @@
 			</tr>
 			</thead>
 			<tbody>
-			while($row = mysql_fetch_array($result)){
-			echo "<tr>";
-			echo	"<td scope="row">" .$row['name']."</td>";
-			echo	"<td>".$row['current']."</td>"
-			echo	"<td>".$row['aggregate']."</td>"
-			echo	"<td>".$row['tran']."</td>"
-			</tr>
+			<?php
+			
+			$conn = mysqli_connect('localhost', 'admin', '3946', 'mydb');
+		
+			
+			$query = "select name, current, aggregate, tran from stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC limit 10";
+			$result = mysqli_query($conn, $query);
+			while($row = mysqli_fetch_array($result)){
+			echo '<tr>';
+			echo '<td scope="row">' .$row['name']. '</td>';
+			echo '<td>' .$row['current']. '</td>';
+			echo '<td>' .$row['aggregate']. '</td>';
+			echo '<td>' .$row['tran']. '</td>';
+			echo '</tr>';
 			}
-			mysql_close($conn);
-			/*
-			<tr>
-				<td scope="row">내용</td>
-				<td>내용</td>
-				<td>내용</td>
-				<td>내용</td>
-			</tr>
-			*/
+			?>
 			
 			</tbody>
 		</table>
-		?>
 	</div>
 	<div id="div_PredictStockPrice">상위 예측 주가</div>
 	<div id="div_PredictRate">예측률</div>
-	<div id="div_jump">급등 종목</div>
+	<div id="div_jump">급등 종목
+		<table class="type09" width = 250>
+			<thead>
+			<tr>
+				<th scope="cols" width = 150>종목명</th>
+				<th scope="cols">등락률</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php
+			
+			$conn = mysqli_connect('localhost', 'admin', '3946', 'mydb');
+		
+			
+			$query = "select name, updown from stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') and updown >= 5 order by updown DESC limit 10";
+			$result = mysqli_query($conn, $query);
+			while($row = mysqli_fetch_array($result)){
+			echo '<tr>';
+			echo '<td scope="row">' .iconv_substr($row['name'], 0, 8). '</td>';
+			echo '<td> +' .$row['updown']. '% </td>';
+			echo '</tr>';
+			}
+			?>
+			
+			</tbody>
+		</table>
+	</div>
 	<div id="div_RecommendBoard">상위 추천게시판</div>
 </body>
+</html>
