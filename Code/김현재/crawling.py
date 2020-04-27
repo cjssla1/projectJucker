@@ -8,7 +8,7 @@ from crawlingDB import *
 driver = webdriver.Chrome('/usr/bin/chromedriver')
 driver.get('https://finance.naver.com/sise/sise_market_sum.nhn?&page=1')
 
-driver.find_element_by_css_selector('#option4').click() # 시가총액(억) 해제
+#driver.find_element_by_css_selector('#option4').click() # 시가총액(억) 해제
 driver.find_element_by_css_selector('#option6').click() # PER(배) 해제
 driver.find_element_by_css_selector('#option7').click() # 시가 선택
 driver.find_element_by_css_selector('#option12').click() # ROE(%) 해제
@@ -31,21 +31,29 @@ for i in range (1, 33, 1) :
 
     name = soup.select('a.tltle') # 종목명
     index = soup.select('td.number') # 종목 지표 
+    
 
+    
     # 종목명 저장
     for key in name :
         save_name.append(key.text)
-    
-    # 현재가, 거래량, 시가, 고가, 저가 저장
+
+    # 현재가, 거래량, 시가, 고가, 저가, 시총 저장
     for x in range (len(index)) :
-        if x % 8 >= 1 and x % 8 <= 3 : # 필요없는 지표 제거
+        data = index[x].text.replace("\n", "")
+        data = data.replace("\t", "")
+        data = data.replace(",", "")
+        data = data.replace("+", "")
+        data = data.replace("%", "")
+        if x % 9 == 1 or x % 9 == 3 : # 필요없는 지표 제거
             continue
         else :
-            save_index.append(index[x].text.replace(",",""))
-
+            save_index.append(data)
+            
 j = 0
+
 for S_name in save_name :
     db.insert(S_name, save_index, j, day)
-    j += 5
+    j += 7
 
 driver.quit()
