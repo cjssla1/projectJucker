@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<title>main.html</title>
+
+	<style>
+	#div_root{
+	margin:auto;
+	width:1100px;
+	}
+
+	#div_logo{
+	width: 1100px;
+	height: 52px;
+	position: absolute;
+	left: 100px;
+	top: 20px;
+	background-color:#000000;
+	text-align:left;
+	}
+
+	#div_menu{
+	width : 500px;
+	height: 50px;
+	position: absolute;
+	left: 700px;
+	top: 20px;
+	background-color:#333;
+	text-align:center;
+
+	}
+
+
+	ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+	}
+	ul:after{
+		content:'';
+		display: block;
+		clear:both;
+	}
+	li {
+		float: right;
+	}
+	li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+	}
+	li a:hover:not(.active) {
+		background-color: #333;
+	}
+	.active {
+		background-color: #4CAF50;
+	}
+	</style>
+</head>
+
+<body>
+	<div id="div_root">
+	<div id="div_logo"> 
+		<a href="main.php">
+		<img src ="logo.jpeg" height="50">
+		</a>
+	</div>
+	<div id="div_menu">
+		<ul>
+		  <li><a class="active" href="RecommendBoard.html">추천게시판</a></li>
+		  <li><a href="board.html">자유게시판</a></li>
+		  <li><a href="#contact">예측 정보</a></li>
+		  <li><a href="main.php">Home</a></li>
+		</ul>
+	</div>
+</body>
+</html>
