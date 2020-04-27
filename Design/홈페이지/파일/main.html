@@ -1,95 +1,199 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<title>main.html</title>
+	<meta charset="utf-8">
+	<title>main.html</title>
 
-<style>
-#div_root{
-margin:auto;
-width:1100px;
-}
+	<style>
+	#div_root{
+	margin:auto;
+	width:1100px;
+	}
 
-#div_logo{
-width: 200px;
-height: 50px;
-position: absolute;
-left: 100px;
-top: 20px;
-background-color:#32a852;
-text-align:center;
-}
+	#div_logo{
+	width: 800px;
+	height: 50px;
+	position: absolute;
+	left: 100px;
+	top: 20px;
+	background-color:#000000;
+	text-align:left;
+	}
 
-#div_menu{
-width : 400px;
-height: 50px;
-position: absolute;
-left: 800px;
-top: 20px;
-background-color:#32a852;
-text-align:center;
-}
+	#div_menu{
+	width : 500px;
+	height: 50px;
+	position: absolute;
+	left: 700px;
+	top: 20px;
+	background-color:#333;
+	text-align:center;
+	}
 
-#div_RealTimeStockPrice{
-width: 500px;
-height: 350px;
-position: absolute;
-left: 100px;
-top: 100px;
-background-color:#fc5151;
-text-align:center;
-}
+	#div_RealTimeStockPrice{
+	width: 500px;
+	height: 350px;
+	position: absolute;
+	left: 100px;
+	top: 100px;
+	background-color:#fc5151;
+	text-align:center;
+	}
 
-#div_PredictStockPrice{
-width: 500px;
-height: 350px;
-position: absolute;
-left: 700px;
-top: 100px;
-background-color:#fc5151;
-text-align:center;
-}
+	#div_PredictStockPrice{
+	width: 500px;
+	height: 350px;
+	position: absolute;
+	left: 700px;
+	top: 100px;
+	background-color:#fc5151;
+	text-align:center;
+	}
 
-#div_PredictRate{
-width: 230px;
-height: 350px;
-position: absolute;
-left: 100px;
-top: 500px;
-background-color:#5157fc;
-text-align:center;
-}
+	#div_PredictRate{
+	width: 230px;
+	height: 350px;
+	position: absolute;
+	left: 100px;
+	top: 500px;
+	background-color:#5157fc;
+	text-align:center;
+	}
 
-#div_jump{
-width: 230px;
-height: 350px;
-position: absolute;
-left: 370px;
-top: 500px;
-background-color:#5157fc;
-text-align:center;
-}
+	#div_jump{
+	width: 230px;
+	height: 350px;
+	position: absolute;
+	left: 370px;
+	top: 500px;
+	background-color:#5157fc;
+	text-align:center;
+	}
 
-#div_RecommendBoard{
-width: 500px;
-height: 350px;
-position: absolute;
-left: 700px;
-top: 500px;
-background-color:#5157fc;
-text-align:center;
-}
+	#div_RecommendBoard{
+	width: 500px;
+	height: 350px;
+	position: absolute;
+	left: 700px;
+	top: 500px;
+	background-color:#5157fc;
+	text-align:center;
+	}
 
-</style>
+	ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+	}
+	ul:after{
+		content:'';
+		display: block;
+		clear:both;
+	}
+	li {
+		float: right;
+	}
+	li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+	}
+	li a:hover:not(.active) {
+		background-color: #333;
+	}
+	.active {
+		background-color: #4CAF50;
+	}
+	
+	table.type09 {
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+
+	}
+	table.type09 thead th {
+		padding: 5px;
+		font-weight: bold;
+		vertical-align: top;
+		color: #369;
+		border-bottom: 3px solid #036;
+		background: #ededed;
+	}
+
+	table.type09 td {
+		width: 100px;
+		padding: 1px;
+		vertical-align: top;
+		border-bottom: 1px solid #ccc;
+		background: #f3f6f7;
+	}
+	</style>
 </head>
 
 <body>
-<div id="div_root">
-<div id="div_logo">로고</div>
-<div id="div_menu">메뉴</div>
-<div id="div_RealTimeStockPrice">상위 실시간 주가</div>
-<div id="div_PredictStockPrice">상위 예측 주가</div>
-<div id="div_PredictRate">예측률</div>
-<div id="div_jump">급등 종목</div>
-<div id="div_RecommendBoard">상위 추천게시판</div>
+	<div id="div_root">
+	<div id="div_logo"> 
+		<a href="main.html">
+		<img src ="logo.jpg" height="50">
+		</a>
+	</div>
+	<div id="div_menu">
+		<ul>
+		  <li><a href="#home">추천게시판</a></li>
+		  <li><a href="#news">자유게시판</a></li>
+		  <li><a href="#contact">예측 정보</a></li>
+		  <li><a class="active" href="main.html">Home</a></li>
+		</ul>
+	</div>
+	<div id="div_RealTimeStockPrice">상위 실시간 주가
+		<?php
+		$mysql_host = 'localhost';
+		$mysql_user = 'admin';
+		$mysql_password = '3946';
+		$mysql_db = 'mydb';
+	
+		$conn = mysql_connect($mysql_host,$mysql_user,$mysql_password);
+		$dbconn = mysql_select_db($mysql_db,$conn);
+		mysql_query("set names utf8");
+		$query = select name, current, aggregate, tran from stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC limit 10;
+		$result = mysql_query($query);
+ 		<table class="type09">
+			<thead>
+			<tr>
+				<th scope="cols">종목명</th>
+				<th scope="cols">현재가</th>
+				<th scope="cols">시가총액</th>
+				<th scope="cols">거래량</th>
+			</tr>
+			</thead>
+			<tbody>
+			while($row = mysql_fetch_array($result)){
+			echo "<tr>";
+			echo	"<td scope="row">" .$row['name']."</td>";
+			echo	"<td>".$row['current']."</td>"
+			echo	"<td>".$row['aggregate']."</td>"
+			echo	"<td>".$row['tran']."</td>"
+			</tr>
+			}
+			mysql_close($conn);
+			/*
+			<tr>
+				<td scope="row">내용</td>
+				<td>내용</td>
+				<td>내용</td>
+				<td>내용</td>
+			</tr>
+			*/
+			
+			</tbody>
+		</table>
+		?>
+	</div>
+	<div id="div_PredictStockPrice">상위 예측 주가</div>
+	<div id="div_PredictRate">예측률</div>
+	<div id="div_jump">급등 종목</div>
+	<div id="div_RecommendBoard">상위 추천게시판</div>
 </body>
