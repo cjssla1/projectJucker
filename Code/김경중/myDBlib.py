@@ -31,35 +31,60 @@ class DBcon:
         sql = "SELECT * FROM rawData"
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
-        print(rows)
 
+         
     #날짜와 개수를 입력받아 해당 날짜와 이전의 개수만큼의 날짜의 데이터를 가져옴
-    #get_learing_data('2020-04-20',3) => 04-17 ~ 04-20 의 데이터 가져옴
+    #get_learing_data('2020-04-20',3) => 04-17 ~ 04-19 의 데이터(5개씩)와 4-20의 데이터(1개) 가져옴
     def get_learing_data(self,date,count):
-
+        
         #해당 날짜의 아이디 값 가져오기
         sql = "SELECT id FROM stockDay WHERE day = '{}'".format(date)
         self.cursor.execute(sql)
         id = self.cursor.fetchone()
-        id = id[0] - 1
+        id = id[0] - count
         
-        #가져온 id부터 앞의 count 개수 만큼의 날들
-        sql = "SELECT day FROM stockDay WHERE id <= {} ORDER BY id DESC".format(id)
+        #가져온 id부터 앞의 count 개수 만큼의 날들 가져오기
+        sql = "SELECT day FROM stockDay WHERE id >= {} ".format(id)
         self.cursor.execute(sql)
         temp = self.cursor.fetchmany(count)
-        target = []
+        days = []
         for e in temp:
-            target.append(e[0])
+            days.append(e[0])
+
+        # 종목명 가져오기
+        sql = "SELECT name FROM rawData WHERE day = '{}'".format(date)
+        self.cursor.execute(sql)
+        temp = self.cursor.fetchall()
+        names = []
+        for e in temp:
+            names.append(e[0])
+
         
-        #타겟에 있는 값들 가져오기
-        ###################3# 이름, 날짜로 묶어서 가져오도록 수정 필요
+        #종목명과 날짜 조건으로 가져오기
         result = []
-        for e in target:
-            sql = "SELECT name,end,start,high,low, tran FROM rawData WHERE day ='{}'".format(e)
+        for i in range(len(names)):
+            
+            # count일 만큼의 정보들 가져옴
+            sql = "SELECT end,start,high,low,tran FROM rawData WHERE "
+            nsql = "name = '{}'".format(names[i])
+            line = [names[i]]
+            #앞 선 요일마다의 데이터 추가
+            for j in days:
+                dsql = "AND day = '{}'".format(j)
+                self.cursor.execute(sql+nsql+dsql)
+                temp = self.cursor.fetchone()
+                if temp != None:
+                    for k in temp:
+                        line.append(k)
+
+            #해당 날짜의 종가 값 추가
+            sql = "SELECT end FROM rawData WHERE day = '{}' AND name = '{}'".format(date,names[i])
             self.cursor.execute(sql)
-            temp = self.cursor.fetchall()
-            for k in temp:
-                result.append(k)
+            dateend = self.cursor.fetchone()
+            dateend = dateend[0]
+            line.append(dateend)
+            result.append(line)
+
         return result
 
 #저장하고 가져오기 예제
