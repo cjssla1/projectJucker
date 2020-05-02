@@ -31,6 +31,7 @@ class DBcon:
         sql = "SELECT * FROM rawData"
         self.cursor.execute(sql)
         rows = self.cursor.fetchall()
+        return rows
 
          
     #날짜와 개수를 입력받아 해당 날짜와 이전의 개수만큼의 날짜의 데이터를 가져옴
