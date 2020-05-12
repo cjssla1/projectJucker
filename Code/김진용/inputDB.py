@@ -12,9 +12,9 @@ class DBconn :
         )
         self.cursor = self.conn.cursor()
     
-    def insert(self, name, end, start, high, low, tran) :
+    def insert(self, name, end, start, high, low, tran, change) :
         day = str(datetime.datetime.now())
-        day = day[0:19]
-        sql = 'INSERT INTO rawData VALUES(\'%s\', %d, %d, %d, %d, %d, \'%s\');' %(name, end, start, high, low, tran, day)
+        day = day[0:10]
+        sql = 'INSERT INTO rawData VALUES(\'%s\', %d, %d, %d, %d, %d, \'%s\', %.2f);' %(name, end, start, high, low, tran, day, change)
         self.cursor.execute(sql)
         self.conn.commit()

@@ -6,8 +6,8 @@ def craw() :
     db = DBconn()
     
     url = 'https://finance.naver.com/sise/sise_market_sum.nhn'
-    driver = webdriver.Chrome('/usr/bin/chromedriver')
-    #driver = webdriver.Chrome('C:/Users/w9879/OneDrive/바탕 화면/4학년/캡스톤디자인/chromedriver/chromedriver')
+    #driver = webdriver.Chrome('/usr/bin/chromedriver')
+    driver = webdriver.Chrome('C:/Users/w9879/OneDrive/바탕 화면/4학년/캡스톤디자인/chromedriver/chromedriver')
     driver.get(url)
 
     driver.find_element_by_css_selector('#option4').click()  # 시가총액(억)
@@ -47,7 +47,6 @@ def craw() :
     for i in range(0, len(n_data)) :
         n_data[i] = n_data[i].strip()
         n_data[i] = n_data[i].replace(",", "")
-
     
     for j in range(0, len(t_data)) :
         name = str(t_data[j])
@@ -56,7 +55,8 @@ def craw() :
         high = int(n_data[j*8+6])
         low = int(n_data[j*8+7])
         tran = int(n_data[j*8+4])
-        db.insert(name, end, start, high, low, tran)
+        change = float(str(n_data[j*8+2]).replace("%", ""))
+        db.insert(name, end, start, high, low, tran, change)
 
 if __name__ == "__main__" :
     craw()
