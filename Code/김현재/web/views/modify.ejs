@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+    <title>main</title>
+    <link rel="stylesheet" href="/../css/board-style.css">
+</head>
+
+<body>
+    <div id="div_root">
+        <div id="div_logo"> 
+            <a href="/">
+            <img src ="/../image/logo.jpeg" height="50">
+            </a>
+        </div>
+        <div id="div_menu">
+            <ul>
+              <li><a href="">추천게시판</a></li>
+              <li><a class="active" href="/board">자유게시판</a></li>
+              <li><a href="">예측 정보</a></li>
+              <li><a href="/">Home</a></li>
+            </ul>
+        </div>
+	<div id="board_area">
+        <h1><a href="/">자유게시판</a></h1>
+        <h4>글을 수정합니다.</h4>
+            <div id="write_area">
+                <form action="modify>" method="post">
+                    <% for(var data of results) { %>
+                    <div id="in_title">
+                        <textarea name="title" id="utitle" rows="1" cols="55" placeholder="제목" maxlength="100" required> <%= data.title %></textarea>
+                    </div>
+                    <div class="wi_line"></div>
+                    <div id="in_name">
+                        <textarea name="name" id="uname" rows="1" cols="55" placeholder="글쓴이" maxlength="100" required></textarea>
+                    </div>
+                    <div class="wi_line"></div>
+                    <div id="in_content">
+                        <textarea name="content" id="ucontent" placeholder="내용" required><%= data.content %></textarea>
+                    </div>
+                    <div id="in_pw">
+                        <input type="password" name="pw" id="upw"  placeholder="비밀번호"> </input>  
+                    </div>
+                    <div class="bt_se">
+                        <button type="submit">글 작성</button>
+                    </div>
+                    <% } %>
+                </form>
+            </div>
+    </div>
+</body>
+</html>

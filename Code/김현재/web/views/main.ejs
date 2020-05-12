@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+	<title>main</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+	<div id="div_root">
+	<div id="div_logo"> 
+		<a href="/">
+		<img src ="image/logo.jpeg" height="50">
+		</a>
+	</div>
+	<div id="div_menu">
+		<ul>
+		  <li><a href="">추천게시판</a></li>
+		  <li><a href="/board">자유게시판</a></li>
+		  <li><a href="">예측 정보</a></li>
+		  <li><a class="active" href="/">Home</a></li>
+		</ul>
+	</div>
+	<div id="div_RealTimeStockPrice">상위 실시간 주가
+		
+ 		<table class="type09">
+			<thead>
+			<tr>
+				<th scope="cols">종목명</th>
+				<th scope="cols">현재가</th>
+				<th scope="cols">시가총액</th>
+				<th scope="cols">거래량</th>
+			</tr>
+			</thead>
+			<tbody>
+                <% for(var data of results) { %>
+                    <tr>
+                        <td scope="row"><%= data.name %> </td>
+                        <td> <%= data.current %> </td>
+                        <td> <%= data.aggregate %> </td>
+                        <td> <%= data.tran %> </td>
+                    </tr>
+                <% } %>
+			</tbody>
+		</table>
+	</div>
+	<div id="div_PredictStockPrice">상위 예측 주가</div>
+	<div id="div_PredictRate">예측률</div>
+	<div id="div_jump">급등 종목</div>
+	<div id="div_RecommendBoard">상위 추천게시판</div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+#div_root{
+	margin:auto;
+	width:1100px;
+	}
+
+	#div_logo{
+	width: 800px;
+	height: 50px;
+	position: absolute;
+	left: 100px;
+	top: 20px;
+	background-color:#000000;
+	text-align:left;
+	}
+
+	#div_menu{
+	width : 500px;
+	height: 50px;
+	position: absolute;
+	left: 700px;
+	top: 20px;
+	background-color:#333;
+	text-align:center;
+	}
+
+	#div_RealTimeStockPrice{
+	width: 500px;
+	height: 350px;
+	position: absolute;
+	left: 100px;
+	top: 100px;
+	background-color:#fc5151;
+	text-align:center;
+	}
+
+	#div_PredictStockPrice{
+	width: 500px;
+	height: 350px;
+	position: absolute;
+	left: 700px;
+	top: 100px;
+	background-color:#fc5151;
+	text-align:center;
+	}
+
+	#div_PredictRate{
+	width: 230px;
+	height: 350px;
+	position: absolute;
+	left: 100px;
+	top: 500px;
+	background-color:#5157fc;
+	text-align:center;
+	}
+
+	#div_jump{
+	width: 230px;
+	height: 350px;
+	position: absolute;
+	left: 370px;
+	top: 500px;
+	background-color:#5157fc;
+	text-align:center;
+	}
+
+	#div_RecommendBoard{
+	width: 500px;
+	height: 350px;
+	position: absolute;
+	left: 700px;
+	top: 500px;
+	background-color:#5157fc;
+	text-align:center;
+	}
+
+	ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+	}
+	ul:after{
+		content:'';
+		display: block;
+		clear:both;
+	}
+	li {
+		float: right;
+	}
+	li a {
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+	}
+	li a:hover:not(.active) {
+		background-color: #333;
+	}
+	.active {
+		background-color: #4CAF50;
+	}
+	
+	table.type09 {
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+
+	}
+	table.type09 thead th {
+		padding: 5px;
+		font-weight: bold;
+		vertical-align: top;
+		color: #369;
+		border-bottom: 3px solid #036;
+		background: #ededed;
+	}
+
+	table.type09 td {
+		width: 100px;
+		padding: 1px;
+		vertical-align: top;
+		border-bottom: 1px solid #ccc;
+		background: #f3f6f7;
+	}

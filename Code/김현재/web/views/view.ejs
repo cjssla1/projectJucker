@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8">
+    <title>main</title>
+    <link rel="stylesheet" href="/../css/board-style.css">
+</head>
+
+<body>
+    <div id="div_root">
+        <div id="div_logo"> 
+            <a href="/">
+            <img src ="/../image/logo.jpeg" height="50">
+            </a>
+        </div>
+        <div id="div_menu">
+            <ul>
+              <li><a href="">추천게시판</a></li>
+              <li><a class="active" href="/board">자유게시판</a></li>
+              <li><a href="">예측 정보</a></li>
+              <li><a href="/">Home</a></li>
+            </ul>
+        </div>
+    
+	<div id="board_area">
+        <% for(var data of results) { %>
+        <h2><%=data.title %></h2>
+		<div id="user_info">
+            <a> 아이디 : <%=data.name %> 등록일 : <%=data.date %> 조회수 : <%=data.hit %></a>
+				<div id="bo_line"></div>
+			</div>
+			<div id="bo_content">
+                <%= data.content%>
+			</div> 
+    <!-- 목록, 수정, 삭제 -->
+    
+	<div id="bo_ser">
+		<ul>
+			<li><a href="/../board">[목록]</a></li>
+			<li><a href="/modify/<%= data.idx %>">[수정]</a></li>
+			<li><a href="/delete/<%= data.idx %>">[삭제]</a></li>
+        </ul>
+    <% } %>
+    </div>
+
+
+
+
+    </div>
+</body>
+</html>

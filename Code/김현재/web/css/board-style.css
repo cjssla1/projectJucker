@@ -1,0 +1,178 @@
+	#div_root{
+	margin:auto;
+	width:1100px;
+	}
+
+	#div_logo{
+	width: 800px;
+	height: 50px;
+	position: absolute;
+	left: 100px;
+	top: 20px;
+	background-color:#000000;
+	text-align:left;
+	}
+
+	#div_menu{
+	width : 500px;
+	height: 50px;
+	position: absolute;
+	left: 700px;
+	top: 20px;
+	background-color:#333;
+	text-align:center;
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		background-color: #000;
+		}
+		ul:after{
+			content:'';
+			display: block;
+			clear:both;
+		}
+		li {
+			float: right;
+		}
+		li a {
+			display: block;
+			color: white;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+		}
+		li a:hover:not(.active) {
+			background-color: #333;
+		}
+		.active {
+			background-color: #4CAF50;
+		}
+
+	a {
+		text-decoration: none;
+		color:#333;
+	}
+	ul li {
+		list-style:none;
+	}
+	
+	/* 공통 */
+	.fl {
+		float:left;
+	}
+	.tc {
+		text-align:center;
+	}
+	
+	/* 게시판 목록 */
+	#board_area {
+		width: 900px;
+		position: absolute;
+		left: 200px;
+		top: 100px;
+	}
+	.list-table {
+		margin-top: 40px;
+	}
+	.list-table thead th{
+		height:40px;
+		border-top:2px solid #09C;
+		border-bottom:1px solid #CCC;
+		font-weight: bold;
+		font-size: 17px;
+	}
+	.list-table tbody td{
+		text-align:center;
+		padding:10px 0;
+		border-bottom:1px solid #CCC; height:20px;
+		font-size: 14px 
+	}
+	#write_btn {
+		position: absolute;
+		margin-top:20px;
+		right: 0;
+	}
+
+	#write_area {
+		margin-top:70px;
+		font-size:14px;}
+	#in_name {
+		margin-top:30px;
+	}
+	#in_name textarea {
+		font-weight:bold;
+		font-size:26px;
+		color:#333;
+		width: 900px;
+		border:none;
+		resize: none;
+	}
+	#in_title {
+		margin-top:30px;
+	}
+	#in_title textarea {
+		font-weight:bold;
+		font-size:26px;
+		color:#333;
+		width: 900px;
+		border:none;
+		resize: none;
+	}
+	.wi_line {
+		border:solid 1px lightgray;
+		margin-top:10px;
+	}
+	#in_content {
+		margin-top:10px;
+	}
+	#in_content textarea {
+		font:14px;
+		color:#333;
+		width: 900px;
+		height: 400px;
+		resize: none;
+	}
+	#in_pw input {
+		font:14px;
+		margin-top:10px;
+	}
+	.bt_se {
+		margin-top:20px;
+		text-align:center;
+	}
+	.bt_se button {
+		width:100px;
+		height:30px;
+	}
+	
+	/* 게시판 read */
+	#user_info {
+		font-size:14px;
+	}
+	#user_info ul li {
+		float:left;
+		margin-left:10px;
+	}
+	#bo_line {
+		width:880px;
+		height:2px;
+		background: gray;
+		margin-top:20px;
+	}
+	#bo_content {
+		margin-top:20px;
+	}
+	#bo_ser {
+		font-size:14px;
+		color:#333;
+		position: absolute;
+		right: 0;
+	}
+	#bo_ser > ul > li {
+		float:left;
+		margin-left:10px;
+	}
+
