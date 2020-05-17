@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Articlelist from './Articlelist';
+import CreateButton from './CreateButton';
 
 class Board extends Component {
 
@@ -12,6 +13,9 @@ class Board extends Component {
         </div>
         <div>
           <Articlelist></Articlelist>
+        </div>
+        <div>
+          <CreateButton></CreateButton>
         </div>
       </div>
     );
