@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Board from './boardpage/Board';
 import Rank from './rankpage/Rank';
 import ReadPage from './boardpage/ReadPage';
+import Create from './boardpage/Create';
+
 class Routes extends Component{
     render(){
         return(
@@ -14,6 +16,7 @@ class Routes extends Component{
             </ul>
             <Route exact path="/rank" component={Rank}></Route>
             <Route exact path="/board" component={Board}></Route>
+            <Route exact path="/board/create" component={Create}></Route>
             <Route exact path="/board/page/:id" component={ReadPage}></Route>
         </Router>
         </div>
