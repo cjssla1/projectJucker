@@ -4,6 +4,7 @@ import Board from './boardpage/Board';
 import Rank from './rankpage/Rank';
 import ReadPage from './boardpage/ReadPage';
 import Create from './boardpage/Create';
+import Update from './boardpage/Update';
 
 class Routes extends Component{
     render(){
@@ -17,7 +18,8 @@ class Routes extends Component{
             <Route exact path="/rank" component={Rank}></Route>
             <Route exact path="/board" component={Board}></Route>
             <Route exact path="/board/create" component={Create}></Route>
-            <Route exact path="/board/page/:id" component={ReadPage}></Route>
+            <Route exact path="/board/read/:id" component={ReadPage}></Route>
+            <Route exact path="/board/update/:id" component={Update}></Route>
         </Router>
         </div>
         );
