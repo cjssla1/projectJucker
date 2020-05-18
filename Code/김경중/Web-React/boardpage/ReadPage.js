@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import CreateButton from './CreateButton';
+import ListButton from './ListButton';
+import DeleteButton from './DeleteButton';
+import UpdateButton from './UpdateButton';
 
 class ReadPage extends Component{
     constructor(props){
@@ -43,6 +47,7 @@ class ReadPage extends Component{
                 <div>내용 :{_content}</div>
                 <div>작성자 :{_author}</div>
                 <div>작성 시간:{_time}</div>
+                <div><ListButton></ListButton><CreateButton></CreateButton><UpdateButton id={_id}></UpdateButton><DeleteButton id={_id}></DeleteButton></div>
             </div>
         )
     }

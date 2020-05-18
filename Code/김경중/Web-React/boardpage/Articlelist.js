@@ -26,7 +26,7 @@ class Articlelist extends Component{
         for(var i =0; i < data.length;i++){
           lists.push(
             <li key={data[i].id}>
-              <Link to={`/board/page/${data[i].id}`}>
+              <Link to={`/board/read/${data[i].id}`}>
                 작성자:{data[i].author}   제목:{data[i].title}         시간:{data[i].time}
               </Link>
             </li>

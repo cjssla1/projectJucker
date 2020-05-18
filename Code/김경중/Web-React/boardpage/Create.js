@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Create extends Component{
     constructor(props){
@@ -13,8 +14,7 @@ class Create extends Component{
     async handleSubmit(e){
         e.preventDefault();
         try{
-            const res = await this.sendtoServer()
-            console.log(res)
+            await this.sendtoServer()
         } catch(err){
             console.error(err)
         }
@@ -40,13 +40,14 @@ class Create extends Component{
         <div className="Create">
           <ul>
             <form method="post" onSubmit={this.handleSubmit.bind(this)}>
-                <p><input type="text" name="title" placehodler="글 제목을 입력해주세요" onChange={function(e){this.setState({title:e.target.value})}.bind(this)}></input></p>
-                <p><input type="text" name="author" placehodler="작성자" onChange={function(e){this.setState({author:e.target.value})}.bind(this)}></input></p>
+                <p><input type="text" name="title" placeholder="글 제목을 입력해주세요" onChange={function(e){this.setState({title:e.target.value})}.bind(this)}></input></p>
+                <p><input type="text" name="author" placeholder="작성자" onChange={function(e){this.setState({author:e.target.value})}.bind(this)}></input></p>
                 <p>
-                    <textarea name ="content" onChange={function(e){this.setState({content:e.target.value})}.bind(this)}></textarea>
+                    <textarea name="content" onChange={function(e){this.setState({content:e.target.value})}.bind(this)}></textarea>
                 </p>
                 <p>
                     <input type="submit" value="등록"></input>
+                    <Link to="/board"><button type="button">취소</button></Link>
                 </p>
             </form>
           </ul>
