@@ -1,0 +1,99 @@
+
+#root {
+    overflow: hidden;
+    min-width: 1190px; 
+    background-color : #f0f1f2;
+}
+
+/* header */
+#header {
+    width: auto;
+    height:70px;
+    padding: 5px;
+    background-color: black;
+}
+
+/* body */
+#container {
+    margin: 2%;
+}
+
+#row {
+    height: auto;
+    padding: 10px;
+}
+
+/* navigation */
+#logo-area {
+    width:150px;
+    height:60px;
+    float: left;
+}
+
+#nav-area {
+    height: 60px;
+    float: right;
+    padding-top: 10px;
+    background-color: black;
+}
+
+.nav-link {
+    text-decoration: none;
+    font-size: 15px;
+    color: white;
+}
+
+.nav-link:hover {
+    color:white;
+    border-bottom: 2px solid white;
+}
+
+/* real time stock price */
+.Real-Time-Stock-Price {
+    width: 550px;
+    height: 100%;
+    display: inline-block;
+    font-size: 12px;
+}
+
+
+.card {
+    /* display: inline-block;*/
+}
+
+
+.card-header {
+    color: white;
+    font-size: 12px;
+}
+
+.card-body {
+    height: 360px;
+}
+.thead-dark {
+    text-align: center;
+}
+
+.price-up {
+    color: red;
+}
+
+.price-down {
+    color: blue;
+}
+
+.table-hover tr:hover td {
+    background-color: #f7abab;
+}
+
+/* predict stock price */
+
+.Predict-Stock-Price {
+    width: 550px;
+    height: 404px;
+    float: right;    
+}
+
+#text-mid {
+    text-align: center;
+}
