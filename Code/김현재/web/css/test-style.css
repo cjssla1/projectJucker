@@ -1,13 +1,14 @@
 
 #root {
-    overflow: hidden;
+    /* overflow: hidden;*/
+    overflow: scroll;
+    width: 100%;
     min-width: 1190px; 
     background-color : #f0f1f2;
 }
 
 /* header */
 #header {
-    width: auto;
     height:70px;
     padding: 5px;
     background-color: black;
@@ -15,12 +16,15 @@
 
 /* body */
 #container {
+    height: auto;
     margin: 2%;
 }
 
 #row {
+    width: 100%;
     height: auto;
-    padding: 10px;
+    display: inline-block;
+    padding: 2%;
 }
 
 /* navigation */
@@ -32,7 +36,6 @@
 
 #nav-area {
     height: 60px;
-    float: right;
     padding-top: 10px;
     background-color: black;
 }
@@ -50,17 +53,11 @@
 
 /* real time stock price */
 .Real-Time-Stock-Price {
-    width: 550px;
+    width: 45%;
     height: 100%;
-    display: inline-block;
+    float: left;
     font-size: 12px;
 }
-
-
-.card {
-    /* display: inline-block;*/
-}
-
 
 .card-header {
     color: white;
@@ -87,13 +84,127 @@
 }
 
 /* predict stock price */
-
 .Predict-Stock-Price {
-    width: 550px;
+    width: 45%;
     height: 404px;
-    float: right;    
+    float: right;
 }
 
 #text-mid {
     text-align: center;
+    font-weight: bold;
+    font-size: 20px;
 }
+
+#select-stock{
+    color: #57a80a;
+    border-bottom: 4px dotted #f7abab;
+}
+
+#select-price{
+    color: #57a80a;
+    border-bottom: 4px dotted #f7abab;
+}
+
+/* sharp rise */
+.Sharp-Rise{
+    width: 25%;
+    height: 100%;
+    float: left;
+    font-size: 12px;
+}
+
+#borad-area{
+    margin: 10px 150px;
+}
+
+/* board */
+
+#thead-blue{
+    background-color: #b8c6ff;
+    text-align: center;
+}
+
+#borad-view-area{
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px 150px;
+    padding: 10px 20px;
+}
+.view-content-header{
+    border-bottom: solid;
+}
+
+.view-content-body{
+    border-bottom: solid;
+}
+
+.board-button{
+    margin: 10px 150px;
+    float: right;
+}
+
+.view-content-foot{
+    height: 80px;
+    margin: 30px 40%;
+    padding-top: 25px;
+    border: solid;
+    border-radius: 10px;
+    border-color: dimgray;
+    border-width: thin;
+    text-align: center;
+}
+
+/* comment */
+
+#comment-area{
+    border-radius: 10px;
+    margin: 10px 150px;
+    padding: 10px 20px;
+    background-color: white;
+}
+
+#comment-header{
+    border-bottom: solid;
+    border-width: thin;
+}
+
+#comment-body{
+    border-bottom: solid;
+    border-width: thin;
+}
+
+#comment-foot{
+    margin-top: 40px;
+}
+
+.comment-user-input-size{
+    height: 25px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.re_content {
+	width:75%;
+	height: 56px; 
+}
+
+.re_bt {
+	position: absolute;
+	width:100px;
+	height:56px;
+	font-size:16px;
+	margin-left: 10px; 
+}
+
+/* recommend-board */
+
+#Recommend-Board{
+    margin-left: 20px;
+    width: 30%;
+    height: 100%;
+    float: left;
+    font-size: 12px;
+}
+
+
