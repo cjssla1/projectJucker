@@ -1,0 +1,25 @@
+
+고객 기본 정보
+CREATE TABLE customer(
+  id VARCHAR(20) NOT NULL,
+  pwd VARCHAR(20) NOT NULL,
+  email VARCHAR(30) NOT NULL,
+  grade CHAR(1) DEFAULT 'A',
+  PRIMARY KEY(id)
+);
+
+
+게시판
+CREATE TABLE board(
+  pageid INT UNSIGNED NOT NULL AUTO_INCREMENT;
+  title TEXT(40),
+  content TEXT,
+  author varchar(20) DEFAULT 'Anomyous',
+  time DATETIME,
+  view INT UNSIGNED,
+  up INT UNSIGNED,
+  down INT UNSIGNED,
+  PRIMARY KEY(pageid)
+);
+
+
