@@ -47,7 +47,6 @@
 					</div>
 				</div>
 			</div>
-			
 			<div class="Predict-Stock-Price">
 				<div class="card">
 					<div class="card-header bg-danger">
@@ -56,19 +55,106 @@
 						</div>
 					</div>
 					<div id= "text-mid" class="card-body" >
-							<span> 삼성전자의 예측주가는</span>
-							<br>
-							<span> xxxxxx 입니다. </span>
+							<span id="select-stock"> 삼성전자</span>
+							<span>예상 주가는</span>
+							<span id="select-price"> xxxxxx </span> 
+							<span>입니다. </span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="row">
+			<div class="Sharp-Rise">
+				<div class="card">
+					<div class="card-header bg-info">
+						<div>
+							<a> 급등 종목 </a>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table id="get-name" class="table table-striped table-hover table-sm">
+								<thead class="thead-dark">
+								<tr>
+									<th scope="cols">종목명</th>
+									<th scope="cols">등락률</th>
+								</tr>
+								</thead>
+								<tbody>
+									<% for(var data of results2) { %>
+										<tr>
+											<td scope="row"><%= data.name %> </td>
+											<% if(data.updown >= 0) { %>
+												<td class="price-up"> +<%= data.updown %>% </td>
+											<% } else { %>
+												<td class="price-down"> <%= data.updown %>% </td> 
+											<% } %>
+											
+										</tr>
+									<% } %>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="Recommend-Board">
+				<div class="card">
+					<div class="card-header bg-success">
+						<div>
+							<a> 화제 게시글 </a>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table id="get-name" class="table table-striped table-hover table-sm">
+
+								<tbody>
+									<% for(var data of results3) { %>
+										<tr>
+											<li ><a style="color:black; font-size: 16px;" href="view/<%=data.idx %>"> <%= data.title %> 
+											<% if(data.cnt_comment != 0) { %>
+												<b style="color: green; font-size: 13px;"> [<%= data.cnt_comment%>]</b>
+											<% } %>
+											</a></li>
+										</tr>
+									<% } %>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		
 	</div>
-
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="get-stock-name.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#get-name tr").click(function(){
+				var tr = $(this);
+				var td = tr.children();
+				var name = td.eq(0).text();
+
+				$.ajax({
+					url: '/',
+					dataType: 'json',
+					type: 'POST',
+					data: {'stock_name': name},
+					success: function(arr) {
+						if (arr){
+							$("#select-stock").html(arr.result[0]);
+							$("#select-price").html(arr.result[1]);
+						}
+					}
+				})	
+				
+			})
+
+		})
+	</script>
 </body>
 </html>

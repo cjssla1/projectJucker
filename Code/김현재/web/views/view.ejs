@@ -1,11 +1,117 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<meta charset="utf-8">
-    <title>main</title>
-    <link rel="stylesheet" href="/../css/board-style.css">
+    <%- include ("head") %>
 </head>
 
+<body id = "root">
+	<%- include ("header") %>
+	<div id="container">
+		<div id="row">
+            <div id="borad-view-area">
+                <div class="view-content-header">
+                <% for(var data of results) { %>
+                    <h2><%=data.title %></h2>
+                    <div style = "font-size : 15px;">
+                        <a> 아이디 : <%=data.name %> | 등록일 : <%=data.time %> | 조회수 : <%=data.hit %> | 추천수 : <%=data.likeno %> </a>  
+                    </div>
+                </div>
+                <div class="view-content-body">
+                    <br></br> 
+                    <%= data.content %>
+                    <br></br>
+                    <% } %>
+                </div>
+                <div class="view-content-foot">
+                    <button type="button" id="up-like" class="btn btn-warning btn-sm" >추천</button>                              
+                    <button type="button" id="down-like" class="btn btn-warning btn-sm" >비추천</button>                  
+                </div>
+            </div>
+            <div class="board-button">
+                <button type="button" onclick= "location.href='/board'" class="btn btn-outline-primary btn-sm">목록</button>
+                <button type="button" onclick= "location.href=''" class="btn btn-outline-primary btn-sm">수정</button>
+                <button type="button" onclick= "location.href=''" class="btn btn-outline-primary btn-sm">삭제</button>
+            </div>
+         </div>
+         <div id="row">
+             <div id="comment-area">
+                
+                <div id="comment-header">
+                    <h3>comment</h3>
+                </div>
+                <% for(var data of results2) { %>
+                <div id="comment-body">
+                    <b><%= data.name %></b> <a href="#"style="color: darkgrey; font-size: 11px;">(<%= data.c_time %>) <a href="#" style="font-size: 11px;">삭제</a></a> 
+                    <blockquote> <a> <%= data.content %> </a> </blockquote>
+                </div>
+                <% } %>
+                <div id="comment-foot">
+                    <form method="post">
+                        <div style="float: left;">
+                        <div>
+                        <input type="text" name="dat_user" id="dat_user" class="comment-user-input-size" size="10" placeholder="아이디" required>
+                        </div>
+                        <div>
+                        <input type="password" name="dat_pw" id="dat_pw" class="comment-user-input-size" size="10" placeholder="비밀번호" required>
+                        </div>
+                        </div>
+                        <textarea name="dat_content" class="re_content" required></textarea>
+                        <button type="submit" id="rep_bt" class="re_bt" >댓글 작성</button>
+                    </form>
+                </div>
+             </div>
+   
+                
+             </div>
+         </div>
+	</div>	
+
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script>
+		$(document).ready(function() {
+			$("#up-like").click(function(){
+                var idx = window.location.pathname.split("/").pop()
+               
+				$.ajax({
+					url: '/view/:idx',
+					dataType: 'json',
+					type: 'POST',
+					data: {'view_idx': idx, 'msg': "up"},
+					success: function(success) {
+						if(success){
+                            alert("추천 완료");
+                        }
+					}
+				})	
+				
+            })
+            $("#down-like").click(function(){
+                var idx = window.location.pathname.split("/").pop()
+				$.ajax({
+					url: '/view/:idx',
+					dataType: 'json',
+					type: 'POST',
+					data: {'view_idx': idx, 'msg': "down"},
+					success: function(success) {
+						if(success){
+                            alert("비추천 완료");
+                        }
+					}
+				})	
+				
+            })
+
+
+
+		})
+	</script>
+</body>
+
+
+<!-- 
 <body>
     <div id="div_root">
         <div id="div_logo"> 
@@ -32,8 +138,7 @@
 			<div id="bo_content">
                 <%= data.content%>
 			</div> 
-    <!-- 목록, 수정, 삭제 -->
-    
+      
 	<div id="bo_ser">
 		<ul>
 			<li><a href="/../board">[목록]</a></li>
@@ -43,9 +148,7 @@
     <% } %>
     </div>
 
-
-
-
     </div>
 </body>
+-->
 </html>
