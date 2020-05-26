@@ -6,7 +6,7 @@ CREATE TABLE customer(
   email VARCHAR(30) NOT NULL,
   grade CHAR(1) DEFAULT 'A',
   PRIMARY KEY(id)
-);
+)DEFAULT CHARSET SET UTF8 COLLATE utf8_general_ci;
 
 
 게시판
@@ -23,7 +23,7 @@ CREATE TABLE board(
   down INT UNSIGNED,
   grade CHAR(1) DEFAULT 'N',
   PRIMARY KEY(pageid)
-);
+)DEFAULT CHARSET SET UTF8 COLLATE utf8_general_ci;
 
 
 댓글
@@ -38,7 +38,7 @@ CREATE TABLE reply(
   up INT UNSIGNED,
   down INT UNSIGNED
   FOREIGN KEY(pageid) REFERENCES board(pageid)
-);
+)DEFAULT CHARSET SET UTF8 COLLATE utf8_general_ci;
 
 대댓글
 CREATE TABLE reply(
@@ -54,5 +54,5 @@ CREATE TABLE reply(
   down INT UNSIGNED,
   FOREIGN KEY(pageid) REFERENCES board(pageid),
   FOREIGN KEY(reid) REFERENCES reply(reid)
-);
+)DEFAULT CHARSET SET UTF8 COLLATE utf8_general_ci;
 
