@@ -3,6 +3,9 @@ const ejs = require("ejs"); // ejs 모듈 요청
 const app = express();  // app을 express 프레임워크로 킨다
 const bodyParser = require('body-parser');
 const mysql = require("mysql");
+const crypto = require('crypto');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 
 const client = mysql.createConnection({
@@ -11,6 +14,7 @@ const client = mysql.createConnection({
     password: "3946",
     database: "mydb"
 });
+
 
 //client.connect();
 //client.query('select name, current from stock;', function(err, rows, fields){
@@ -22,9 +26,20 @@ app.set("view engine", "ejs");  // app에 view engine을 설치, ejs를 템플�
 app.use(express.static(__dirname + '/')); // views 폴더 경로는 프로젝트 폴더.(__dirname이 폴더 위치)
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+    key: 'sid',
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 10 //10분
+    }
+}));
 
 app.get('/', function (req, res){
-    console.log("hello");
+    let session = req.session;
+    console.log(session.email);
     client.query("select name, current, aggregate, tran, updown from stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC limit 10;", function(err, result, fields){
         if (err){
             console.log(err + "error1");
@@ -43,7 +58,8 @@ app.get('/', function (req, res){
                             res.render("main", {
                                 results: result, //실시간 주가 정보
                                 results2: result2, // 급등 종목 정보
-                                results3: result3
+                                results3: result3,
+                                session: session
                             });
                         }
                     })
@@ -78,6 +94,7 @@ app.post('/', function(req, res) {
 
 app.get('/board', function (req, res){
     console.log("hello");
+    let session = req.session;
     
     client.query("select *, date_format(date, '%H:%i') as time from board order by idx desc limit 0,10;", function(err, result, fields){
         if (err){
@@ -91,7 +108,8 @@ app.get('/board', function (req, res){
                 else{
                     res.render("board", {
                         results: result,
-                        results2: result2
+                        results2: result2,
+                        session: session
                     });
                 }
             })
@@ -104,6 +122,7 @@ app.get('/board', function (req, res){
 
 app.get('/recommend-board', function (req, res){
     console.log("hello");
+    let session = req.session;
     
     client.query("select *, date_format(date, '%H:%i') as time from board where likeno >= 3 order by idx desc limit 0,10;", function(err, result, fields){
         if (err){
@@ -117,7 +136,8 @@ app.get('/recommend-board', function (req, res){
                 else{
                     res.render("recommend-board", {
                         results: result,
-                        results2: result2
+                        results2: result2,
+                        session: session
                     });
                 }
             })
@@ -130,6 +150,7 @@ app.get('/recommend-board', function (req, res){
 
 app.get('/view/:idx', function(req, res){
     console.log(req.params.idx);
+    let session = req.session;
        
     client.query("select *, date_format(date, '%Y-%m%-%d %H:%i:%s') as time from board where idx = ?", [req.params.idx], function(err, result, fields){
         if (err){
@@ -143,7 +164,8 @@ app.get('/view/:idx', function(req, res){
                 else {
                     res.render("view", {
                         results: result,
-                        results2: result2
+                        results2: result2,
+                        session: session
                     })
                 }
             })
@@ -230,7 +252,12 @@ app.post('/view/:idx', function(req, res) {
 
 
 app.get('/writer', function (req, res){
-    res.render("writer")
+    let session = req.session;
+
+    res.render("writer", {
+        session : session
+    });
+    //res.render("writer")
 });
 
 app.post('/writer', function (req, res){
@@ -250,13 +277,16 @@ app.post('/writer', function (req, res){
 });
 
 app.get('/modify/:idx', function (req, res){
+    let session = req.session;
+
     client.query("select * from board where idx = ?", [req.params.idx], function(err, result, fields){
         if (err){
             console.log("error5");
         }
         else {
             res.render("modify", {
-                results: result
+                results: result,
+                session: session
             });
         }
     });
@@ -274,13 +304,16 @@ app.post('/modify/:idx', function(req, res){
 });
 
 app.get('/delete/:idx', function (req, res){
+    let session = req.session;
+
     client.query("select * from board where idx = ?", [req.params.idx], function(err, result, fields){
         if (err){
             console.log("error6");
         }
         else {
             res.render("delete", {
-                results: result
+                results: result,
+                session: session
             });
         }
     });
@@ -295,6 +328,77 @@ app.post('/delete/:idx', function(req, res){
         res.redirect("/../board")
     });
 });
+
+app.get('/signup', function(req, res, next) {
+    let session = req.session;
+
+    res.render("signup", {
+        session : session
+    });
+    //res.render("signup");
+})
+
+app.post('/signup', function(req, res, next){
+    let name = req.body.userName;
+    let email = req.body.userEmail;
+    let password = req.body.password;
+
+    let salt = Math.round((new Date().valueOf() * Math.random())) + "";
+    let hashPassword = crypto.createHash("sha512").update(password + salt).digest("hex");
+
+    client.query("insert into users(name, email, password, salt) values (?, ?, ?, ?)", [name, email, hashPassword, salt], function(err, result, fields){
+        if(err){
+            console.log("회원가입" + err);
+        }
+        else {
+            res.redirect("/signup");
+        }
+    });
+});
+
+app.get('/login', function(req, res, next) {
+    let session = req.session;
+
+    res.render("login", {
+        session : session
+    });
+})
+
+app.post('/login', async function(req, res, next) {
+    let body = req.body;
+
+    client.query("select * from users where email = ?", [body.userEmail], function(err, result, fields){
+        if(err){
+            console.log("회원가입" + err);
+        }
+        else {
+            let dbPassword = result[0].password;
+            let inputPassword = body.password;
+            let salt = result[0].salt;
+            let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
+            
+            if (dbPassword === hashPassword){
+                console.log("비밀번호 일치");
+                req.session.email = body.userEmail;
+                req.session.save(function() {
+                    res.redirect("/");
+                })
+                //res.redirect("/");
+            }
+            else {
+                console.log("비밀번호 불일치");
+                res.redirect("/login");
+            }
+            //res.redirect("/header");
+        }
+    });
+})
+
+app.get("/logout", function(req,res,next){
+    req.session.destroy(function(err){});
+    res.clearCookie('sid');
+    res.redirect("/")
+  })
 
 app.listen(3000, function(){
     console.log("실행중");
