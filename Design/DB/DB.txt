@@ -11,7 +11,7 @@ CREATE TABLE customer(
 
 게시판
 CREATE TABLE board(
-  pageid INT UNSIGNED NOT NULL AUTO_INCREMENT;
+  pageid INT UNSIGNED NOT NULL AUTO_INCREMENT,
   title TEXT(40),
   content TEXT,
   author varchar(20) DEFAULT 'Anomyous',
