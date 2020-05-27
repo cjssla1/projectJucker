@@ -14,7 +14,7 @@ CREATE TABLE customer(
 CREATE TABLE conform(
   email VARCHAR(30) NOT NULL,
   code CHAR(6) NOT NULL,
-  PRIMARY KEY(email)
+  time DATETIME
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 게시판
