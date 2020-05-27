@@ -1,6 +1,8 @@
 데이터베이스 이름
 WEB
 
+
+
 고객 기본 정보
 CREATE TABLE customer(
   id VARCHAR(20) NOT NULL,
@@ -10,6 +12,7 @@ CREATE TABLE customer(
   PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
+
 회원가입 인증
 CREATE TABLE conform(
   email VARCHAR(30) NOT NULL,
@@ -17,10 +20,17 @@ CREATE TABLE conform(
   time DATETIME
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
+
+
+
+
+
+
+
 게시판
 CREATE TABLE board(
   pageid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  title TEXT(40),
+  title TEXT(100),
   content TEXT,
   author varchar(20) DEFAULT 'Anomyous',
   id VARCHAR(20),
@@ -41,12 +51,13 @@ CREATE TABLE reply(
   author VARCHAR(30) DEFAULT 'Anomyous',
   id VARCHAR(20),
   pwd VARCHAR(30),
-  content TEXT(255),
+  content TEXT(300),
   time DATETIME,
   up INT UNSIGNED,
   down INT UNSIGNED,
   FOREIGN KEY(pageid) REFERENCES board(pageid),
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
+
 
 대댓글
 CREATE TABLE rereply(
@@ -56,7 +67,7 @@ CREATE TABLE rereply(
   author VARCHAR(30) DEFAULT 'Anomyous',
   id VARCHAR(20),
   pwd VARCHAR(30),
-  content TEXT(255),
+  content TEXT(300),
   time DATETIME,
   up INT UNSIGNED,
   down INT UNSIGNED,
@@ -65,10 +76,15 @@ CREATE TABLE rereply(
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 
+
+
+
+
+
 금융 정보
 CREATE TABLE finfo(
   pageid INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  title TEXT(40),
+  title TEXT(100),
   content TEXT,
   author varchar(20) DEFAULT 'Administrator',
   time DATETIME,
@@ -77,3 +93,38 @@ CREATE TABLE finfo(
   PRIMARY KEY(pageid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
+
+
+
+
+
+
+주식 종목 정보
+CREATE TABLE stock(
+  symbol CHAR(6),
+  name VARCHAR(40) NOT NULL,
+  PRIMARY KEY(symbol)
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
+
+
+주식 데이터 하루하루
+CREATE TABLE stockdata(
+  symbol CHAR(6),
+  start INT,
+  high INT,
+  low INT,
+  end INT,
+  tran INT,
+  change FLOAT,
+  date DATE,
+  PRIMARY KEY(symbol)
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
+
+
+주식 예측 정보
+CREATE TABLE stockpredict(
+  symbol CHAR(6),
+  value INT,
+  type CHAR(1),
+  PRIMARY KEY(symbol)
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
