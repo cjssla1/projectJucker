@@ -10,6 +10,12 @@ CREATE TABLE customer(
   PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
+회원가입 인증
+CREATE TABLE conform(
+  email VARCHAR(30) NOT NULL,
+  code CHAR(6) NOT NULL,
+  PRIMARY KEY(email)
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 게시판
 CREATE TABLE board(
@@ -38,12 +44,12 @@ CREATE TABLE reply(
   content TEXT(255),
   time DATETIME,
   up INT UNSIGNED,
-  down INT UNSIGNED
-  FOREIGN KEY(pageid) REFERENCES board(pageid)
+  down INT UNSIGNED,
+  FOREIGN KEY(pageid) REFERENCES board(pageid),
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 대댓글
-CREATE TABLE reply(
+CREATE TABLE rereply(
   pageid INT,
   reid INT UNSIGNED,
   rereid INT UNSIGNED,
@@ -56,5 +62,18 @@ CREATE TABLE reply(
   down INT UNSIGNED,
   FOREIGN KEY(pageid) REFERENCES board(pageid),
   FOREIGN KEY(reid) REFERENCES reply(reid)
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
+
+
+금융 정보
+CREATE TABLE finfo(
+  pageid INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title TEXT(40),
+  content TEXT,
+  author varchar(20) DEFAULT 'Administrator',
+  time DATETIME,
+  view INT UNSIGNED,
+  grade CHAR(1) DEFAULT 'N',
+  PRIMARY KEY(pageid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
