@@ -55,7 +55,7 @@ CREATE TABLE reply(
   time DATETIME,
   up INT UNSIGNED,
   down INT UNSIGNED,
-  FOREIGN KEY(pageid) REFERENCES board(pageid),
+  FOREIGN KEY(reid) REFERENCES board(pageid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 
@@ -71,8 +71,8 @@ CREATE TABLE rereply(
   time DATETIME,
   up INT UNSIGNED,
   down INT UNSIGNED,
-  FOREIGN KEY(pageid) REFERENCES board(pageid),
-  FOREIGN KEY(reid) REFERENCES reply(reid)
+  FOREIGN KEY(reid) REFERENCES board(pageid),
+  FOREIGN KEY(rereid) REFERENCES reply(reid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 
@@ -115,8 +115,8 @@ CREATE TABLE stockdata(
   low INT,
   end INT,
   tran INT,
-  change FLOAT,
-  date DATE,
+  camount FLOAT(10),
+  day DATE,
   PRIMARY KEY(symbol)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
