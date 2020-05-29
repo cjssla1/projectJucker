@@ -128,3 +128,56 @@ CREATE TABLE stockpredict(
   type CHAR(1),
   PRIMARY KEY(symbol)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
+
+
+
+
+
+모의 투자 과거 정보
+CREATE TABLE history(
+  id VARCHAR(20) NOT NULL,
+  season INT,
+  smoney INT,
+  emoney INT,
+  ratio FLOAT(10),
+  ranking INT,
+  PRIMARY KEY(id)
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
+
+
+모의 투자 현재 회차 내 정보
+CREATE TABLE myinfo(
+  id VARCHAR(20) NOT NULL,
+  season INT,
+  smoney INT,
+  balance INT,
+  total INT,
+  ratio FLOAT(10),
+  emoney INT,
+  ranking INT,
+  PRIMARY KEY(id)
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
+
+
+모의 투자 현재 회차 소유주
+CREATE TABLE having(
+  id VARCHAR(20) NOT NULL,
+  season INT NOT NULL,
+  symbol CHAR(6),
+  share INT,
+  num INT,
+  total INT
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
+
+
+모의 투자 거래
+CREATE TABLE transaction(
+  id VARCHAR(20) NOT NULL,
+  season INT NOT NULL,
+  symbol CHAR(6)
+  share INT,
+  num INT,
+  total INT,
+  time DATETIME,
+  type CHAR(1)
+) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
