@@ -35,10 +35,10 @@ CREATE TABLE board(
   author varchar(20) DEFAULT 'Anomyous',
   id VARCHAR(20),
   pwd VARCHAR(30),
-  time DATETIME,
-  view INT UNSIGNED,
-  up INT UNSIGNED,
-  down INT UNSIGNED,
+  time DATETIME DEFAULT NOW(),
+  view INT UNSIGNED DEFAULT 0,
+  up INT UNSIGNED DEFAULT 0,
+  down INT UNSIGNED DEFAULT 0,
   grade CHAR(1) DEFAULT 'N',
   PRIMARY KEY(pageid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
@@ -52,9 +52,9 @@ CREATE TABLE reply(
   id VARCHAR(20),
   pwd VARCHAR(30),
   content TEXT(300),
-  time DATETIME,
-  up INT UNSIGNED,
-  down INT UNSIGNED,
+  time DATETIME DEFAULT NOW(),
+  up INT UNSIGNED DEFAULT 0,
+  down INT UNSIGNED DEFAULT 0,
   FOREIGN KEY(reid) REFERENCES board(pageid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
@@ -68,9 +68,9 @@ CREATE TABLE rereply(
   id VARCHAR(20),
   pwd VARCHAR(30),
   content TEXT(300),
-  time DATETIME,
-  up INT UNSIGNED,
-  down INT UNSIGNED,
+  time DATETIME DEFAULT NOW(),
+  up INT UNSIGNED DEFAULT 0,
+  down INT UNSIGNED DEFAULT 0,
   FOREIGN KEY(reid) REFERENCES board(pageid),
   FOREIGN KEY(rereid) REFERENCES reply(reid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
