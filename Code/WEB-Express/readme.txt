@@ -9,8 +9,11 @@ Backend
       ㄴwww
   ㄴnode_modules.d
   ㄴpublic.d
+  ㄴlib.d
+      ㄴpassport.js
   ㄴroutes.d
       ㄴboard.js
+      ㄴauth.js
       ㄴindex.js
   ㄴviews.d
       ㄴboardhtml.js
