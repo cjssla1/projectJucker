@@ -8,13 +8,9 @@ const bodyparser = require('body-parser');
 
 const session = require('express-session');
 const mysqlStore = require('express-mysql-session');
+var flash = require('connect-flash');
 
 const app = express();
-
-// 라우터 가져오기
-const indexRouter = require('./routes/index');
-const boardRouter = require('./routes/board');
-const authRouter = require('./routes/auth');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,10 +35,25 @@ app.use(session({//세션 저장
     database:'WEB'
   })
 }))
+app.use(flash());
+var passport = require('./lib/passport')(app);
+
+
+// 라우터 가져오기
+const indexRouter = require('./routes/index');
+const boardRouter = require('./routes/board');
+var authRouter = require('./routes/auth')(passport);
+
+var isAuthenticated = function(req,res,next){
+  if(req.isAuthenticated())
+      return next();
+  res.redirect('/auth/login');
+};
+
 // 라우터 사용
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/board', boardRouter);
+app.use('/board',isAuthenticated, boardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
