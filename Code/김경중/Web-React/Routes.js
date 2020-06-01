@@ -5,16 +5,51 @@ import Rank from './rankpage/Rank';
 import ReadPage from './boardpage/ReadPage';
 import Create from './boardpage/Create';
 import Update from './boardpage/Update';
+import Login from './authpage/Login';
+import Signup from './authpage/Signup';
+
 
 class Routes extends Component{
+
+    constructor(props){
+        super(props);
+        this.state ={
+          session:null
+        };
+      }
+      componentDidMount(){
+        fetch('/auth')
+          .then(res=>res.json())
+          .then(data=>{
+            console.log(data)
+            this.setState({
+              session:data
+            })
+          })
+      }
+
     render(){
+        var auth1 = ''
+        var auth2 = ''
+        if(this.state.session){
+            auth1 = this.state.session.id
+            auth2 = <Link to="/auth/logout">LogOut</Link>
+        } else{
+            auth1 = <Link to="/auth/login">Login</Link>
+            auth2 = <Link to="/auth/signup">SignUp</Link>
+        }
+
         return(
         <div className="Routes">
         <Router>
-            <ul>
-                <li><Link to="/rank">주식랭킹</Link></li>
-                <li><Link to="/board">게시판</Link></li>
-            </ul>
+            <div><Link to="/">홈페이지</Link></div>
+            <div>{auth1}</div>
+            <div>{auth2}</div>
+            <div><Link to="/rank">주식랭킹</Link></div>
+            <div><Link to="/board">게시판</Link></div>
+            
+            <Route exact path="/auth/login" component={Login}></Route>
+            <Route exact path="/auth/signup" component={Signup}></Route>
             <Route exact path="/rank" component={Rank}></Route>
             <Route exact path="/board" component={Board}></Route>
             <Route exact path="/board/create" component={Create}></Route>
