@@ -38,7 +38,6 @@ class Create extends Component{
       
       return (
         <div className="Create">
-          <ul>
             <form method="post" onSubmit={this.handleSubmit.bind(this)}>
                 <p><input type="text" name="title" placeholder="글 제목을 입력해주세요" onChange={function(e){this.setState({title:e.target.value})}.bind(this)}></input></p>
                 <p><input type="text" name="author" placeholder="작성자" onChange={function(e){this.setState({author:e.target.value})}.bind(this)}></input></p>
@@ -50,7 +49,6 @@ class Create extends Component{
                     <Link to="/board"><button type="button">취소</button></Link>
                 </p>
             </form>
-          </ul>
         </div>
       );
     }
