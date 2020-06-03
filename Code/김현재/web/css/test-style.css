@@ -119,8 +119,8 @@
 
 /* board */
 
-#thead-blue{
-    background-color: darkorange;
+#thead-success{
+    background-color: #28a745;;
     text-align: center;
 }
 
@@ -131,7 +131,6 @@
     padding: 10px 20px;
 }
 .view-content-header{
-    border-bottom: solid;
 }
 
 .view-content-body{
@@ -139,7 +138,7 @@
 }
 
 .board-button{
-    margin: 10px 150px;
+    margin-top: 30px; 
     float: right;
 }
 
@@ -148,27 +147,48 @@
     margin: 30px 40%;
     padding-top: 25px;
     border: solid;
-    border-radius: 10px;
-    border-color: dimgray;
+    border-radius: 30px;
+    border-color: #fff6ba;
     border-width: thin;
     text-align: center;
+    background-color: #fff6ba;
+}
+
+#view-table-border{
+    margin-top: 30px;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+
+#view-table-border > thead > tr{
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+#view-table-border > thead > td{
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
 }
 
 /* comment */
 
 #comment-area{
     border-radius: 10px;
-    margin: 10px 150px;
+    margin: 30px 150px;
+    margin-top: 100px;
     padding: 10px 20px;
     background-color: white;
 }
 
 #comment-header{
+    margin-top: 30px;
     border-bottom: solid;
     border-width: thin;
 }
 
 #comment-body{
+    margin: 15px 2px;
     border-bottom: solid;
     border-width: thin;
 }
@@ -207,3 +227,90 @@
 }
 
 
+/* login */
+
+#login-area{
+    margin-top: 100px;
+    margin-left: 300px;
+}
+
+.id{
+    width:300px;
+    height: 40px;
+    margin-top: 50px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.pw{
+    width:300px;
+    height: 40px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+.btn-info{
+    margin-top: 30px;
+    margin-bottom: 10px;
+    width: 300px;
+    height:50px;
+    background-color: skyblue;
+}
+
+.logo-title{
+    margin: 0% 23%;
+    font-size: 70px;
+}
+
+/* signup */
+
+#signup-area{
+    margin: 10% 40%;
+}
+
+.sign-id{
+    width:300px;
+    height: 40px;
+    margin-bottom: 30px;
+    margin-right: 10px;
+}
+
+.sign-pw{
+    width:300px;
+    height: 40px;
+    margin-bottom: 30px;
+    margin-right: 10px;
+}
+
+.sign-email{
+    width:300px;
+    height: 40px;
+    margin-bottom: 30px;
+    margin-right: 10px;
+}
+
+/* writer */
+
+#writer-area{
+    background-color: white;
+    padding: 40px;
+    margin: 30px 180px;
+    border: double black;
+}
+
+.write-user-info{
+    margin-bottom: 15px;
+}
+
+.in-title{
+    margin-bottom: 15px;
+}
+
+.in-content{
+    margin-bottom: 15px;
+}
+
+.write-bt{
+    float: right;
+    margin-right: 0px;
+}
