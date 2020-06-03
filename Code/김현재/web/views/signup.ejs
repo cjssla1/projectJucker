@@ -8,9 +8,26 @@
 	<%- include ("header") %>
 	<div id="container">
 		<div id="row">
-            <div id="borad-area">
-                <h3>회원 가입</h3>
+            <div id="signup-area">
                 <form action="/signup" method="post">
+                    <div style="float: left;">
+                        <b> 아이디</b>
+                        <div>
+                            <input class="sign-id" type="text" name="userName">
+                        </div>
+                        <b> 이메일 </b>
+                        <div>
+                            <input class="sign-email" type="text" name="userEmail">
+                        </div>
+                        <b> 비밀번호 </b>
+                        <div>
+                            <input class="sign-pw" type="password" name="password">
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-info" type="submit" > 회원가입 </button>
+                        </div>
+                    </div>
+                    <!--
                     <table>
                         <tr>
                             <td>이름 : </td>
@@ -28,6 +45,7 @@
                             <td><input type="submit" value="회원가입"></td>
                         </tr>
                     </table>
+                    -->
                 </form>
             </div>
 		</div>	

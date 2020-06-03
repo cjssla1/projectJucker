@@ -8,9 +8,24 @@
 	<%- include ("header") %>
 	<div id="container">
 		<div id="row">
-            <div id="borad-area">
-                <h3>로그인</h3>
+            <div id="login-area">
+                <b class="logo-title">JUCKER</b>
                 <form action="/login" method="post">
+                    <div style="float: left;">
+                        <div>
+                            <input class="id" type="text" name="userEmail" placeholder="아이디" required >
+                        </div>
+                        <div>
+                            <input class="pw" type="password" name="password" size="30" height="50" placeholder="비밀번호" required>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-info" type="submit" >로그인 </button>
+                        </div>
+                        <div>
+                            <a href='/signup'> 회원가입 </a>
+                        </div>
+                    </div>
+                    <!--
                     <table>
                         <tr>
                             <td>이메일 : </td>
@@ -24,8 +39,8 @@
                             <td><input type="submit" value="로그인"></td>
                         </tr>
                     </table>
+                -->
                 </form>
-                <button onclick= "location.href='/signup'"> 회원가입 </button>
             </div>
 		</div>	
 	</div>

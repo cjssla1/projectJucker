@@ -10,7 +10,32 @@
 		<div id="row">
             <div id="borad-view-area">
                 <div class="view-content-header">
-                <% for(var data of results) { %>
+                    <% for(var data of results) { %>
+                    <table id="view-table-border" class="table">
+                        <thead>
+                            <tr>
+                                <td colspan="8" style="text-align: center; font-weight: bold; background-color: #f7f7f7;"><%=data.title %></td>
+                            </tr>
+                            <tr style="text-align: center; font-size: 13px;" height="5">
+                                <td class="table-secondary">아이디</td>
+                                <td><%=data.name %></td>
+                                <td class="table-secondary">작성일</td>
+                                <td><%=data.time %></td>
+                                <td class="table-secondary">조회수</td>
+                                <td><%=data.hit %></td>
+                                <td class="table-secondary">추천수</td>
+                                <td><%=data.likeno %></td>
+      
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td colspan="8" style="padding: 70px 10px;"><%= data.content %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- 
                     <h2><%=data.title %></h2>
                     <div style = "font-size : 15px;">
                         <a> 아이디 : <%=data.name %> | 등록일 : <%=data.time %> | 조회수 : <%=data.hit %> | 추천수 : <%=data.likeno %> </a>  
@@ -22,6 +47,7 @@
                     <br></br>
                     <% } %>
                 </div>
+                -->
                 <div class="view-content-foot">
                     <button type="button" id="up-like" class="btn btn-warning btn-sm" >추천</button>                              
                     <button type="button" id="down-like" class="btn btn-warning btn-sm" >비추천</button>                  
@@ -33,16 +59,15 @@
                 <button type="button" onclick= "location.href=''" class="btn btn-outline-primary btn-sm">삭제</button>
             </div>
          </div>
-         <div id="row">
+         
              <div id="comment-area">
                 
                 <div id="comment-header">
-                    <h3>comment</h3>
                 </div>
                 <% for(var data of results2) { %>
                 <div id="comment-body">
-                    <b><%= data.name %></b> <a href="#"style="color: darkgrey; font-size: 11px;">(<%= data.c_time %>) <a href="#" style="font-size: 11px;">삭제</a></a> 
-                    <blockquote> <a> <%= data.content %> </a> </blockquote>
+                    <b><%= data.name %></b> <a style="color: darkgrey; font-size: 11px;">(<%= data.c_time %>) <a href="#" style="font-size: 11px;">삭제</a></a> 
+                    <blockquote style="margin: 25px 0px;"> <a> <%= data.content %> </a> </blockquote>
                 </div>
                 <% } %>
                 <div id="comment-foot">
@@ -56,14 +81,14 @@
                         </div>
                         </div>
                         <textarea name="dat_content" class="re_content" required></textarea>
-                        <button type="submit" id="rep_bt" class="re_bt" >댓글 작성</button>
+                        <button type="submit" id="rep_bt" class="btn btn-dark re_bt" >댓글 작성</button>
                     </form>
                 </div>
              </div>
    
                 
              </div>
-         </div>
+         
 	</div>	
 
 	

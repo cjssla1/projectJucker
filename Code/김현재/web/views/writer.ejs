@@ -1,11 +1,41 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<meta charset="utf-8">
-    <title>main</title>
-    <link rel="stylesheet" href="css/board-style.css">
+    <%- include ("head") %>
 </head>
 
+<body id = "root">
+	<%- include ("header") %>
+	<div id="container">
+		<div id="row">
+            <div id="writer-area">      
+                <form action="writer" method="post">
+                    <div class="write-user-info">
+                            <input name="name" id="uname" placeholder="아이디" maxlength="100" required />
+                            <input type="password" name="pw" id="upw"  placeholder="비밀번호" required />  
+                    </div>
+                    <div class="in-title">
+                        <input name="title" id="utitle" placeholder="제목" maxlength="100" style="width: 800px;" required />
+                    </div>
+                    <div class="in-content">
+                         <input name="content" id="ucontent" placeholder="내용" style="width: 800px; height: 800px;" required/>
+                    </div>
+                    <div class="write-bt">
+                        <button class="btn btn-success" type="submit">글 작성</button>
+                    </div>
+                </form>
+            </div>
+        </div>     
+	</div>	
+
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+</body>
+
+<!--
 <body>
     <div id="div_root">
         <div id="div_logo"> 
@@ -47,5 +77,5 @@
                 </form>
             </div>
     </div>
-</body>
+</body> -->
 </html>
