@@ -22,7 +22,7 @@ module.exports = function (app) {
 
     passport.use(new LocalStrategy({
             usernameField: 'id',
-            passwordField: 'pwd'
+            passwordField: 'password'
         },
         function (username, password, done) {
             if (username === authData.id) {

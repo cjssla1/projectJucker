@@ -44,16 +44,10 @@ const indexRouter = require('./routes/index');
 const boardRouter = require('./routes/board');
 var authRouter = require('./routes/auth')(passport);
 
-var isAuthenticated = function(req,res,next){
-  if(req.isAuthenticated())
-      return next();
-  res.redirect('/auth/login');
-};
-
 // 라우터 사용
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/board',isAuthenticated, boardRouter);
+app.use('/board', boardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

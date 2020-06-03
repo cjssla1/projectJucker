@@ -4,36 +4,25 @@ const router = express.Router();
 /* GET home page. */
 
 module.exports = function (passport) {
-  router.get('/login', function (request, response) {
+  
+  router.get('/error', function (request, response) {
     var fmsg = request.flash();
-    var feedback = '';
+    var feedback = null
     if (fmsg.error) {
       feedback = fmsg.error[0];
     }
-
-    var output = `
-      <h1>Login Page</h1>
-      <div style="color:red;">${feedback}</div>
-      <form action="/auth/login_process" method="post">
-        <p><input type="text" name="id" placeholder="ID"></p>
-        <p><input type="password" name="pwd" placeholder="password"></p>
-        <p>
-          <input type="submit" value="login">
-        </p>
-      </form>
-    `;
-    response.send(output);
+    response.json(feedback);
   });
+  
 
   router.post('/login_process',
     passport.authenticate('local', {
       successRedirect: '/',
       failureRedirect: '/auth/login',
-      failureFlash: true,
-      successFlash: true
+      failureFlash: true
     }));
 
-  router.get('/logout', function (request, response) {
+  router.post('/logout', function (request, response) {
     request.logout();
     request.session.save(function () {
       response.redirect('/');
@@ -41,7 +30,7 @@ module.exports = function (passport) {
   });
 
   router.get('/', function (request, response) {
-    var user = 'none';
+    var user = null
     if(request.user){
       user = request.user
     }
