@@ -7,6 +7,7 @@ import Create from './boardpage/Create';
 import Update from './boardpage/Update';
 import Login from './authpage/Login';
 import Signup from './authpage/Signup';
+import LogoutButton from './authpage/LogoutButton';
 
 
 class Routes extends Component{
@@ -33,7 +34,7 @@ class Routes extends Component{
         var auth2 = ''
         if(this.state.session){
             auth1 = this.state.session.id
-            auth2 = <Link to="/auth/logout">LogOut</Link>
+            auth2 = <LogoutButton></LogoutButton>
         } else{
             auth1 = <Link to="/auth/login">Login</Link>
             auth2 = <Link to="/auth/signup">SignUp</Link>
