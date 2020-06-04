@@ -5,17 +5,38 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const compression = require('compression');
 const bodyparser = require('body-parser');
-
+//auth 
 const session = require('express-session');
 const mysqlStore = require('express-mysql-session');
 var flash = require('connect-flash');
-
+//DB
+const mysql = require('mysql2/promise');
+const db = mysql.createPool({
+    host      : 'localhost',
+    user      : 'admin',
+    password  : '1234',
+    database  : 'WEB',
+    waitForConnections: true,
+    connectionLimit: 10,
+});
+/*
+const db = mysql.createPool({
+  host      : 'jukerdb.cwhsnjoqybdo.ap-northeast-2.rds.amazonaws.com',
+  user      : 'admin',
+  password  : ,
+  database  : ,
+  port      : ,
+  waitForConnections: true,
+  connectionLimit: 10,
+});
+*/
 const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+//미들 웨어
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -36,13 +57,13 @@ app.use(session({//세션 저장
   })
 }))
 app.use(flash());
-var passport = require('./lib/passport')(app);
+var passport = require('./lib/passport')(app,db);
 
 
 // 라우터 가져오기
 const indexRouter = require('./routes/index');
-const boardRouter = require('./routes/board');
-var authRouter = require('./routes/auth')(passport);
+const boardRouter = require('./routes/board')(db);
+var authRouter = require('./routes/auth')(passport,db);
 
 // 라우터 사용
 app.use('/', indexRouter);

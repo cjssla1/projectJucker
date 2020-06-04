@@ -1,10 +1,10 @@
-module.exports = function (app) {
 
-    var authData = {
-        id: 'hi',
-        password: '1234',
-        nickname: 'gyeong'
-      };
+
+module.exports = function (app,db) {
+
+    var authData ={
+        nickname:null
+    }
 
     var passport = require('passport'),
         LocalStrategy = require('passport-local').Strategy;
@@ -13,7 +13,7 @@ module.exports = function (app) {
     app.use(passport.session());
 
     passport.serializeUser(function (user, done) {
-        done(null, user.id);
+        done(null, user.nickname);
     });
 
     passport.deserializeUser(function (id, done) {
@@ -24,20 +24,23 @@ module.exports = function (app) {
             usernameField: 'id',
             passwordField: 'password'
         },
-        function (username, password, done) {
-            if (username === authData.id) {
-                if (password === authData.password) {
+        async function (username, password, done) {
+            const sel = await db.execute(`SELECT id, pwd FROM customer WHERE id = ?`,[username])
+            
+            if(sel[0][0] != undefined){
+                authData.nickname = sel[0][0].id
+                if(password === sel[0][0].pwd){
                     return done(null, authData, {
                         message: 'Welcome.'
                     });
-                } else {
+                }else{
                     return done(null, false, {
-                        message: 'Incorrect password.'
+                        message: '잘못된 비밀번호입니다.'
                     });
                 }
-            } else {
-                return done(null, false, {
-                    message: 'Incorrect username.'
+            }else{
+                return done(null,false,{
+                    message: '없는 아이디입니다.'
                 });
             }
         }
