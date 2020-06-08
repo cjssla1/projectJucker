@@ -160,7 +160,7 @@ CREATE TABLE myinfo(
 
 
 모의 투자 현재 회차 소유주
-CREATE TABLE having(
+CREATE TABLE myhave(
   id VARCHAR(20) NOT NULL,
   season INT NOT NULL,
   symbol CHAR(6),
