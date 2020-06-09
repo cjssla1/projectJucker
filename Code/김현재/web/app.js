@@ -6,6 +6,10 @@ const mysql = require("mysql");
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const passport = require('passport');
+const KakaoStrategy = require("passport-kakao").Strategy;
+const NaverStrategy = require("passport-naver").Strategy;
+
 
 
 const client = mysql.createConnection({
@@ -36,9 +40,15 @@ app.use(session({
         maxAge: 1000 * 60 * 10 //10분
     }
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get('/', function (req, res){
     let session = req.session;
+    //console.log(req.user[0].email);
+    //console.log(req.user[0]);
+    //console.log(session);
+    //console.log(session.passport.user[0].email);
     console.log(session.email);
     client.query("select name, current, aggregate, tran, updown from stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC limit 10;", function(err, result, fields){
         if (err){
@@ -76,13 +86,14 @@ app.get('/', function (req, res){
 app.post('/', function(req, res) {
     var Vname = req.body.stock_name;
     //console.log('POST Para = ' + Vname);
-    client.query("select current from stock where name = ? and date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')", [Vname], function(err, result, fieldds){
+    client.query("select current, (abs(current - low)/low) * 100 as rate from stock where name = ? and date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')", [Vname], function(err, result, fieldds){
         if (err){
             console.log("err");
         }
         else {
             var Vprice = result[0].current;
-            var arr = new Array(Vname, Vprice);
+            var Vrate = result[0].rate;
+            var arr = new Array(Vname, Vprice, Vrate);
             console.log(arr);
             res.send({result:arr});
         }
@@ -394,12 +405,125 @@ app.post('/login', async function(req, res, next) {
     });
 })
 
+const kakaoKey = {
+    clientID: "d9b0bc4bccf95cc138a4c6fe2746b773",
+    callbackURL: "http://localhost:3000/login/kakao/oauth"
+};
+
+app.get("/login/kakao", passport.authenticate("login-kakao"));
+
+passport.use("login-kakao", new KakaoStrategy(kakaoKey, function(accessToken, refreshToken, profile, done){
+        //console.log(profile);
+        //console.log(profile.id);
+        //console.log(profile._json.kakao_account.email);
+        //console.log(profile.username);
+        const sql = "select * from social_users where id = ? and provider = ?";
+        client.query(sql, [profile.id, profile.provider], function(err, result, fields){
+            if(err){
+                console.log(err);
+            }
+            if (result.length === 0) {
+                const sql = "insert into social_users(id, provider, name, email) values(?, ?, ?, ?)";
+                client.query(sql, [profile.id, profile.provider, profile.username, profile._json.kakao_account.email], function(err, result, fields) {
+                    if(err){
+                        console.log(err);
+                    }
+                    const sql = "select * from social_users where id = ? and provider = ?";
+                    client.query(sql, [profile.id, profile.provider], function(err, result, fields){
+                        if(err){
+                            console.log(err);
+                        }
+                        return done(null, result);
+                    })
+                })
+            }
+            else {
+                return done(null, result);
+                //return done(null, profile);
+            }
+        })
+    })
+);
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+})
+
+passport.deserializeUser((user, done) => {
+    done(null, user);
+})
+
+app.get("/login/kakao/oauth", passport.authenticate("login-kakao", {
+    successRedirect: '/',
+    failureRedirect: '/login'
+}))
+
+const naverKey = {
+    clientID: "eGdywUn24jKDHDSMZ_jI",
+    clientSecret: "yBiDz0foD9",
+    callbackURL: "http://localhost:3000/login/naver/oauth"
+};
+
+app.get("/login/naver", passport.authenticate("login-naver"));
+
+passport.use("login-naver", new NaverStrategy(naverKey, function(accessToken, refreshToken, profile, done){
+    console.log(profile);
+    console.log(profile.provider);
+    console.log(profile.id);
+    console.log(profile.emails[0].value);
+    const sql = "select * from social_users where id = ? and provider = ?";
+    client.query(sql, [profile.id, profile.provider], function(err, result, fields){
+        if(err){
+            console.log(err);
+        }
+        if (result.length === 0) {
+            const sql = "insert into social_users(id, provider, name, email) values(?, ?, ?, ?)";
+            client.query(sql, [profile.id, profile.provider, profile.displayName, profile.emails[0].value], function(err, result, fields) {
+                if(err){
+                    console.log(err);
+                }
+                const sql = "select * from social_users where id = ? and provider = ?";
+                client.query(sql, [profile.id, profile.provider], function(err, result, fields){
+                    if(err){
+                        console.log(err);
+                    }
+                    return done(null, result);
+                })
+            })
+        }
+        else {
+            return done(null, result);
+            //return done(null, profile);
+        }
+
+    })
+}))
+
+app.get("/login/naver/oauth", passport.authenticate("login-naver", {
+    successRedirect: '/',
+    failureRedirect: '/login'
+}))
+
+/*
+app.get("/login/kakao", passport.authenticate("kakao"));
+app.get("/login/kakao/oauth", function(req, res, next) {
+    console.log("zzz");
+    passport.authenticate("kakao", function(err, user){
+        console.log("카카오 실행");
+        res.redirect("/");
+    })(req, res);
+})
+*/
+
 app.get("/logout", function(req,res,next){
     req.session.destroy(function(err){});
     res.clearCookie('sid');
     res.redirect("/")
   })
 
+
+
 app.listen(3000, function(){
     console.log("실행중");
 });
+
