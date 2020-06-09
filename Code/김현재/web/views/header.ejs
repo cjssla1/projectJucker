@@ -22,13 +22,20 @@
                     <a class="dropdown-item" href="/recommend-board">추천게시판</a>
                 </div>
             </li>
-            <% if(session.email){ %>
                 <li class="nav-item dropdown">
+                    <% if(session.email){ %>
                     <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown"> <%= session.email %> </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="/logout">로그아웃</a>
                     </div>
                 </li>
+                <% } else if(session.passport) { %>
+                    <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown"> <%= session.passport.user[0].email %> </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/logout">로그아웃</a>
+                    </div>
+                </li>
+
             <% } else{ %>
                 <li class="nav-item">
                     <a class="nav-link" href="/login">로그인</a>

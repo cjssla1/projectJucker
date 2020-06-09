@@ -55,10 +55,15 @@
 						</div>
 					</div>
 					<div id= "text-mid" class="card-body" >
-							<span id="select-stock"> 삼성전자</span>
+							<span id="select-stock"> xxxx </span>
 							<span>예상 주가는</span>
 							<span id="select-price"> xxxxxx </span> 
 							<span>입니다. </span>
+							<div>
+								<canvas id="myChart" style="width: 500px; height: 200px;"></canvas>
+							</div>
+							<span> 예측률 </span>
+							<span id="rate"> xx% </span>
 					</div>
 				</div>
 			</div>
@@ -148,6 +153,34 @@
 						if (arr){
 							$("#select-stock").html(arr.result[0]);
 							$("#select-price").html(arr.result[1]);
+							$("#rate").html(Math.floor(100 - arr.result[2]) + "%");
+							data = {
+								datasets: [{
+									backgroundColor: ['#ff6161','#a39f9e'],
+									data: [100 - arr.result[2], arr.result[2]]
+								}],
+
+								// These labels appear in the legend and in the tooltips when hovering different arcs
+								//labels: [
+								//	'예측률',
+								//	'Yellow',
+								//	'Blue'
+								//]
+							};
+							// 우선 컨텍스트를 가져옵니다. 
+							var ctx = document.getElementById("myChart").getContext('2d');
+							/*
+							- Chart를 생성하면서, 
+							- ctx를 첫번째 argument로 넘겨주고, 
+							- 두번째 argument로 그림을 그릴때 필요한 요소들을 모두 넘겨줍니다. 
+							*/
+							var myDoughnutChart = new Chart(ctx, {
+								type: 'doughnut',
+								data: data,
+								options: {
+									responsive: false
+								}
+							});
 						}
 					}
 				})	
@@ -156,5 +189,37 @@
 
 		})
 	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+	
+	<script>
+		data = {
+			datasets: [{
+				backgroundColor: ['#ff6161','#a39f9e'],
+				data: [50, 50]
+			}],
+
+			// These labels appear in the legend and in the tooltips when hovering different arcs
+			//labels: [
+			//	'Red',
+			//	'Yellow',
+			//	'Blue'
+			//]
+		};
+		// 우선 컨텍스트를 가져옵니다. 
+		var ctx = document.getElementById("myChart").getContext('2d');
+		/*
+		- Chart를 생성하면서, 
+		- ctx를 첫번째 argument로 넘겨주고, 
+		- 두번째 argument로 그림을 그릴때 필요한 요소들을 모두 넘겨줍니다. 
+		*/
+		var myDoughnutChart = new Chart(ctx, {
+			type: 'doughnut',
+			data: data,
+			options: {
+				responsive: false
+			}
+		});
+		</script>
+		
 </body>
 </html>
