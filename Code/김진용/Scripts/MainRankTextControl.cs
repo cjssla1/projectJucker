@@ -22,7 +22,7 @@ public class MainRankTextControl : MonoBehaviour
 
     void setStockRank()
     {
-        string strconn = "Server=localhost;Database=stock;Uid=root;Pwd=w3084926;Charset=utf8";
+        string strconn = "Server=172.30.1.14;Database=stock;Uid=admin;Pwd=w3084926;Charset=utf8";
         conn = new MySqlConnection(strconn);
         conn.Open();
         Debug.Log("connect success!");
@@ -43,7 +43,7 @@ public class MainRankTextControl : MonoBehaviour
     }
     void setRcmdRank()
     {
-        string strconn = "Server=localhost;Database=stock;Uid=root;Pwd=w3084926;Charset=utf8";
+        string strconn = "Server=172.30.1.14;Database=stock;Uid=admin;Pwd=w3084926;Charset=utf8";
         conn = new MySqlConnection(strconn);
         conn.Open();
         Debug.Log("connect success!");

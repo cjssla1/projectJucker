@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainUImanager : MonoBehaviour
+public class WritingUImanager : MonoBehaviour
 {
-    public void stockClick()
-    {
-        Debug.Log("2_StockUp called");
-        SceneManager.LoadScene("2_StockUp");
-    }
-    public void boardClick()
+    public void backClick()
     {
         Debug.Log("4_BoardNormal called");
         SceneManager.LoadScene("4_BoardNormal");
     }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frameW
 }
