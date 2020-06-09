@@ -126,7 +126,7 @@ CREATE TABLE stockpredict(
   symbol CHAR(6),
   value INT,
   type CHAR(1),
-  PRIMARY KEY(symbol)
+  day DATE
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 
