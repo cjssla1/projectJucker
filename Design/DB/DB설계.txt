@@ -55,7 +55,7 @@ CREATE TABLE reply(
   time DATETIME DEFAULT NOW(),
   up INT UNSIGNED DEFAULT 0,
   down INT UNSIGNED DEFAULT 0,
-  FOREIGN KEY(reid) REFERENCES board(pageid)
+  FOREIGN KEY(pageid) REFERENCES board(pageid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 
@@ -71,8 +71,8 @@ CREATE TABLE rereply(
   time DATETIME DEFAULT NOW(),
   up INT UNSIGNED DEFAULT 0,
   down INT UNSIGNED DEFAULT 0,
-  FOREIGN KEY(reid) REFERENCES board(pageid),
-  FOREIGN KEY(rereid) REFERENCES reply(reid)
+  FOREIGN KEY(pageid) REFERENCES board(pageid),
+  FOREIGN KEY(reid) REFERENCES reply(reid)
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 
