@@ -49,28 +49,32 @@ app.get('/', function (req, res){
     //console.log(req.user[0]);
     //console.log(session);
     //console.log(session.passport.user[0].email);
-    console.log(session.email);
-    client.query("select name, current, aggregate, tran, updown from stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC limit 10;", function(err, result, fields){
+    console.log(session.customerid);
+    client.query("select name, current, aggregate, tran, updown from web_stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC limit 10;", function(err, result, fields){
         if (err){
             console.log(err + "error1");
         }
         else {
-            client.query("select name, updown from stock where updown >= 5 and date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by updown DESC limit 10;", function(err, result2, fields){
+            client.query("select name, updown from web_stock where updown >= 5 and date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by updown DESC limit 10;", function(err, result2, fields){
                 if (err){
                     console.log("중첩에러");
                 }
                 else{
-                    client.query("select idx, title, cnt_comment from board where likeno >= 3 order by idx DESC limit 10;", function(err, result3, fields) {
+                    //client.query("select A.pageid, A.title, count(*) as cnt from board as A, reply as B where A.pageid = B.pageid and A.up >= 3 group by B.pageid order by pageid DESC limit 10;", function(err, result3, fields) {
+                    client.query("select pageid, title, cnt_reply from board where up >= 3 order by pageid DESC limit 10;", function(err, result3, fields) {
                         if(err){
                             console.log(err);
                         }
                         else {
-                            res.render("main", {
-                                results: result, //실시간 주가 정보
-                                results2: result2, // 급등 종목 정보
-                                results3: result3,
-                                session: session
-                            });
+
+                                res.render("main", {
+                                    results: result, //실시간 주가 정보
+                                    results2: result2, // 급등 종목 정보
+                                    results3: result3,
+                                    session: session
+                                });
+
+
                         }
                     })
                 }
@@ -86,7 +90,7 @@ app.get('/', function (req, res){
 app.post('/', function(req, res) {
     var Vname = req.body.stock_name;
     //console.log('POST Para = ' + Vname);
-    client.query("select current, (abs(current - low)/low) * 100 as rate from stock where name = ? and date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')", [Vname], function(err, result, fieldds){
+    client.query("select current, (abs(current - low)/low) * 100 as rate from web_stock where name = ? and date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')", [Vname], function(err, result, fieldds){
         if (err){
             console.log("err");
         }
@@ -107,23 +111,15 @@ app.get('/board', function (req, res){
     console.log("hello");
     let session = req.session;
     
-    client.query("select *, date_format(date, '%H:%i') as time from board order by idx desc limit 0,10;", function(err, result, fields){
+    client.query("select *, date_format(time, '%H:%i') as time from board order by pageid desc limit 0,10;", function(err, result, fields){
         if (err){
-            console.log("error2");
+            console.log("error2-1");
         }
         else {
-            client.query("select board_idx, count(*) AS cnt from comment group by board_idx;", function(err, result2, fields){
-                if (err){
-                    console.log("error2");
-                }
-                else{
-                    res.render("board", {
-                        results: result,
-                        results2: result2,
-                        session: session
-                    });
-                }
-            })
+            res.render("board", {
+                results: result,
+                session: session
+            });
             //res.render("board", {
             //    results: result
             //});
@@ -135,23 +131,17 @@ app.get('/recommend-board', function (req, res){
     console.log("hello");
     let session = req.session;
     
-    client.query("select *, date_format(date, '%H:%i') as time from board where likeno >= 3 order by idx desc limit 0,10;", function(err, result, fields){
+    client.query("select *, date_format(time, '%H:%i') as time from board where up >= 3 order by pageid desc limit 0,10;", function(err, result, fields){
         if (err){
             console.log(err);
         }
         else {
-            client.query("select board_idx, count(*) AS cnt from comment group by board_idx;", function(err, result2, fields){
-                if (err){
-                    console.log("error2");
-                }
-                else{
+
                     res.render("recommend-board", {
                         results: result,
-                        results2: result2,
                         session: session
                     });
-                }
-            })
+
             //res.render("board", {
             //    results: result
             //});
@@ -159,34 +149,45 @@ app.get('/recommend-board', function (req, res){
     });
 })
 
-app.get('/view/:idx', function(req, res){
-    console.log(req.params.idx);
+app.get('/view/:pageid', function(req, res){
+    //console.log(req.params.pageid);
     let session = req.session;
        
-    client.query("select *, date_format(date, '%Y-%m%-%d %H:%i:%s') as time from board where idx = ?", [req.params.idx], function(err, result, fields){
+    client.query("select *, date_format(time, '%Y-%m%-%d %H:%i:%s') as time from board where pageid = ?", [req.params.pageid], function(err, result, fields){
         if (err){
             console.log("error3");
         }
         else {
-            client.query("select *, date_format(date, '%Y-%m%-%d %H:%i:%s') as c_time from comment where board_idx = ?", [req.params.idx], function(err, result2, fields){
+            client.query("select *, date_format(time, '%Y-%m%-%d %H:%i:%s') as c_time from reply where pageid = ?", [req.params.pageid], function(err, result2, fields){
                 if (err){
                     console.log("error3");
                 }
                 else {
-                    res.render("view", {
-                        results: result,
-                        results2: result2,
-                        session: session
+                    client.query("select *, date_format(time, '%Y-%m%-%d %H:%i:%s') as c_time from rereply where pageid = ?", [req.params.pageid], function(err, result3, fields){
+                        if(err){
+                            console.log("대댓글");
+                        }
+                        else{
+                            console.log(result3);
+                            res.render("view", {
+                                results: result,
+                                results2: result2,
+                                results3: result3,
+                                session: session
+                            })
+                            
+                        }
                     })
+
                 }
             })
             //res.render("view", {
             //    results: result
             //});
-            let u_hit = result[0].hit + 1;
-            console.log('wwww',result)
-            client.query("update board set hit = ? where idx = ?", [u_hit, req.params.idx], function(err, result, fields){
-                console.log('zzzzzz',result)
+            let u_hit = result[0].view + 1;
+            //console.log('wwww',result)
+            client.query("update board set view = ? where pageid = ?", [u_hit, req.params.pageid], function(err, result, fields){
+                //console.log('zzzzzz',result)
                 if (err){console.log("errerrrerrrerr")}
             });
             
@@ -194,16 +195,16 @@ app.get('/view/:idx', function(req, res){
     });
 });
     
-app.post('/view/:idx', function(req, res) {
+app.post('/view/:pageid', function(req, res) {
     var view_idx = req.body.view_idx;
     var msg = req.body.msg;
     var user = req.body.dat_user;
     var pw = req.body.dat_pw;
+    var confirm = req.body.confirm;
     var content = req.body.dat_content;
-    
 
     if(msg=="up"){
-        client.query("update board set likeno = likeno + 1 where idx = ? ", [view_idx], function(err, result, fieldds){
+        client.query("update board set up = up + 1 where pageid = ? ", [view_idx], function(err, result, fieldds){
             if (err){
                 console.log("err");
             }
@@ -217,7 +218,7 @@ app.post('/view/:idx', function(req, res) {
         })
     }
     else if(msg=="down"){
-        client.query("update board set likeno = likeno - 1 where idx = ? ", [view_idx], function(err, result, fieldds){
+        client.query("update board set down = down - 1 where pageid = ? ", [view_idx], function(err, result, fieldds){
             if (err){
                 console.log("err");
             }
@@ -230,33 +231,94 @@ app.post('/view/:idx', function(req, res) {
             }
         })
     }
-    else if(user && pw && content){
+    else if(user && pw && content && msg === "re"){
         //console.log(req.params.idx);
         console.log(user, pw, content);
-        client.query("insert into comment(board_idx, name, pw, content, date) values (?, ?, ?, ?, now())", [req.params.idx, user, pw, content], function(err, result, fieldds){
-            if (err){
-                console.log(err);
-            }
-            else {
-                client.query("update board set cnt_comment = cnt_comment + 1 where idx = ? ", [req.params.idx], function(err, result, fieldds){
+        client.query("select reid from reply where pageid = ?", [req.params.pageid], function(err, result2, fields){
+            if(result2.length != 0){
+                console.log("@@@@@@@@@@@@" + result2[result2.length-1].reid)
+                client.query("insert into reply(pageid, id, pwd, content, reid, time) values (?, ?, ?, ?, ?, now())", [req.params.pageid, user, pw, content, result2[result2.length-1].reid + 1], function(err, result, fields){
                     if (err){
-                        console.log(err);
+                        console.log("여긴가요1" + err);
                     }
                     else {
-                        res.redirect(req.get('referer'));
+                        //res.redirect(req.get('referer'));
+                        client.query("update board set cnt_reply = cnt_reply + 1 where pageid = ? ", [req.params.pageid], function(err, result, fieldds){
+                            if (err){
+                                console.log(err);
+                            }
+                            else {
+                                res.redirect(req.get('referer'));
+                            }
+                        })
                     }
                 })
-                //res.redirect(req.get('referer'));
-                //res.send({result:"success"})
-                //var Vprice = result[0].current;
-                //var arr = new Array(Vname, Vprice);
-                //console.log(result);
-                //res.send({result:arr});
+
+            }
+            else{
+                client.query("insert into reply(pageid, id, pwd, content, reid, time) values (?, ?, ?, ?, ?, now())", [req.params.pageid, user, pw, content, 1], function(err, result, fields){
+                    if (err){
+                        console.log("여긴가요2" + err);
+                    }
+                    else {
+                        //res.redirect(req.get('referer'));
+                        client.query("update board set cnt_reply = cnt_reply + 1 where pageid = ? ", [req.params.pageid], function(err, result, fieldds){
+                            if (err){
+                                console.log(err);
+                            }
+                            else {
+                                res.redirect(req.get('referer'));
+                            }
+                        })
+                    }
+                })
             }
         })
        // res.redirect(req.get('referer'));
     }
-
+    else if(user && pw && content && msg === "rere"){
+        console.log(user, pw, content, msg, confirm);
+        
+        client.query("select rereid from rereply where pageid = ? and reid = ?", [req.params.pageid, confirm], function(err, result2, fields){
+            if(result2.length != 0){
+                client.query("insert into rereply(pageid, id, pwd, content, reid, rereid, time) values (?, ?, ?, ?, ?, ?, now())", [req.params.pageid, user, pw, content, confirm, result2[result2.length-1].rereid + 1], function(err, result, fields){
+                    if (err){
+                        console.log("여긴가요1" + err);
+                    }
+                    else {
+                        //res.redirect(req.get('referer'));
+                        client.query("update board set cnt_reply = cnt_reply + 1 where pageid = ? ", [req.params.pageid], function(err, result, fieldds){
+                            if (err){
+                                console.log(err);
+                            }
+                            else {
+                                res.redirect(req.get('referer'));
+                            }
+                        })
+                    }
+                })
+            }
+            else{
+                client.query("insert into rereply(pageid, id, pwd, content, reid, rereid, time) values (?, ?, ?, ?, ?, ?, now())", [req.params.pageid, user, pw, content, confirm, 1], function(err, result, fields){
+                    if (err){
+                        console.log("여긴가요2" + err);
+                    }
+                    else {
+                        //res.redirect(req.get('referer'));
+                        client.query("update board set cnt_reply = cnt_reply + 1 where pageid = ? ", [req.params.pageid], function(err, result, fieldds){
+                            if (err){
+                                console.log(err);
+                            }
+                            else {
+                                res.redirect(req.get('referer'));
+                            }
+                        })
+                    }
+                })
+            }
+        })
+        
+    }
 
 })
 
@@ -277,7 +339,7 @@ app.post('/writer', function (req, res){
     const b_content = req.body.content;
     const b_pw = req.body.pw;
 
-    client.query("insert into board(name, pw, title, content, date) values(?, ?, ?, ?, now())", [b_name, b_pw, b_title, b_content], function(err, result, fields){
+    client.query("insert into board(id, pwd, title, content, time) values(?, ?, ?, ?, now())", [b_name, b_pw, b_title, b_content], function(err, result, fields){
         if (err){
             console.log("error4");
         }
@@ -287,10 +349,10 @@ app.post('/writer', function (req, res){
     
 });
 
-app.get('/modify/:idx', function (req, res){
+app.get('/modify/:pageid', function (req, res){
     let session = req.session;
 
-    client.query("select * from board where idx = ?", [req.params.idx], function(err, result, fields){
+    client.query("select * from board where pageid = ?", [req.params.pageid], function(err, result, fields){
         if (err){
             console.log("error5");
         }
@@ -303,21 +365,21 @@ app.get('/modify/:idx', function (req, res){
     });
 });
 
-app.post('/modify/:idx', function(req, res){
+app.post('/modify/:pageid', function(req, res){
     const m_name = req.body.name;
     const m_title = req.body.title;
     const m_content = req.body.content;
     const m_pw = req.body.pw;
     console.log(m_name, m_title, m_content, m_pw);
-    client.query("update board set title = ?, content = ? where name = ? and pw = ?", [m_title, m_content, m_name, m_pw], function(err, result, fields){
+    client.query("update board set title = ?, content = ? where id = ? and pwd = ?", [m_title, m_content, m_name, m_pw], function(err, result, fields){
         res.redirect("/../board")
     });
 });
 
-app.get('/delete/:idx', function (req, res){
+app.get('/delete/:pageid', function (req, res){
     let session = req.session;
 
-    client.query("select * from board where idx = ?", [req.params.idx], function(err, result, fields){
+    client.query("select * from board where pageid = ?", [req.params.pageid], function(err, result, fields){
         if (err){
             console.log("error6");
         }
@@ -330,12 +392,12 @@ app.get('/delete/:idx', function (req, res){
     });
 });
 
-app.post('/delete/:idx', function(req, res){
+app.post('/delete/:pageid', function(req, res){
     const m_name = req.body.name;
     const m_pw = req.body.pw;
     console.log(m_name, m_pw);
 
-    client.query("delete from board where name = ? and pw = ?", [m_name, m_pw], function(err, result, fields){
+    client.query("delete from board where id = ? and pwd = ?", [m_name, m_pw], function(err, result, fields){
         res.redirect("/../board")
     });
 });
@@ -350,19 +412,19 @@ app.get('/signup', function(req, res, next) {
 })
 
 app.post('/signup', function(req, res, next){
-    let name = req.body.userName;
+    let id = req.body.userId;
     let email = req.body.userEmail;
     let password = req.body.password;
 
     let salt = Math.round((new Date().valueOf() * Math.random())) + "";
     let hashPassword = crypto.createHash("sha512").update(password + salt).digest("hex");
 
-    client.query("insert into users(name, email, password, salt) values (?, ?, ?, ?)", [name, email, hashPassword, salt], function(err, result, fields){
+    client.query("insert into customer(id, email, pwd, salt) values (?, ?, ?, ?)", [id, email, hashPassword, salt], function(err, result, fields){
         if(err){
             console.log("회원가입" + err);
         }
         else {
-            res.redirect("/signup");
+            res.redirect("/login");
         }
     });
 });
@@ -378,19 +440,20 @@ app.get('/login', function(req, res, next) {
 app.post('/login', async function(req, res, next) {
     let body = req.body;
 
-    client.query("select * from users where email = ?", [body.userEmail], function(err, result, fields){
+    client.query("select * from customer where id = ?", [body.userId], function(err, result, fields){
         if(err){
             console.log("회원가입" + err);
         }
         else {
-            let dbPassword = result[0].password;
+            let dbPassword = result[0].pwd;
             let inputPassword = body.password;
             let salt = result[0].salt;
             let hashPassword = crypto.createHash("sha512").update(inputPassword + salt).digest("hex");
             
             if (dbPassword === hashPassword){
                 console.log("비밀번호 일치");
-                req.session.email = body.userEmail;
+                req.session.customerid = result[0].id;
+                //req.session.email = body.userEmail;
                 req.session.save(function() {
                     res.redirect("/");
                 })
@@ -417,18 +480,18 @@ passport.use("login-kakao", new KakaoStrategy(kakaoKey, function(accessToken, re
         //console.log(profile.id);
         //console.log(profile._json.kakao_account.email);
         //console.log(profile.username);
-        const sql = "select * from social_users where id = ? and provider = ?";
+        const sql = "select * from customer where id = ? and provider = ?";
         client.query(sql, [profile.id, profile.provider], function(err, result, fields){
             if(err){
                 console.log(err);
             }
             if (result.length === 0) {
-                const sql = "insert into social_users(id, provider, name, email) values(?, ?, ?, ?)";
+                const sql = "insert into customer(id, provider, name, email) values(?, ?, ?, ?)";
                 client.query(sql, [profile.id, profile.provider, profile.username, profile._json.kakao_account.email], function(err, result, fields) {
                     if(err){
                         console.log(err);
                     }
-                    const sql = "select * from social_users where id = ? and provider = ?";
+                    const sql = "select * from customer where id = ? and provider = ?";
                     client.query(sql, [profile.id, profile.provider], function(err, result, fields){
                         if(err){
                             console.log(err);
@@ -471,18 +534,18 @@ passport.use("login-naver", new NaverStrategy(naverKey, function(accessToken, re
     console.log(profile.provider);
     console.log(profile.id);
     console.log(profile.emails[0].value);
-    const sql = "select * from social_users where id = ? and provider = ?";
+    const sql = "select * from customer where id = ? and provider = ?";
     client.query(sql, [profile.id, profile.provider], function(err, result, fields){
         if(err){
             console.log(err);
         }
         if (result.length === 0) {
-            const sql = "insert into social_users(id, provider, name, email) values(?, ?, ?, ?)";
+            const sql = "insert into customer(id, provider, name, email) values(?, ?, ?, ?)";
             client.query(sql, [profile.id, profile.provider, profile.displayName, profile.emails[0].value], function(err, result, fields) {
                 if(err){
                     console.log(err);
                 }
-                const sql = "select * from social_users where id = ? and provider = ?";
+                const sql = "select * from customer where id = ? and provider = ?";
                 client.query(sql, [profile.id, profile.provider], function(err, result, fields){
                     if(err){
                         console.log(err);
@@ -521,9 +584,53 @@ app.get("/logout", function(req,res,next){
     res.redirect("/")
   })
 
+app.get('/information', function(req, res, next){
+    res.redirect('/information/1');
+})
 
+app.get('/information/:page', function(req, res, next) {
+    let session = req.session;
+    var page = req.params.page;
+
+
+    const sql = "select * from web_stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC;"
+    client.query(sql, function(err, result, fields){
+        res.render("information", {
+            results: result,
+            page: page,
+            length: result.length-1,
+            page_num:20,
+            pass:true,
+            session : session
+        });
+        console.log(result.length-1)
+    })
+
+})
+
+app.post('/information', function(req, res) {
+    var Vname = req.body.stock_name;
+    //console.log('POST Para = ' + Vname);
+    client.query("select symbol from stock where name = ?", [Vname], function(err, result, fieldds){
+        if (err){
+            console.log(err);
+        }
+        else if (result.length == 0){
+            console.log("데이터 없음");
+        }
+        else {
+            var symbol = result[0].symbol;
+            console.log(symbol);
+            res.send({result:symbol});
+        }
+    })
+    //console.log("zz"+Vname);
+    //res.send({result:Vname})
+
+})
 
 app.listen(3000, function(){
     console.log("실행중");
 });
+
 
