@@ -52,7 +52,7 @@
 
 /* real time stock price */
 .Real-Time-Stock-Price {
-    width: 45%;
+    width: 560px;
     height: 100%;
     float: left;
     font-size: 12px;
@@ -64,7 +64,8 @@
 }
 
 .card-body {
-    height: 360px;
+    /* height: 360px; */
+    height: auto;
 }
 .thead-dark {
     text-align: center;
@@ -313,4 +314,25 @@
 .write-bt{
     float: right;
     margin-right: 0px;
+}
+
+/* information */
+
+#graph-area{
+    width:750px;
+    height: 320px;
+    margin: 10px 10px; margin-left: 100px;
+    padding-top: 30px; padding-left: 20px;
+    background-color: white;
+    border: 2px solid black;
+    float: left;
+}
+
+.real-time{
+    width: 1050px;
+    height: 100%;
+    float: left;
+    font-size: 12px;
+    margin-left: 100px; 
+    text-align: center;
 }
