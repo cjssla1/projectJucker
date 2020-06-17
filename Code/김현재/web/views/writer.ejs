@@ -2,6 +2,12 @@
 <html lang="ko">
 <head>
     <%- include ("head") %>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="../js/summernote/summernote-lite.js"></script>
+    <script src="../js/summernote/lang/summernote-ko-KR.js"></script>
+    
+    <link rel="stylesheet" href="../css/summernote/summernote-lite.css">
+    
 </head>
 
 <body id = "root">
@@ -9,7 +15,7 @@
 	<div id="container">
 		<div id="row">
             <div id="writer-area">      
-                <form action="writer" method="post">
+                <form action="writer" method="post" submit>
                     <div class="write-user-info">
                             <input name="name" id="uname" placeholder="아이디" maxlength="100" required />
                             <input type="password" name="pw" id="upw"  placeholder="비밀번호" required />  
@@ -17,8 +23,24 @@
                     <div class="in-title">
                         <input name="title" id="utitle" placeholder="제목" maxlength="100" style="width: 800px;" required />
                     </div>
+                    
                     <div class="in-content">
-                         <input name="content" id="ucontent" placeholder="내용" style="width: 800px; height: 800px;" required/>
+                        <textarea id="summernote" name="content"></textarea>
+                        <script> 
+
+                            $('#summernote').summernote({
+                                //placeholder: 'Hello bootstrap 4', 
+                                tabsize: 1,
+                                height: 500,
+                                minHeight: 500,
+                                maxHeight: 1000, 
+                                lang: "ko-KR",
+                            });
+                        
+
+
+                        </script>
+                        <!-- <input name="content" id="ucontent" placeholder="내용" style="width: 800px; height: 800px;" required/>-->
                     </div>
                     <div class="write-bt">
                         <button class="btn btn-success" type="submit">글 작성</button>
@@ -32,6 +54,7 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
 
 </body>
 

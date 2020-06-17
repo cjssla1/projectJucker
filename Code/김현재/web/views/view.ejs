@@ -18,20 +18,20 @@
                             </tr>
                             <tr style="text-align: center; font-size: 13px;" height="5">
                                 <td class="table-secondary">아이디</td>
-                                <td><%=data.name %></td>
+                                <td><%=data.id %></td>
                                 <td class="table-secondary">작성일</td>
                                 <td><%=data.time %></td>
                                 <td class="table-secondary">조회수</td>
-                                <td><%=data.hit %></td>
+                                <td><%=data.view %></td>
                                 <td class="table-secondary">추천수</td>
-                                <td><%=data.likeno %></td>
+                                <td><%=data.up %></td>
       
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr>
-                                <td colspan="8" style="padding: 70px 10px;"><%= data.content %></td>
+                                <td colspan="8" style="padding: 70px 10px;"> <%- data.content %> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -65,9 +65,19 @@
                 <div id="comment-header">
                 </div>
                 <% for(var data of results2) { %>
-                <div id="comment-body">
-                    <b><%= data.name %></b> <a style="color: darkgrey; font-size: 11px;">(<%= data.c_time %>) <a href="#" style="font-size: 11px;">삭제</a></a> 
+                <div id="comment-body-<%= data.reid %>" style="border-bottom: 1px solid black">
+                    
+                    <b><%= data.id %></b> <a style="color: darkgrey; font-size: 11px;">(<%= data.c_time %>) <a href="" style="font-size: 11px;">삭제</a> <a id="confirm-<%= data.reid %>" href="" onclick="rereply(this.id); return false;" style="font-size: 11px;">댓글</a> </a> 
                     <blockquote style="margin: 25px 0px;"> <a> <%= data.content %> </a> </blockquote>
+                    <% for(var data2 of results3) { %>
+                        <% if(data.reid == data2.reid) { %>
+                            <blockquote style="border-top: 1px dashed black; padding: 10px 40px;"> <b> ┗ <%= data2.id %></b> <a style="color: darkgrey; font-size: 11px;">(<%= data2.c_time %>) <a href="" style="font-size: 11px;">삭제</a> </a> <p style="margin: 15px 0px;"><a> <%= data2.content %> </a></p> </blockquote>
+
+                        <% } %>
+                    <% } %>
+                    
+                    <div id="reply-input-<%= data.reid %>"></div>
+                    
                 </div>
                 <% } %>
                 <div id="comment-foot">
@@ -81,6 +91,7 @@
                         </div>
                         </div>
                         <textarea name="dat_content" class="re_content" required></textarea>
+                        <input type="hidden" name="msg" value="re">
                         <button type="submit" id="rep_bt" class="btn btn-dark re_bt" >댓글 작성</button>
                     </form>
                 </div>
@@ -128,11 +139,37 @@
 				})	
 				
             })
-
-
-
 		})
-	</script>
+    </script>
+    <script>
+            function rereply(clicked_id){
+                var parent = $("#"+clicked_id).closest("div").attr("id");
+                var confirm = parent.charAt(parent.length-1);
+
+                //alert(JSON.stringify(parent));
+                if($('#reply-input-'+ confirm).text().length == 0){
+                    const str = `                    
+                        <form method="post">
+                        <div style="float: left; margin-left: 20px">
+                        <div>
+                        <input type="text" name="dat_user" id="dat_user" class="comment-user-input-size" size="10" placeholder="아이디" required>
+                        </div>
+                        <div>
+                        <input type="password" name="dat_pw" id="dat_pw" class="comment-user-input-size" size="10" placeholder="비밀번호" required>
+                        </div>
+                        </div>
+                        <textarea name="dat_content" class="re_content" required></textarea>
+                        <input type="hidden" name="msg" value="rere">
+                        <input type="hidden" name="confirm" value="` + confirm + `">
+                        <button type="submit" id="rereply_rep_bt" class="btn btn-dark re_bt" >댓글 작성</button>
+                    </form>`;
+                $("#reply-input-"+ confirm).append(str);
+                }
+                else {
+                    $("#reply-input-" + confirm).remove(str);
+                }
+                }
+    </script>
 </body>
 
 
