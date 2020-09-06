@@ -2,6 +2,7 @@
 .text-left { text-align: left;}
 .text-center { text-align: center;}
 .text-right { text-align: right; }
+.font-black { color: black;}
 
 #root {
     background-color: #f0f1f2;
@@ -30,6 +31,10 @@ nav > ul > li ul{ width:100%;}
 nav > ul > li:hover {color: #ffcc00;}
 nav > ul > li > ul > li {color: black;}
 nav > ul > li > ul > li:hover {color: #ffcc00;}
+.nav-style {color: black;}
+a.nav-style:link { text-decoration: none;}
+a.nav-style:hover { color: #ffcc00;}
+
 
 
 
@@ -100,7 +105,7 @@ nav > ul > li > ul > li:hover {color: #ffcc00;}
 
 /* main container */
 .main-container { 
-    position: relative; 
+    position: relative;
     width: 1024px; 
     height: 800px; 
     margin: 0 auto; 
@@ -157,7 +162,7 @@ ul.tabs {
 
 ul.tabs li { 
     float: left;
-    background: #e0e0e0;
+    background: #e8e8e8;
     color: #636363;  
     border-top: 2px solid white;
     padding: 5px 15px;
@@ -168,7 +173,7 @@ ul.tabs li.current {
     background: white;
     border-left: 1px solid #e0e0e0;
     border-right: 1px solid #e0e0e0;
-    border-top: 2px solid black;
+    border-top: 2px solid #fe9661;
     font-weight: bold;
     color: black;
 }
@@ -181,10 +186,85 @@ ul.tabs li.current {
     margin: 0px 5px;
 }
 
-.tab-content.current{
-    display: inherit;
+.tab-content.current{ display: inherit; }
+
+/* board */
+.sub-container { 
+    position: relative;
+    top: 50px;
+    width: 1024px; 
+    height: 1000px; 
+    margin: 0 auto; 
+    border-top: 1px solid #f0f1f2;
+    background-color: white; 
 }
 
+.top-banner {
+    position: relative;
+    top: 50px;
+    margin: 0 auto;
+    width: 800px;
+    height: 50px;
+    border: 1px solid #636363;
+    border-radius: 0.5em;
+    background: linear-gradient( 45deg, #3d85c6,blueviolet);
+}
+
+.top-banner-font{
+    position: relative;
+    top: 3px;
+    left: 20px;
+    font-family: 'Do Hyeon', sans-serif;
+    font-size: 30px;
+    color: white;
+}
+
+.board-table {
+    position: relative;
+    top: 30px;
+    width: 800px;
+    height: auto;
+}
+.board-thead {
+    box-shadow: 0 0 0 2px #919df2;
+    border-radius: 30px;
+}
+
+.board-th {
+    padding: 5px 0px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.board-tbody:before {
+    line-height:1.5em; 
+    content:"\200C"; 
+    display:block;
+}
+
+.board-tr { border-top: 1px dotted #e3e3e3; }
+.board-td { font-size: 13px; padding: 5px 0px; text-align: center;}
+
+.board-btn {
+    position: relative;
+    top: 70px;
+    margin: 0 auto;
+    width: 800px;
+    height: 35px;
+    /* border: 1px solid #636363; */
+}
+
+.write-btn{
+    float: right;
+    font-size: 12px;
+    width: 100px;
+    height: 30px;
+    border: 0;
+    border-radius: 2em;
+    background-color: #0066b3;
+    color: white;
+}
+.write-btn:focus{ outline: 0;}
 
 /* --------------------------------------------- */
 

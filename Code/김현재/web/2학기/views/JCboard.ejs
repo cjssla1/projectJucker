@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<%- include ("head") %>
+</head>
+
+<body id="root">
+    <%- include ("header") %>
+    <div id="wrapper">
+        <div class="sub-container">
+            <div class="top-banner">
+                <span class="top-banner-font"> 자유게시판 </span>
+                <table class="board-table">
+                    <thead class="board-thead">
+                        <tr>
+                            <th class="board-th">번호</th>
+                            <th class="board-th">제목</th>
+                            <th class="board-th">작성자</th>
+                            <th class="board-th">작성일</th>
+                            <th class="board-th">추천</th>
+                            <th class="board-th">조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody class="board-tbody">
+                        <% for(var data of results) { %>
+                        <tr class="board-tr">
+                            <td class="board-td"> <%= data.pageid %> </td>
+                            <td class="board-td text-left">
+                                <a href="view/<%=data.pageid %>"> 
+                                    <span class="font-black"><%= data.title %></span>       
+                                    <% if(data.cnt_reply != 0) { %>   
+                                    <span class="cnt-reply"> [<%= data.cnt_reply%>]</span> 
+                                    <% } %>   
+                                </a>
+                            </td>
+                            <td class="board-td"> <%= data.id %> </td>
+                            <td width="70px" class="board-td"> <%= data.time %> </td>
+                            <td width="70px" class="board-td"> <%= data.up %> </td>
+                            <td width="70px" class="board-td"> <%= data.view %> </td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <div class="board-btn">
+                    <button type="button" onclick="location.href='/writer'" class="write-btn">글쓰기</button>
+                </div>
+            </div>
+        </div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+    <script>
+		$(function(){
+			var $firstMenu = $('nav > ul > li'), $header = $('header');
+			$firstMenu.mouseenter(function(){
+				$header.stop().animate({height:'300px'}, 300);
+			})
+			.mouseleave(function(){
+				$header.stop().animate({height:'50px'}, 300);
+			});
+
+		});
+	</script>
+</body>
+</html>

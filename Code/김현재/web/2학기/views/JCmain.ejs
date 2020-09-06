@@ -5,8 +5,8 @@
 </head>
 
 <body id="root">
+	<%- include ("header") %>
 	<div id="wrapper">
-		<%- include ("header") %>
 		<div class="predicted-price">
 			<div class="graph">				
 				<div id="barchart_material_1" class="graph-area"></div>
@@ -155,8 +155,8 @@
 								
 										var chart = new google.charts.Bar(document.getElementById('barchart_material_' + (i+1)));
 										chart.draw(chart_data, google.charts.Bar.convertOptions(options));
-										if(data.arr[0] <= data.arr[1]){ $('#barchart_material_' + (i+1)).css('border','2px solid #d91616'); }
-										else{ $('#barchart_material_' + (i+1)).css('border','2px solid #3546de'); }
+										if(data.arr[0] <= data.arr[1]){ $('#barchart_material_' + (i+1)).css('border','2px solid #d93b3b'); }
+										else{ $('#barchart_material_' + (i+1)).css('border','2px solid #3b3bd9'); }
 										
 									}
 								}
@@ -190,8 +190,8 @@
 								
 										var chart = new google.charts.Bar(document.getElementById('barchart_material_' + (i-2)));
 										chart.draw(chart_data, google.charts.Bar.convertOptions(options));
-										if(data.arr[0] <= data.arr[1]){ $('#barchart_material_' + (i-2)).css('border','2px solid #d91616'); }
-										else{ $('#barchart_material_' + (i-2)).css('border','2px solid #3546de'); }
+										if(data.arr[0] <= data.arr[1]){ $('#barchart_material_' + (i-2)).css('border','2px solid #d93b3b'); }
+										else{ $('#barchart_material_' + (i-2)).css('border','2px solid #3b3bd9'); }
 									}
 								}
 							}
@@ -224,8 +224,8 @@
 								
 										var chart = new google.charts.Bar(document.getElementById('barchart_material_' + (i-5)));
 										chart.draw(chart_data, google.charts.Bar.convertOptions(options));
-										if(data.arr[0] <= data.arr[1]){ $('#barchart_material_' + (i-5)).css('border','2px solid #d91616'); }
-										else{ $('#barchart_material_' + (i-5)).css('border','2px solid #3546de'); }
+										if(data.arr[0] <= data.arr[1]){ $('#barchart_material_' + (i-5)).css('border','2px solid #d93b3b'); }
+										else{ $('#barchart_material_' + (i-5)).css('border','2px solid #3b3bd9'); }
 									}
 								}
 							}
@@ -258,8 +258,8 @@
 								
 										var chart = new google.charts.Bar(document.getElementById('barchart_material_' + (i-8)));
 										chart.draw(chart_data, google.charts.Bar.convertOptions(options));
-										if(data.arr[0] <= data.arr[1]){ $('#barchart_material_' + (i-8)).css('border','2px solid #d91616'); }
-										else{ $('#barchart_material_' + (i-8)).css('border','2px solid #3546de'); }
+										if(data.arr[0] <= data.arr[1]){ $('#barchart_material_' + (i-8)).css('border','2px solid #d93b3b'); }
+										else{ $('#barchart_material_' + (i-8)).css('border','2px solid #3b3bd9'); }
 									}
 								}
 							}

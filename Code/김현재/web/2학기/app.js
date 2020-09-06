@@ -124,6 +124,23 @@ app.post('/', function(req, res) {
     });
 });
 
+app.get('/board', function (req, res){
+    let session = req.session;
+    client.query("select *, date_format(time, '%H:%i') as time from board order by pageid desc limit 20;", function(err, result, fields){
+        if (err)
+        {
+            console.log("board : 게시글 목록 추출 오류");
+        }
+        else 
+        {
+            res.render("JCboard", {
+                results: result,
+                session: session
+            });
+        }
+    });
+})
+
 /* -------------------------------------------------------
 app.get('/', function (req, res){
     let session = req.session;
@@ -206,7 +223,7 @@ app.post('/', function(req, res) {
     //res.send({result:Vname})
 
 })
------------------------------------------------------- */
+
 
 app.get('/board', function (req, res){
     console.log("hello");
@@ -227,6 +244,8 @@ app.get('/board', function (req, res){
         }
     });
 })
+
+------------------------------------------------------ */
 
 app.get('/recommend-board', function (req, res){
     console.log("hello");
