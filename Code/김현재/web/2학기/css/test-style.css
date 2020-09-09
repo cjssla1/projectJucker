@@ -4,6 +4,7 @@
 .text-right { text-align: right; }
 .font-black { color: black;}
 
+
 #root {
     background-color: #f0f1f2;
 }
@@ -105,10 +106,13 @@ a.nav-style:hover { color: #ffcc00;}
 
 /* main container */
 .main-container { 
+    overflow: hidden;
     position: relative;
     width: 1024px; 
-    height: 800px; 
-    margin: 0 auto; 
+    height: auto;
+    /* height: 800px; */ 
+    margin: 0 auto;
+    padding-bottom: 100px;
     background-color: white; 
 }
 .top-stock-price {
@@ -190,19 +194,18 @@ ul.tabs li.current {
 
 /* board */
 .sub-container { 
-    position: relative;
-    top: 50px;
-    width: 1024px; 
-    height: 1000px; 
     margin: 0 auto; 
+    margin-top: 50px;
+    width: 1024px; 
+    height: auto; 
+    padding-bottom: 50px;
     border-top: 1px solid #f0f1f2;
     background-color: white; 
 }
 
 .top-banner {
-    position: relative;
-    top: 50px;
     margin: 0 auto;
+    margin-top: 50px;
     width: 800px;
     height: 50px;
     border: 1px solid #636363;
@@ -219,11 +222,14 @@ ul.tabs li.current {
     color: white;
 }
 
+.contents {
+    margin: 0 auto;
+    width: 800px; 
+}
+
 .board-table {
-    position: relative;
-    top: 30px;
+    margin-top: 30px;
     width: 800px;
-    height: auto;
 }
 .board-thead {
     box-shadow: 0 0 0 2px #919df2;
@@ -246,12 +252,17 @@ ul.tabs li.current {
 .board-td { font-size: 13px; padding: 5px 0px; text-align: center;}
 
 .board-btn {
-    position: relative;
-    top: 70px;
     margin: 0 auto;
+    margin-top: 30px;
     width: 800px;
-    height: 35px;
-    /* border: 1px solid #636363; */
+    height: 50px;
+    
+    border-top: 2px solid #919df2; 
+}
+.search-form {
+    margin-top: 20px;
+    float: left;
+    height: 30px;
 }
 
 .write-btn{
@@ -259,12 +270,65 @@ ul.tabs li.current {
     font-size: 12px;
     width: 100px;
     height: 30px;
+    margin-top: 15px;
     border: 0;
     border-radius: 2em;
     background-color: #0066b3;
     color: white;
 }
 .write-btn:focus{ outline: 0;}
+
+.search-select {
+    font-size: 12px;
+}
+
+.search-input {
+    padding-left: 5px;
+    width: 200px;
+    font-size: 12px;
+}
+
+.search-btn {
+    width: 50px;
+    border: 1px solid grey;
+    border-radius: 1em;
+    background-color: white;
+    font-size: 12px;
+}
+
+.pagination {
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 300px;
+    height: 35px;
+    border-top: 2px solid #919df2;
+}
+
+.pager {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 12px;
+}
+
+.previous {
+    margin: 5px 5px;
+    display: inline-block;
+}
+
+.not-selected {
+    margin: 5px 5px;
+    display: inline-block;
+}
+
+.selected {
+    margin: 5px 5px;
+    display: inline-block;
+}
+.next {
+    margin: 5px 5px;
+    display: inline-block;
+}
+.paging-font { text-decoration: underline; font-weight: bold;}
 
 /* --------------------------------------------- */
 

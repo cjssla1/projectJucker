@@ -117,29 +117,97 @@ app.post('/', function(req, res) {
                     var predicted_price = result2[0].value;
                     var data = new Array(current_price, predicted_price); 
                     //console.log(data);
-                    res.send({arr:data});
+                    res.send({arr:data}); // 현재시세와 예측시세
                 }
             });
         }
     });
 });
 
-app.get('/board', function (req, res){
+app.get('/board/:page', function (req, res){
     let session = req.session;
-    client.query("select *, date_format(time, '%H:%i') as time from board order by pageid desc limit 20;", function(err, result, fields){
+    let page_size = 20; // 한 페이지 당 x개 게시물
+    let page_list_size = 10 // 1 ~ 10개 페이지
+    let no = ""; // limit 변수
+    let type = req.query.type; // T=제목, C=내용, W=작성자, TC=제목+내용
+    let word = req.query.word_search;
+    let T_wrod; let C_word; let W_word;
+    //console.log (type, word);
+
+    if (type == "T") {  T_word = "%" + word + "%";  C_word = "";  W_word = ""; }
+    else if (type == "C") {  T_word = "";  C_word = "%" + word + "%";  W_word = ""; }
+    else if (type == "W") {  T_word = "";  C_word = "";  W_word = "%" + word + "%"; }
+    else if (type == "TC") {  T_word = "%" + word + "%";  C_word = "%" + word + "%";  W_word = ""; }
+    else { T_word = "%%";  C_word = "%%";  W_word = "%%"; }
+    //console.log (T_word, C_word, W_word)
+
+    client.query("SELECT count(*) AS cnt FROM board WHERE title LIKE ? OR content LIKE ? OR id LIKE ?;", [T_word, C_word, W_word], function(err, result, fields){
         if (err)
         {
-            console.log("board : 게시글 목록 추출 오류");
+            console.log(err + "board : 전체 게시물의 개수 추출");
         }
-        else 
+        else
         {
-            res.render("JCboard", {
-                results: result,
-                session: session
+            let totalPageCount = result[0].cnt; // 전체 게시물의 숫자
+            let curPage = req.params.page; // 현재 페이지
+
+            if (totalPageCount < 0) { totalPageCount = 0 }
+
+            let totalPage = Math.ceil(totalPageCount / page_size); // 전체 페이지수
+            let totalSet = Math.ceil(totalPage / page_list_size); //전체 세트수
+            let curSet = Math.ceil(curPage / page_list_size) // 현재 세트 번호
+            let startPage = ((curSet - 1) * 10) + 1 // 현재 세트내 출력된 시작 페이지
+            let endPage = (startPage + page_list_size) - 1; // 현재 세트내 출력될 마지막 페이지
+
+            if (curPage < 0) { no = 0 }
+            else { no = (curPage - 1) * 20} // !-- page_size 수정 시 * 뒤의 값 수정 필요 --! 
+
+            //if (curPage > totalSet) { res.redirect(totalSet) }
+            //console.log('[6] startPage : ' + startPage + ' | [7] endPage : ' + endPage)
+
+            let paging = {
+                "curPage": curPage,
+                "page_list_size": page_list_size,
+                "page_size": page_size,
+                "totalPage": totalPage,
+                "totalSet": totalSet,
+                "curSet": curSet,
+                "startPage": startPage,
+                "endPage": endPage
+            };
+
+            client.query("SELECT *, date_format(time, '%H:%i') AS time FROM board WHERE title LIKE ? OR content LIKE ? OR id LIKE ? ORDER BY pageid DESC LIMIT ?,?;", [T_word, C_word, W_word, no, page_size], function(err, result2, fields){
+                if (err)
+                {
+                    console.log("board : 게시글 목록 추출 오류");
+                }
+                else 
+                {
+                    res.render("JCboard", {
+                        results: paging, // 페이징 
+                        results2: result2, // 자유 게시글 추출
+                        session: session // 세션    
+                    });
+                }
             });
+
         }
     });
+
 })
+
+app.post('/board/:page', function(req, res) {
+    /*
+    let type = req.body.type;
+    let word = req.body.word_search;
+    if(type == "T") {
+        res.json({
+            type: type,
+            word: word 
+        });
+    }
+    */
+});
 
 /* -------------------------------------------------------
 app.get('/', function (req, res){

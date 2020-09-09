@@ -10,19 +10,21 @@
         <div class="sub-container">
             <div class="top-banner">
                 <span class="top-banner-font"> 자유게시판 </span>
+            </div>
+            <div class="contents">
                 <table class="board-table">
                     <thead class="board-thead">
                         <tr>
-                            <th class="board-th">번호</th>
-                            <th class="board-th">제목</th>
-                            <th class="board-th">작성자</th>
-                            <th class="board-th">작성일</th>
-                            <th class="board-th">추천</th>
-                            <th class="board-th">조회수</th>
+                            <th width="82px"class="board-th">번호</th>
+                            <th width="384px"class="board-th">제목</th>
+                            <th width="124px"class="board-th">작성자</th>
+                            <th width="70px"class="board-th">작성일</th>
+                            <th width="70px"class="board-th">추천</th>
+                            <th width="70px"class="board-th">조회수</th>
                         </tr>
                     </thead>
                     <tbody class="board-tbody">
-                        <% for(var data of results) { %>
+                        <% for(var data of results2) { %>
                         <tr class="board-tr">
                             <td class="board-td"> <%= data.pageid %> </td>
                             <td class="board-td text-left">
@@ -34,17 +36,70 @@
                                 </a>
                             </td>
                             <td class="board-td"> <%= data.id %> </td>
-                            <td width="70px" class="board-td"> <%= data.time %> </td>
-                            <td width="70px" class="board-td"> <%= data.up %> </td>
-                            <td width="70px" class="board-td"> <%= data.view %> </td>
+                            <td class="board-td"> <%= data.time %> </td>
+                            <td class="board-td"> <%= data.up %> </td>
+                            <td class="board-td"> <%= data.view %> </td>
                         </tr>
                         <% } %>
                     </tbody>
                 </table>
                 <div class="board-btn">
+                    <form action="/board/1" method="GET" class="search-form">
+                        <select name="type" class="search-select">
+                            <option value="T"> 제목 </option>
+                            <option value="C"> 내용 </option>
+                            <option value="W"> 작성자 </option>
+                            <option value="TC"> 제목+내용 </option>
+                        </select>
+                        <input type="text" class="search-input" name="word_search" required>
+                        <button type="submit" class="search-btn"> 검색 </button>
+                    </form>
                     <button type="button" onclick="location.href='/writer'" class="write-btn">글쓰기</button>
                 </div>
+                <div class="pagination">
+                    <ul class="pager">
+                        <%
+                        var curSet = results.curSet
+                        var endPage = results.endPage
+                        var startPage = results.startPage
+                        var totalSet = results.totalSet
+                        var totalPage = results.totalPage
+                        var page_list_size = results.page_list_size
+                        var page_size = results.page_size
+                        var curPage = results.curPage
+                        %>
+                        
+                        <% if(curSet > 1){ %>
+                        <li value=(startPage-1) class="previous">
+                            <a href='/board/<%=(startPage-1)%>'> ◀ </a>
+                        </li>
+                        <% } %>
+                        
+                        <% for(var i = startPage; i <= endPage; i++){
+                            if(i > totalPage){break;}    
+                            if(i == curPage){
+                            %>
+                            <li value=i class="selected">
+                                <a href='/board/<%= i %>' class="font-black paging-font"> <%= i %> </a>
+                            </li> 
+                            <%
+                            } else{
+                            %>
+                            <li value=i class="not-selected">
+                                <a href='/board/<%= i %>' class="font-black"> <%= i %> </a>
+                            </li>
+                            <% } %>
+                        <% } %>
+                        
+                        <% if(curSet < totalSet){ %>
+                        <li value=(endPage+1) class="next">
+                            <a href='/board/<%= (endPage+1) %>'> ▶ </a>
+                        </li>
+                        <% } %>
+                    </ul> 
+                </div>
             </div>
+            <!-- </div> top-banner -->
         </div>
 	</div>
 
@@ -63,6 +118,6 @@
 			});
 
 		});
-	</script>
+    </script>
 </body>
 </html>
