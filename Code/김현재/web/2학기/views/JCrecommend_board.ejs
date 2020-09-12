@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="top-banner">
-                <span class="top-banner-font"> 자유게시판 </span>
+                <span class="top-banner-font"> 추천게시판 </span>
             </div>
             <div class="contents">
                 <table class="board-table">
@@ -61,7 +61,7 @@
                     </tbody>
                 </table>
                 <div class="board-btn">
-                    <form action="/board/1" method="GET" class="search-form">
+                    <form action="/board/recommend/1" method="GET" class="search-form">
                         <select name="type" class="search-select">
                             <option value="T"> 제목 </option>
                             <option value="C"> 내용 </option>
@@ -71,7 +71,6 @@
                         <input type="search" class="search-input" name="word_search" required>
                         <button type="submit" class="search-btn"> 검색 </button>
                     </form>
-                    <button type="button" onclick="location.href='/writer'" class="write-btn">글쓰기</button>
                 </div>
                 <div class="pagination">
                     <ul class="pager">
@@ -88,7 +87,7 @@
                         
                         <% if(curSet > 1){ %>
                         <li value=(startPage-1) class="previous">
-                            <a href='/board/<%=(startPage-1)%>'> ◀ </a>
+                            <a href='/board/recommend/<%=(startPage-1)%>'> ◀ </a>
                         </li>
                         <% } %>
                         
@@ -97,20 +96,20 @@
                             if(i == curPage){
                             %>
                             <li value=i class="selected">
-                                <a href='/board/<%= i %>' class="font-black paging-font"> <%= i %> </a>
+                                <a href='/board/recommend/<%= i %>' class="font-black paging-font"> <%= i %> </a>
                             </li> 
                             <%
                             } else{
                             %>
                             <li value=i class="not-selected">
-                                <a href='/board/<%= i %>' class="font-black"> <%= i %> </a>
+                                <a href='/board/recommend/<%= i %>' class="font-black"> <%= i %> </a>
                             </li>
                             <% } %>
                         <% } %>
                         
                         <% if(curSet < totalSet){ %>
                         <li value=(endPage+1) class="next">
-                            <a href='/board/<%= (endPage+1) %>'> ▶ </a>
+                            <a href='/board/recommend/<%= (endPage+1) %>'> ▶ </a>
                         </li>
                         <% } %>
                     </ul> 

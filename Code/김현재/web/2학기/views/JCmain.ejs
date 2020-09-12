@@ -67,11 +67,20 @@
 						<div id="tab-1" class="tab-content current">
 							<% for(var data of results2) { %>
 							<li type="disc" class="title-li">
-								<a href="view/<%=data.pageid %>"> 
+								<a href="/board/view/<%=data.pageid %>"> 
 									<span class="top-board-title text-right"> <%= data.title %> </span>
+									<% var cnt_length = results4.length %>			
+									<% for(var i = cnt_length-1; i >= 0; i--) { %>
+										<% if(data.pageid == results4[i].pageid) { %>
+											<span class="cnt-reply"> [<%= results4[i].cnt_reply %>] </a> 
+											<!-- <a><%= results4[i].cnt_reply %></a> -->
+										<% } %>
+									<% } %>
+									<!-- 댓글댓글
 									<% if(data.cnt_reply != 0) { %>   
 									<span class="cnt-reply"> [<%= data.cnt_reply %>] </a> 
 									<% } %>
+									-->
 								</a>
 							</li>
 							<% } %>
@@ -79,11 +88,20 @@
 						<div id="tab-2" class="tab-content">
 							<% for(var data of results3) { %>
 								<li type="disc" class="title-li">
-									<a href="view/<%=data.pageid %>"> 
+									<a href="/board/view/<%=data.pageid %>"> 
 										<span class="top-board-title text-right"> <%= data.title %> </span>
+										<% var cnt_length = results4.length %>			
+										<% for(var i = cnt_length-1; i >= 0; i--) { %>
+											<% if(data.pageid == results4[i].pageid) { %>
+												<span class="cnt-reply"> [<%= results4[i].cnt_reply %>] </a> 
+												<!-- <a><%= results4[i].cnt_reply %></a> -->
+											<% } %>
+										<% } %>
+										<!-- 댓글댓글
 										<% if(data.cnt_reply != 0) { %>   
 										<span class="cnt-reply"> [<%= data.cnt_reply %>] </a> 
 										<% } %>
+										-->
 									</a>
 								</li>
 								<% } %>
