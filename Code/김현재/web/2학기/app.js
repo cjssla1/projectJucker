@@ -292,7 +292,7 @@ app.get('/board/recommend/:page', function (req, res){
                 }
                 else 
                 {
-                    client.query("select A.pageid, SUM(A.cnt) AS cnt_reply FROM ((SELECT pageid, count(reid) AS cnt FROM reply GROUP BY pageid) UNION ALL (SELECT pageid, count(rereid) AS cnt FROM rereply GROUP BY pageid)) AS A GROUP BY A.pageid;", function(err, result3, fields){
+                    client.query("SELECT A.pageid, SUM(A.cnt) AS cnt_reply FROM ((SELECT pageid, count(reid) AS cnt FROM reply GROUP BY pageid) UNION ALL (SELECT pageid, count(rereid) AS cnt FROM rereply GROUP BY pageid)) AS A GROUP BY A.pageid;", function(err, result3, fields){
                         if (err)
                         {
                             console.log("board : 게시글 댓글수 추출 오류");
@@ -321,48 +321,264 @@ app.get('/board/recommend/:page', function (req, res){
     });
 })
 
-app.get('/board/view/:pageid', function(req, res){
+app.get('/board/:page/view/:pageid', function(req, res){
     //console.log(req.params.pageid);
     let session = req.session;
-       
-    client.query("select *, date_format(time, '%Y-%m%-%d %H:%i:%s') as time from board where pageid = ?", [req.params.pageid], function(err, result, fields){
-        if (err){
-            console.log("error3");
-        }
-        else {
-            client.query("select *, date_format(time, '%Y-%m%-%d %H:%i:%s') as c_time from reply where pageid = ?", [req.params.pageid], function(err, result2, fields){
-                if (err){
-                    console.log("error3");
-                }
-                else {
-                    client.query("select *, date_format(time, '%Y-%m%-%d %H:%i:%s') as c_time from rereply where pageid = ?", [req.params.pageid], function(err, result3, fields){
-                        if(err){
-                            console.log("대댓글");
-                        }
-                        else{
-                            console.log(result3);
-                            res.render("JCview", {
-                                results: result,
-                                results2: result2,
-                                results3: result3,
-                                session: session
-                            })
-                            
-                        }
-                    })
+    let page_size = 20; // 한 페이지 당 x개 게시물
+    let page_list_size = 10 // 1 ~ 10개 페이지
+    let no = ""; // limit 변수
+    let type = req.query.type; // T=제목, C=내용, W=작성자, TC=제목+내용
+    let word = req.query.word_search;
+    let T_wrod; let C_word; let W_word;
+    //console.log (type, word);
 
+    if (type == "T") {  T_word = "%" + word + "%";  C_word = "";  W_word = ""; }
+    else if (type == "C") {  T_word = "";  C_word = "%" + word + "%";  W_word = ""; }
+    else if (type == "W") {  T_word = "";  C_word = "";  W_word = "%" + word + "%"; }
+    else if (type == "TC") {  T_word = "%" + word + "%";  C_word = "%" + word + "%";  W_word = ""; }
+    else { T_word = "%%";  C_word = "%%";  W_word = "%%"; }
+    //console.log (T_word, C_word, W_word)
+
+    
+    client.query("update board set view = view + 1 where pageid = ?", [req.params.pageid], function(err, result4, fields){
+        if (err)
+        {
+            console.log("board : 조회수 증가")
+        }
+        else 
+        {
+            client.query("SELECT *, date_format(time, '%Y-%m%-%d %H:%i:%s') AS time FROM board WHERE pageid = ?", [req.params.pageid], function(err, result, fields){
+                if (err)
+                {
+                    console.log("board : 게시글 정보 추출 오류");
                 }
-            })
-            //res.render("view", {
-            //    results: result
-            //});
-            let u_hit = result[0].view + 1;
-            //console.log('wwww',result)
-            client.query("update board set view = ? where pageid = ?", [u_hit, req.params.pageid], function(err, result, fields){
-                //console.log('zzzzzz',result)
-                if (err){console.log("errerrrerrrerr")}
+                else 
+                {
+                    client.query("SELECT *, date_format(time, '%Y-%m%-%d %H:%i:%s') AS c_time FROM reply WHERE pageid = ?", [req.params.pageid], function(err, result2, fields){
+                        if (err)
+                        {
+                            console.log("reply : 댓글 정보 추출 오류");
+                        }
+                        else 
+                        {
+                            client.query("SELECT *, date_format(time, '%Y-%m%-%d %H:%i:%s') AS c_time FROM rereply WHERE pageid = ?", [req.params.pageid], function(err, result3, fields){
+                                if(err)
+                                {
+                                    console.log("rereply : 대댓글 정보 추출 오류");
+                                }
+                                else
+                                { ///////////////////////////
+                                    client.query("SELECT count(*) AS cnt FROM board WHERE title LIKE ? OR content LIKE ? OR id LIKE ?;", [T_word, C_word, W_word], function(err, result6, fields){
+                                        if (err)
+                                        {
+                                            console.log(err + "board : 전체 게시물의 개수 추출");
+                                        }
+                                        else
+                                        {
+                                            let totalPageCount = result6[0].cnt; // 전체 게시물의 숫자
+                                            let curPage = req.params.page; // 현재 페이지
+                                
+                                            if (totalPageCount < 0) { totalPageCount = 0 }
+                                
+                                            let totalPage = Math.ceil(totalPageCount / page_size); // 전체 페이지수
+                                            let totalSet = Math.ceil(totalPage / page_list_size); //전체 세트수
+                                            let curSet = Math.ceil(curPage / page_list_size) // 현재 세트 번호
+                                            let startPage = ((curSet - 1) * 10) + 1 // 현재 세트내 출력된 시작 페이지
+                                            let endPage = (startPage + page_list_size) - 1; // 현재 세트내 출력될 마지막 페이지
+                                
+                                            if (curPage < 0) { no = 0 }
+                                            else { no = (curPage - 1) * 20} // !-- page_size 수정 시 * 뒤의 값 수정 필요 --! 
+                                
+                                            //if (curPage > totalSet) { res.redirect(totalSet) }
+                                            //console.log('[6] startPage : ' + startPage + ' | [7] endPage : ' + endPage)
+                                
+                                            let paging = {
+                                                "curPage": curPage,
+                                                "page_list_size": page_list_size,
+                                                "page_size": page_size,
+                                                "totalPage": totalPage,
+                                                "totalSet": totalSet,
+                                                "curSet": curSet,
+                                                "startPage": startPage,
+                                                "endPage": endPage
+                                            };
+                                
+                                            client.query("SELECT *, date_format(time, '%H:%i') AS time FROM board WHERE title LIKE ? OR content LIKE ? OR id LIKE ? ORDER BY pageid DESC LIMIT ?,?;", [T_word, C_word, W_word, no, page_size], function(err, result4, fields){
+                                                if (err)
+                                                {
+                                                    console.log("board : [view 아래 글 목록]게시글 목록 추출 오류");
+                                                }
+                                                else 
+                                                {
+                                                    client.query("select A.pageid, SUM(A.cnt) AS cnt_reply FROM ((SELECT pageid, count(reid) AS cnt FROM reply GROUP BY pageid) UNION ALL (SELECT pageid, count(rereid) AS cnt FROM rereply GROUP BY pageid)) AS A GROUP BY A.pageid;", function(err, result5, fields){
+                                                        if (err)
+                                                        {
+                                                            console.log("board : [view 아래 글 목록]게시글 댓글수 추출 오류");
+                                                        }
+                                                        else
+                                                        {
+                                                            res.render("JCview", {
+                                                                results: result, // 게시글 정보 추출
+                                                                results2: result2, // 댓글 정보 추출
+                                                                results3: result3, // 대댓글 정보 추출
+                                                                results_under: paging, // [view 아래 글 목록] 페이징 
+                                                                results4: result4, // [view 아래 글 목록] 자유 게시글 추출
+                                                                results5: result5, // [view 아래 글 목록] 게시글 댓글수 추출
+                                                                value: req.params.pageid, // 현재 게시글
+                                                                session: session // 세션
+                                                            });
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                
+                                        }
+                                    });
+                                    /*
+                                    res.render("JCview", {
+                                        results: result, // 게시글 정보 추출
+                                        results2: result2, // 댓글 정보 추출
+                                        results3: result3, // 대댓글 정보 추출
+                                        session: session // 세션
+                                    })
+                                    */                          
+                                } ////////////////////////////
+                            })
+                        }
+                    })                    
+                }
             });
-            
+        }
+    });
+});
+
+app.get('/board/recommend/:page/view/:pageid', function(req, res){
+    //console.log(req.params.pageid);
+    let session = req.session;
+    let page_size = 20; // 한 페이지 당 x개 게시물
+    let page_list_size = 10 // 1 ~ 10개 페이지
+    let no = ""; // limit 변수
+    let type = req.query.type; // T=제목, C=내용, W=작성자, TC=제목+내용
+    let word = req.query.word_search;
+    let T_wrod; let C_word; let W_word;
+    //console.log (type, word);
+
+    if (type == "T") {  T_word = "%" + word + "%";  C_word = "";  W_word = ""; }
+    else if (type == "C") {  T_word = "";  C_word = "%" + word + "%";  W_word = ""; }
+    else if (type == "W") {  T_word = "";  C_word = "";  W_word = "%" + word + "%"; }
+    else if (type == "TC") {  T_word = "%" + word + "%";  C_word = "%" + word + "%";  W_word = ""; }
+    else { T_word = "%%";  C_word = "%%";  W_word = "%%"; }
+    //console.log (T_word, C_word, W_word)
+
+    
+    client.query("update board set view = view + 1 where pageid = ?", [req.params.pageid], function(err, result4, fields){
+        if (err)
+        {
+            console.log("board : 조회수 증가")
+        }
+        else 
+        {
+            client.query("SELECT *, date_format(time, '%Y-%m%-%d %H:%i:%s') AS time FROM board WHERE pageid = ?", [req.params.pageid], function(err, result, fields){
+                if (err)
+                {
+                    console.log("board : 게시글 정보 추출 오류");
+                }
+                else 
+                {
+                    client.query("SELECT *, date_format(time, '%Y-%m%-%d %H:%i:%s') AS c_time FROM reply WHERE pageid = ?", [req.params.pageid], function(err, result2, fields){
+                        if (err)
+                        {
+                            console.log("reply : 댓글 정보 추출 오류");
+                        }
+                        else 
+                        {
+                            client.query("SELECT *, date_format(time, '%Y-%m%-%d %H:%i:%s') AS c_time FROM rereply WHERE pageid = ?", [req.params.pageid], function(err, result3, fields){
+                                if(err)
+                                {
+                                    console.log("rereply : 대댓글 정보 추출 오류");
+                                }
+                                else
+                                { ///////////////////////////
+                                    client.query("SELECT count(*) AS cnt FROM board WHERE up >= 3 AND (title LIKE ? OR content LIKE ? OR id LIKE ?);", [T_word, C_word, W_word], function(err, result6, fields){
+                                        if (err)
+                                        {
+                                            console.log(err + "board : 전체 게시물의 개수 추출");
+                                        }
+                                        else
+                                        {
+                                            let totalPageCount = result6[0].cnt; // 전체 게시물의 숫자
+                                            let curPage = req.params.page; // 현재 페이지
+                                
+                                            if (totalPageCount < 0) { totalPageCount = 0 }
+                                
+                                            let totalPage = Math.ceil(totalPageCount / page_size); // 전체 페이지수
+                                            let totalSet = Math.ceil(totalPage / page_list_size); //전체 세트수
+                                            let curSet = Math.ceil(curPage / page_list_size) // 현재 세트 번호
+                                            let startPage = ((curSet - 1) * 10) + 1 // 현재 세트내 출력된 시작 페이지
+                                            let endPage = (startPage + page_list_size) - 1; // 현재 세트내 출력될 마지막 페이지
+                                
+                                            if (curPage < 0) { no = 0 }
+                                            else { no = (curPage - 1) * 20} // !-- page_size 수정 시 * 뒤의 값 수정 필요 --! 
+                                
+                                            //if (curPage > totalSet) { res.redirect(totalSet) }
+                                            //console.log('[6] startPage : ' + startPage + ' | [7] endPage : ' + endPage)
+                                
+                                            let paging = {
+                                                "curPage": curPage,
+                                                "page_list_size": page_list_size,
+                                                "page_size": page_size,
+                                                "totalPage": totalPage,
+                                                "totalSet": totalSet,
+                                                "curSet": curSet,
+                                                "startPage": startPage,
+                                                "endPage": endPage
+                                            };
+                                
+                                            client.query("SELECT *, date_format(time, '%H:%i') AS time FROM board WHERE up >= 3 AND (title LIKE ? OR content LIKE ? OR id LIKE ?) ORDER BY pageid DESC LIMIT ?,?;", [T_word, C_word, W_word, no, page_size], function(err, result4, fields){
+                                                if (err)
+                                                {
+                                                    console.log("board : [view 아래 글 목록]게시글 목록 추출 오류");
+                                                }
+                                                else 
+                                                {
+                                                    client.query("select A.pageid, SUM(A.cnt) AS cnt_reply FROM ((SELECT pageid, count(reid) AS cnt FROM reply GROUP BY pageid) UNION ALL (SELECT pageid, count(rereid) AS cnt FROM rereply GROUP BY pageid)) AS A GROUP BY A.pageid;", function(err, result5, fields){
+                                                        if (err)
+                                                        {
+                                                            console.log("board : [view 아래 글 목록]게시글 댓글수 추출 오류");
+                                                        }
+                                                        else
+                                                        {
+                                                            res.render("JCview_recommend", {
+                                                                results: result, // 게시글 정보 추출
+                                                                results2: result2, // 댓글 정보 추출
+                                                                results3: result3, // 대댓글 정보 추출
+                                                                results_under: paging, // [view 아래 글 목록] 페이징 
+                                                                results4: result4, // [view 아래 글 목록] 자유 게시글 추출
+                                                                results5: result5, // [view 아래 글 목록] 게시글 댓글수 추출
+                                                                value: req.params.pageid, // 현재 게시글
+                                                                session: session // 세션
+                                                            });
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                
+                                        }
+                                    });
+                                    /*
+                                    res.render("JCview", {
+                                        results: result, // 게시글 정보 추출
+                                        results2: result2, // 댓글 정보 추출
+                                        results3: result3, // 대댓글 정보 추출
+                                        session: session // 세션
+                                    })
+                                    */                          
+                                } ////////////////////////////
+                            })
+                        }
+                    })                    
+                }
+            });
         }
     });
 });

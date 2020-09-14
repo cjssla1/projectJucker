@@ -36,7 +36,7 @@
                         <tr class="board-tr">
                             <td class="board-td"> <%= data.pageid %> </td>
                             <td class="board-td text-left">
-                                <a href="/board/view/<%=data.pageid %>"> 
+                                <a href="/board/<%= results.curPage %>/view/<%= data.pageid %>"> 
                                     <span class="font-black"><%= data.title %></span>
                                     <% var cnt_length = results3.length %>			
 									<% for(var i = cnt_length-1; i >= 0; i--) { %>
