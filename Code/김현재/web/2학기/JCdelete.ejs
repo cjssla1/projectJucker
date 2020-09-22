@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <%- include ("head") %>
+</head>
+
+<body id="root">
+    <%- include ("header") %>
+    <div id="wrapper">
+        <div class="sub-container">
+            <div class="sub-nav">
+                <div class="sub-nav-list">
+                    <ul class="sub-ul">
+                        <a class="sub-text" href="/board/1"><li> 자유게시판 </li></a>
+                        <a class="sub-text" href="/board/recommend/1"><li> 추천게시판 </li></a>
+                    </ul>
+                </div>
+            </div>
+            <div class="delete-contents">
+                <div class="delete-section">
+                    <div class="delete-pw">
+                        <form action="/delete/<%= pageid %>" method="post">
+                            <span class="del-text"> 게시글 삭제를 위한 정보를 입력하세요.</span><br>
+                            <input name="name" id="uname" class="in-name input-normal" placeholder="아이디" maxlength="100" required autofocus />
+                            <input type="password" name="pw" id="upw" class="in-name input-normal" placeholder="비밀번호" required /><br>
+                            <button type="submit" class="delete-btn"> 확인 </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+    <script>
+		$(function(){
+			var $firstMenu = $('nav > ul > li'), $header = $('header');
+			$firstMenu.mouseenter(function(){
+				$header.stop().animate({height:'300px'}, 300);
+			})
+			.mouseleave(function(){
+				$header.stop().animate({height:'50px'}, 300);
+			});
+
+		});
+    </script>
+</body>
+</html>

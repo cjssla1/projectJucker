@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<%- include ("head") %>
+</head>
+
+<body id="root">
+    <%- include ("header") %>
+    <div id="wrapper">
+        <div class="sub-container-grey">
+            <div class="login-contents">
+                <div class="login-section">
+                    <b class="logo-title">JUCKER</b>
+                    <div class="signup">
+                        <form action="/signup" method="post">                            
+                            <fieldset class="signup-input">
+                            <label for="userID"> 아이디 </label><br>
+                            <input class="sign-id" type="text" name="userId" id="userID" required autofocus> 
+                            <button type="button" id="check-id" class="check-btn"> 확인 </button><br>
+                            <p class="info-text"> 영어, 숫자만 입력 가능합니다. </p>
+                            <p id="check-id-text" class="check-text"></p>
+
+                            <label for="password"> 비밀번호 </label><br>
+                            <input class="sign-pw" type="password" name="password" id="password" required><br>
+                            <p class="info-text"> 영문, 숫자, 특수문자 중 2가지 이상을 혼합하여 입력해주세요. </p>
+                            <p id="check-pw-text" class="check-text"></p>
+                            <label for="password2"> 비밀번호 확인 </label><br>
+                            <input class="sign-pw" type="password" name="password2" id="password2" required>
+                            <p id="check-pw-text2" class="check-text"></p>
+
+                            <label for="userNick"> 닉네임 </label><br>
+                            <input class="sign-email" type="text" name="userNick" id="userNick" required>
+                            <button type="button" id="check-nick" class="check-btn"> 확인 </button><br>
+                            <p id="check-nick-text" class="check-text"></p>
+                            <input type="hidden" name="provider_id" value="<%= session.provider_id %>" readonly>
+                            
+                            <button type="submit" class="btn btn-info" type="submit" > 회원가입 </button>
+                           
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+    <script>
+		$(function(){
+			var $firstMenu = $('nav > ul > li'), $header = $('header');
+			$firstMenu.mouseenter(function(){
+				$header.stop().animate({height:'300px'}, 300);
+			})
+			.mouseleave(function(){
+				$header.stop().animate({height:'50px'}, 300);
+			});
+
+		});
+    </script>
+    <script>
+        $(function(){
+            $('#check-id').click(function(){
+                var id = $("#userID").val();
+                //var num = id.search(/[0-9]/g);
+                //var eng = id.search(/[a-z]/ig);
+                var kor = id.search(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/);
+                var SC = id.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi);
+
+                if(id == "" || id.search(/\s/) != -1 ) { 
+                    $('#check-id-text').text('공백을 제외해주세요.');
+                    $('#check-id-text').css('color','red'); 
+                    return;
+                }
+                if (kor != -1 || SC != -1 ) { 
+                    $('#check-id-text').text('한글 또는 특수문자를 제외해주세요.');
+                    $('#check-id-text').css('color','red'); 
+                    return;
+                }
+                $.ajax({
+                    url: '/check_id',
+                    dataType: 'json',
+                    type: 'POST',
+                    traditional : true,
+                    data: {'id': id},
+                    success: function(data) {
+                        var data = data;
+                        if(data.status == "not_overlab"){
+                            $('#check-id-text').text(data.msg);
+                            //$('.check-text').css('visibility','visible');
+                            $('#check-id-text').css('color','green');
+                        }
+                        else {
+                            $('#check-id-text').text(data.msg);
+                            //$('.check-text').css('visibility','visible');
+                            $('#check-id-text').css('color','red');
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    <script>
+        $(function(){
+            $('#password').focusout(function(){
+                var pw = $("#password").val();
+                var num = pw.search(/[0-9]/g);
+                var eng = pw.search(/[a-z]/ig);
+                var kor = pw.search(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/);
+                var SC = pw.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi);
+
+                if(pw == "" || pw.search(/\s/) != -1 || kor != -1 ) { 
+                    $('#check-pw-text').text('공백 또는 한글을 제외해주세요.');
+                    $('#check-pw-text').css('color','red'); 
+                    return;
+                }
+                else if ((num < 0 && eng < 0) || (eng < 0 && SC < 0) || (SC < 0 && num < 0)) { 
+                    $('#check-pw-text').text('사용할 수 없는 비밀번호 입니다.');
+                    $('#check-pw-text').css('color','red'); 
+                    return;
+                }
+                else { 
+                    $('#check-pw-text').text('사용 가능한 비밀번호 입니다.');
+                    $('#check-pw-text').css('color','green'); 
+                    return;
+                }
+            })
+        })
+    </script>
+    <script>
+    $(function(){
+        $('#password2').focusout(function(){
+            var pw1 = $("#password").val();
+            var pw2 = $("#password2").val();
+            if(pw1 == "" || pw1.search(/\s/) != -1 || pw2 == "" || pw2.search(/\s/) != -1) { 
+                $('#check-pw-text2').text('비밀번호가 일치하지 않습니다.');
+                $('#check-pw-text2').css('color','red'); 
+                return;
+            }
+            else if (pw1 == pw2) { 
+                $('#check-pw-text2').text('비밀번호가 일치합니다.');
+                $('#check-pw-text2').css('color','green'); 
+                return;
+            }
+            else { 
+                $('#check-pw-text2').text('비밀번호가 일치하지 않습니다.');
+                $('#check-pw-text2').css('color','red'); 
+                return;
+            }
+        })
+    })
+    </script>
+        <script>
+            $(function(){
+                $('#check-nick').click(function(){
+                    var nick = $("#userNick").val();
+                    //var num = id.search(/[0-9]/g);
+                    //var eng = id.search(/[a-z]/ig);
+                    //var kor = id.search(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/);
+                    //var SC = id.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi);
+    
+                    if(nick == "" || nick.search(/\s/) != -1 ) { 
+                        $('#check-nick-text').text('공백을 제외해주세요.');
+                        $('#check-nick-text').css('color','red'); 
+                        return;
+                    }
+                    $.ajax({
+                        url: '/check_nick',
+                        dataType: 'json',
+                        type: 'POST',
+                        traditional : true,
+                        data: {'nick': nick},
+                        success: function(data) {
+                            var data = data;
+                            if(data.status == "not_overlab"){
+                                $('#check-nick-text').text(data.msg);
+                                //$('.check-text').css('visibility','visible');
+                                $('#check-nick-text').css('color','green');
+                            }
+                            else {
+                                $('#check-nick-text').text(data.msg);
+                                //$('.check-text').css('visibility','visible');
+                                $('#check-nick-text').css('color','red');
+                            }
+                        }
+                    })
+                })
+            })
+        </script>
+</body>
+</html>
