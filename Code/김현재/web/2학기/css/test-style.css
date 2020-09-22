@@ -197,7 +197,7 @@ ul.tabs li.current {
     margin: 0 auto; 
     margin-top: 50px;
     width: 1024px; 
-    height: auto; 
+    height: auto;
     padding-bottom: 50px;
     border-top: 1px solid #f0f1f2;
     background-color: white; 
@@ -220,7 +220,7 @@ ul.tabs li.current {
     height: 50px;
     border: 1px solid #636363;
     border-radius: 0.5em;
-    background: linear-gradient( 45deg, #c63d5d,blueviolet);
+    background: linear-gradient( 45deg, #d64b5a, blueviolet);
 }
 
 .top-banner-font{
@@ -371,7 +371,7 @@ ul.tabs li.current {
 
 .board-section {
     margin: 0 auto;
-    margin-top: 80px;
+    margin-top: 60px;
     width: 802px;
     height: auto;
 
@@ -398,7 +398,7 @@ ul.tabs li.current {
 .date-text { width: 130px; }
 
 .view-contents {
-    padding: 50px 20px ;
+    padding: 100px 20px;
     border-left: 1px dashed #919191;
     border-right: 1px dashed #919191;
 }
@@ -554,9 +554,278 @@ ul.tabs li.current {
 .comment-btn:focus{ outline: 0;}
 .empty {font-size: 12px; font-weight: bold; display: inline-block; margin-top: 15px; margin-left: 35px;}
 
+.write-section {
+    border: 1px solid #919191;
+    border-radius: 20px;
+    border-top: 3px solid #7a7a7a;
+    margin: 0 auto;
+    margin-top: 60px;
+    width: 902px;
+    height: auto;
+}
 
+.write-contents {
+    margin: 0 auto;
+    width: 902px; 
+}
 
+.in-info {
+    margin: 0 auto;
+    margin-top: 40px;
+    width: 800px;
+    font-size: 12px;
+}
 
+.in-name {
+    height: 30px;
+}
+
+.in-pw {
+    margin-left: 20px;
+    height: 30px;
+}
+
+.in-title{
+    width: 800px;
+    height: 30px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.in-content{
+    margin: 0 auto;
+    width: 800px;
+}
+
+.input-normal {
+    padding-left: 5px;
+}
+
+.write-submit {
+    width: 800px;
+    height: 40px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.write-submit-btn {
+    float: right;
+    font-size: 12px;
+    width: 100px;
+    height: 30px;
+    border: 0;
+    border-radius: 50px;
+    background-color: #0066b3;
+    color: white;
+}
+.write-submit-btn:focus {outline: 0;}
+
+.submit-btn {
+    width: 800px;
+    height: 40px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 0px;
+}
+
+.modify-submit-btn {
+    float: right;
+    font-size: 12px;
+    width: 100px;
+    height: 30px;
+    border: 0;
+    border-radius: 50px;
+    background-color: #0066b3;
+    color: white;
+}
+.modify-submit-btn:focus {outline: 0;}
+
+.delete-submit-btn {
+    float: right;
+    margin-left: 20px;
+    font-size: 12px;
+    width: 100px;
+    height: 30px;
+    border: 0;
+    border-radius: 50px;
+    background-color: #0066b3;
+    color: white;
+}
+.delete-submit-btn:focus {outline: 0;}
+
+.delete-contents {
+    margin: 0 auto;
+    width: 802px; 
+}
+
+.delete-section {
+    border: 1px solid #919191;
+    border-radius: 20px;
+    border-top: 3px solid #7a7a7a;
+    margin: 0 auto;
+    margin-top: 60px;
+    width: 802px;
+    height: 400px;
+}
+
+.delete-pw {
+    border: 2px solid #e03a3a;
+    margin: 0 auto;
+    margin-top: 100px;
+    width: 500px;
+    height: 200px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.del-text {
+    display: inline-block;
+    font-weight: bold;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.delete-btn {
+    margin-top: 20px;
+    font-size: 12px;
+    border: 1px solid grey;
+    width: 100px;
+    height: 30px;
+}
+
+.sub-container-grey { 
+    margin: 0 auto; 
+    margin-top: 50px;
+    width: 1024px; 
+    height: auto;
+    /*padding-bottom: 50px;*/
+    border-top: 1px solid #f0f1f2;
+    background-color: #f0f1f2; 
+}
+
+.login-contents {
+    margin: 0 auto;
+    width: 802px; 
+}
+
+.login-section {
+    margin: 0 auto;
+    margin-top: 50px;
+    width: 802px;
+    height: auto;
+    text-align: center;
+}
+
+.logo-title {
+    font-size: 70px;
+}
+
+.login {
+    font-size: 14px;
+    margin: 0 150px;
+    border-top: 2px solid black;
+    border-radius: 20px;
+}
+
+.id{
+    width:300px;
+    height: 40px;
+    margin-top: 70px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    padding-left: 5px;
+}
+
+.pw{
+    width:300px;
+    height: 40px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    padding-left: 5px;
+}
+
+.btn-info{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 300px;
+    height:50px;
+    background-color: skyblue;
+}
+
+.social-login {
+    border-top: 1px solid #919191;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.social-img {
+    margin-top: 10px;
+}
+
+.signup {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 150px;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+    border-radius: 20px;
+    padding-top: 30px;
+    padding-left: 50px;
+    margin-bottom: 50px;
+    background-color: #fafafa;
+}
+
+.sign-id{
+    width:210px;
+    height: 30px;
+    padding-left: 5px;
+}
+
+.sign-pw{
+    width:210px;
+    height: 30px;
+    padding-left: 5px;
+}
+
+.sign-email{
+    width:210px;
+    height: 30px;
+    padding-left: 5px;
+}
+
+.signup-input {
+    margin: 0 auto;
+    width: 350px;
+    text-align: left;
+}
+
+.check-btn{
+    font-size: 13px;
+    color: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: #4cba7e;
+    margin-left: 18px;
+    height: 30px;
+    width: 70px;
+}
+
+.check-text{
+    font-weight: normal;
+    margin-bottom: 0px;
+    font-size: 12px;
+    height: 18px;
+}
+
+.info-text{
+    font-weight: normal;
+    font-size: 12px;
+    height: 18px;
+    margin-bottom: 0px;
+}
+
+#check-id-text, #check-pw-text2, #check-nick-text { margin-bottom: 15px;}
 
 /* --------------------------------------------- */
 
@@ -789,33 +1058,7 @@ ul.tabs li.current {
     margin-left: 300px;
 }
 
-.id{
-    width:300px;
-    height: 40px;
-    margin-top: 50px;
-    margin-bottom: 5px;
-    margin-right: 10px;
-}
 
-.pw{
-    width:300px;
-    height: 40px;
-    margin-bottom: 5px;
-    margin-right: 10px;
-}
-
-.btn-info{
-    margin-top: 30px;
-    margin-bottom: 10px;
-    width: 300px;
-    height:50px;
-    background-color: skyblue;
-}
-
-.logo-title{
-    margin: 0% 23%;
-    font-size: 70px;
-}
 
 /* signup */
 
@@ -823,26 +1066,7 @@ ul.tabs li.current {
     margin: 10% 40%;
 }
 
-.sign-id{
-    width:300px;
-    height: 40px;
-    margin-bottom: 30px;
-    margin-right: 10px;
-}
 
-.sign-pw{
-    width:300px;
-    height: 40px;
-    margin-bottom: 30px;
-    margin-right: 10px;
-}
-
-.sign-email{
-    width:300px;
-    height: 40px;
-    margin-bottom: 30px;
-    margin-right: 10px;
-}
 
 /* writer */
 
@@ -857,9 +1081,7 @@ ul.tabs li.current {
     margin-bottom: 15px;
 }
 
-.in-title{
-    margin-bottom: 15px;
-}
+
 
 .in-content{
     margin-bottom: 15px;
