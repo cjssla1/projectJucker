@@ -4,13 +4,24 @@
     </a>
     <nav>
         <ul class="clearfix">
-            <li class="first"> 로그인
-                <ul>
-                    <li>sub menu</li>
-                    <li>sub menu</li>
-                    <li>sub menu</li>
-                </ul>
-            </li>
+            <% if(session.passport){ %>
+                <li class="first"> <a class="nav-style" > <%= session.passport.user[0].nickname %></a> 
+                    <ul>
+                        <a class="nav-style" href="/logout"><li>로그아웃</li></a>
+                    </ul>
+                    
+                </li>
+            <% } else { %>
+                <li class="first"> <a class="nav-style" href="/login">로그인</a>
+                    <!--
+                    <ul>
+                        <li>sub menu</li>
+                        <li>sub menu</li>
+                        <li>sub menu</li>
+                    </ul>
+                    -->
+                </li>
+            <% } %>        
             <li> 금융 정보
                 <ul>
                     <li>sub menu</li>
@@ -42,52 +53,3 @@
         </ul>
     </nav>
 </header>
-
-<!-- 
-<div id="header">
-    <div id="logo-area">
-        <a href="/">
-            <img src ="../image/logo.jpeg" height="50">
-        </a>
-    </div>
-    <div id="nav-area">
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <a class="nav-link" href="/information">금융 정보</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">예측 정보</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">모의 투자</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">게시판</a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/board">자유게시판</a>
-                    <a class="dropdown-item" href="/recommend-board">추천게시판</a>
-                </div>
-            </li>
-                <li class="nav-item dropdown">
-                    <% if(session.customerid){ %>
-                    <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown"> <%= session.customerid %> </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/logout">로그아웃</a>
-                    </div>
-                </li>
-                <% } else if(session.passport) { %>
-                    <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown"> <%= session.passport.user[0].email %> </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/logout">로그아웃</a>
-                    </div>
-                </li>
-
-            <% } else{ %>
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">로그인</a>
-                </li>
-            <% } %>
-          </ul>
-    </div>
-</div>
--->

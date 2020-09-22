@@ -8,6 +8,14 @@
     <%- include ("header") %>
     <div id="wrapper">
         <div class="sub-container">
+            <div class="sub-nav">
+                <div class="sub-nav-list">
+                    <ul class="sub-ul">
+                        <a class="sub-text" href="/board/1"><li> 자유게시판 </li></a>
+                        <a class="sub-text" href="/board/recommend/1"><li> 추천게시판 </li></a>
+                    </ul>
+                </div>
+            </div>
             <div class="board-section">
                 <% for(var data of results) { %>
                 <div class="view-information">
@@ -37,7 +45,11 @@
                        </div>
                    </div>
                 </div>
-                <% } %> 
+                <% } %>
+                <div class="submit-btn">
+                    <button type="button" id="delete-btn" onclick="location.href='/delete/<%= value %>'" class="delete-submit-btn">삭제</button>
+                    <button type="button" id="modify-btn" onclick="location.href='/modify/<%= results_under.curPage %>/<%= value %>'" class="modify-submit-btn">수정</button>
+                </div>
                 <div class="comment">
                     <div id="empty-reply"></div> 
                     <% for(var data of results2) { %>
@@ -219,7 +231,7 @@
 					data: {'view_idx': idx, 'msg': "up"},
 					success: function(success) {
 						if(success){
-                            alert("추천 완료");
+                            alert("게시글을 추천 했습니다.");
                         }
 					}
 				})	
@@ -234,7 +246,7 @@
 					data: {'view_idx': idx, 'msg': "down"},
 					success: function(success) {
 						if(success){
-                            alert("비추천 완료");
+                            alert("게시글을 비추천 했습니다.");
                         }
 					}
 				})	
