@@ -62,7 +62,7 @@ app.use(passport.session());
 
 app.get('/', function(req, res){
     let session = req.session;
-    console.log(session);
+    //console.log(session);
     //if(session.passport) { "@@@@" + console.log(session.passport.user[0]); }
     //console.log(session.passport.user[0].nickname);
     client.query("SELECT * from web_stock WHERE date_format(day, '%Y-%m-%d') = curdate() ORDER BY aggregate DESC LIMIT 12;", function(err, result, fields){
@@ -774,7 +774,7 @@ app.post('/delete/:pageid', function(req, res){
 
 app.get('/login', function(req, res, next) {
     let session = req.session;
-    console.log(session);
+    //console.log(session);
 
     res.render("JClogin", {
         session : session
@@ -816,15 +816,20 @@ app.post('/login', passport.authenticate('local', {failureRedirect: '/login'}), 
 })
 
 var isAuthenticated = function (req, res, next) {
-    if (req.isAuthenticated())
-      return next();
+    console.log(req.session);
+    if (req.session.provider_id)
+        return next();
+    else if (req.session.user_id)
+        return next();
+    //if (req.isAuthenticated())
+    //  return next();
     res.redirect('/login');
   };
 
 app.get('/signup', isAuthenticated, function(req, res) {
     let session = req.session;
-    console.log(session);
-    console.log(session.provider_id);
+    //console.log(session);
+    //console.log(session.provider_id);
     res.render("JCsignup", {
         session : session
     });
@@ -849,6 +854,9 @@ app.post('/signup', function(req, res, next){
             console.log(err + "customer : 회원가입 오류");
         }
         else {
+            req.session.destroy(function(){ 
+                req.session;
+            });        
             res.redirect("/login");
         }
     });
@@ -857,7 +865,6 @@ app.post('/signup', function(req, res, next){
 app.post('/oauth', function(req, res, next){
     let provider_id = req.body.provider_id;
     let email = req.body.email;
-    console.log("1");
     client.query("SELECT * FROM customer WHERE provider_id = ?", [provider_id], function(err, result, fields){
         if(err)
         {
@@ -871,7 +878,6 @@ app.post('/oauth', function(req, res, next){
                 }
                 else
                 {
-                    console.log("2");
                     req.session.provider_id = provider_id;
                     req.session.email = email;
                     var status = {
@@ -884,7 +890,6 @@ app.post('/oauth', function(req, res, next){
         }
         else 
         {
-            console.log("3");
             var status = {
                 "status": 'exist_info',
                 "message": '이미 가입되어있는 사용자입니다.'
@@ -900,8 +905,11 @@ passport.use(new LocalStrategy({
     passReqToCallback: true
 }, function(req, userID, password, done) {
         client.query("select nickname from customer where id = ? AND pwd = ?", [userID, password], function(err, result, fields){
-            console.log("@@@@@" + result);
-            return done(null, result)    
+            if(err){
+                console.log("로그인 인증 오류");
+            }
+            if(result.length != 0) { return done(null, result) }    
+            else { return done(null, false) }
         });
     }
 ))
@@ -960,6 +968,135 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
     done(null, user);
 })
+
+app.get('/find', function(req, res) {
+    let session = req.session;
+    //console.log(session);
+    //console.log(session.provider_id);
+    res.render("JCfind", {
+        session : session
+    });
+    //res.render("signup");
+})
+
+app.post('/find/id', function(req, res, next){
+    let provider_id = req.body.provider_id;
+    let email = req.body.email;
+    client.query("SELECT id FROM customer WHERE provider_id = ?", [provider_id], function(err, result, fields){
+        if(err)
+        {
+            console.log("customer : 인증 오류");
+        }
+        if (result.length === 0) {
+            //req.session.provider_id = provider_id;
+            //req.session.email = email;
+            var status = {
+                "status": 'Not_exist_info',
+                "message": '계정이 존재하지 않습니다.'
+            }
+            res.send(JSON.stringify(status));     
+        }
+        else 
+        {
+            req.session.user_id = result[0].id;
+            var status = {
+                "status": 'exist_info',
+                "message": '계정이 존재합니다.'
+            }
+            res.send(JSON.stringify(status));
+        }
+    });
+});
+
+app.get('/find/id', isAuthenticated, function(req, res) {
+    let session = req.session;
+    //console.log(session);
+    //console.log(session.provider_id);
+    res.render("JCfind_id", {
+        session : session
+    });
+    //res.render("signup");
+})
+
+app.get('/findkey', function(req, res) {
+    let session = req.session;
+    //console.log(session);
+    //console.log(session.provider_id);
+    res.render("JCfindkey", {
+        session : session
+    });
+    //res.render("signup");
+})
+
+app.post('/find/pw', function(req, res, next){
+    let provider_id = req.body.provider_id;
+    let email = req.body.email;
+    client.query("SELECT pwd FROM customer WHERE provider_id = ?", [provider_id], function(err, result, fields){
+        if(err)
+        {
+            console.log("customer : 인증 오류");
+        }
+        if (result.length === 0) {
+            //req.session.provider_id = provider_id;
+            //req.session.email = email;
+            var status = {
+                "status": 'Not_exist_info',
+                "message": '계정이 존재하지 않습니다.'
+            }
+            res.send(JSON.stringify(status));     
+        }
+        else 
+        {
+            req.session.provider_id = provider_id;
+            var status = {
+                "status": 'exist_info',
+                "message": '계정이 존재합니다.'
+            }
+            res.send(JSON.stringify(status));
+        }
+    });
+});
+
+app.get('/find/pw', isAuthenticated, function(req, res) {
+    let session = req.session;
+    //console.log(session);
+    //console.log(session.provider_id);
+    res.render("JCfindKey_pw", {
+        session : session
+    });
+    //res.render("signup");
+})
+
+app.post('/change', function(req, res, next){
+    let session = req.session;
+    let provider_id = session.provider_id;
+    let email = req.body.email;
+    let password = req.body.password;
+    client.query("UPDATE customer SET pwd = ? WHERE provider_id = ?", [password, provider_id], function(err, result, fields){
+        if(err)
+        {
+            console.log("customer : 인증 오류");
+        }  
+        if (result.affectedRows != 0) {
+            //req.session.provider_id = provider_id;
+            //req.session.email = email;
+            var status = {
+                "status": 'change_info',
+                "message": '비밀번호가 변경되었습니다.'
+            }
+            res.send(JSON.stringify(status));  
+        }
+        else 
+        {
+            //req.session.provider_id = provider_id;
+            var status = {
+                "status": 'Not_exist_info',
+                "message": '비밀번호가 변경되지 않았습니다.'
+            }
+            res.send(JSON.stringify(status));
+        }
+    });
+});
 
 
 /*app.get("/login/kakao", passport.authenticate("login-kakao")); //login-kakao
@@ -1071,6 +1208,7 @@ app.get("/login/naver/oauth", passport.authenticate("login-naver", {
     failureRedirect: '/login'
 }))
 
+/*
 function isAuthenticated(req, res, next) {
     console.log("@@@@@@@@@@@@@@@@@@@@");
     console.log(req.isAuthenticated())
@@ -1078,8 +1216,15 @@ function isAuthenticated(req, res, next) {
         return next();
     }
     res.redirect('/login');
-}
+}*/
 
+app.get("/logout", function(req,res,next){
+    req.session.destroy(function(){ 
+        req.session;
+    });
+    res.clearCookie('sid');
+    res.redirect("/")
+})
 
 
 /*
@@ -1562,11 +1707,6 @@ app.get("/login/kakao/oauth", function(req, res, next) {
 })
 */
 
-app.get("/logout", function(req,res,next){
-    //req.session.destroy(function(err){});
-    res.clearCookie('sid');
-    res.redirect("/")
-  })
 
 app.get('/information', function(req, res, next){
     res.redirect('/information/1');
