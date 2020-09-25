@@ -15,23 +15,24 @@
                         <form action="/login" method="post">
                             <input class="id" type="text" name="userId" placeholder="아이디" required autofocus ><br>
                             <input class="pw" type="password" name="password" size="30" height="50" placeholder="비밀번호" required><br>
-                            <!-- <a href='/signup'> 회원가입 </a><br> -->
+                            <a href='' onclick="window.open('/find', '_blank', 'width=600px, height=400px')"> 아이디찾기 </a> 
+                            <a> | </a>
+                            <a href='' onclick="window.open('/findkey', '_blank', 'width=600px, height=400px')"> 비밀번호찾기 </a><br> 
                             <button type="submit" class="btn btn-info" type="submit" >로그인 </button>
                         </form>
                         <div class="social-login">
                             <a id="login-form-btn" href="javascript:loginFormWithKakao()">
-                                <img
-                                  src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
-                                  width="222"
-                                />
-                              </a>
-                              <p id="login-form-result"></p>
+                                <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="250"/>
+                            </a>
+                            <p id="login-form-result"></p>
                             <!-- <a href="/login/kakao/oauth" id="kakao-login-btn">
                                 <img src ="../image/kakao_login.png" class="social-img">
                             </a>-->
+                            <!--
                             <a href="/login/naver">
                                 <img src ="../image/naver_login.PNG" class="social-img">
                             </a>
+                            -->
                         </div>
                     </div>
                 </div>
@@ -65,8 +66,8 @@
                     success: function(res) {
                         //alert(JSON.stringify(res)); //<---- kakao.api.request 에서 불러온 결과값 json형태로 출력
                         //alert(JSON.stringify(authObj)); //<----Kakao.Auth.createLoginButton에서 불러온 결과값 json형태로 출력
-                        console.log(res.id);//<---- 콘솔 로그에 id 정보 출력(id는 res안에 있기 때문에  res.id 로 불러온다)
-                        console.log(res.kakao_account.email);//<---- 콘솔 로그에 email 정보 출력 (어딨는지 알겠죠?)
+                        //console.log(res.id);//<---- 콘솔 로그에 id 정보 출력(id는 res안에 있기 때문에  res.id 로 불러온다)
+                        //console.log(res.kakao_account.email);//<---- 콘솔 로그에 email 정보 출력 (어딨는지 알겠죠?)
                         $.ajax({
 							url: '/oauth',
 							dataType: 'json',
@@ -75,7 +76,6 @@
                             data: {'provider_id': res.id, 'email':res.kakao_account.email},
 							success: function(data) {
                                 var data = data;
-                                console.log(data);
                                 if(data.status == 'exist_info'){
                                     window.location.replace("../login");
                                     alert(data.message);

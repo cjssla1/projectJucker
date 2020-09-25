@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<%- include ("head") %>
+</head>
+
+<body id="root">
+    <div id="wrapper">
+        <div class="find-container-grey">
+            <div class="find-select">
+                <ul class="tabs">
+                    <li class="tab-link current" data-tab="tab-1"> 카카오톡 </li>
+                    <li class="tab-link" data-tab="tab-2"> - </li>
+                </ul>
+                <div id="tab-1" class="tab-content current">
+                    <p class="find-text">회원가입시 인증했던 소셜계정으로 비밀번호를 찾을 수 있습니다.</p><br>
+                    <a id="login-form-btn" href="javascript:loginFormWithKakao()"><button class="find-kakao-btn"> 확인 </button></a>
+                </div>
+                <div id="tab-2" class="tab-content">
+                    <p class="find-text"> - </p>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+	<script>
+		$(function() {
+			$('ul.tabs li').click(function(){							//선택자를 통해 tabs 메뉴를 클릭 이벤트를 지정해줍니다.
+				var tab_id = $(this).attr('data-tab');
+
+				$('ul.tabs li').removeClass('current');			//선택 되있던 탭의 current css를 제거하고 
+				$('.tab-content').removeClass('current');		
+
+				$(this).addClass('current');								////선택된 탭에 current class를 삽입해줍니다.
+				$("#" + tab_id).addClass('current');
+			})
+		})
+    </script>
+        <script type="text/javascript">
+            Kakao.init('2f6714e2325a872e5a76ff2bf8397c4b'); 
+            function loginFormWithKakao() {
+                Kakao.Auth.loginForm({
+                success: function(authObj) {
+                    Kakao.API.request({
+                        url: '/v2/user/me',
+                        success: function(res) {
+                            //alert(JSON.stringify(res)); //<---- kakao.api.request 에서 불러온 결과값 json형태로 출력
+                            //alert(JSON.stringify(authObj)); //<----Kakao.Auth.createLoginButton에서 불러온 결과값 json형태로 출력
+                            console.log(res.id);//<---- 콘솔 로그에 id 정보 출력(id는 res안에 있기 때문에  res.id 로 불러온다)
+                            console.log(res.kakao_account.email);//<---- 콘솔 로그에 email 정보 출력 (어딨는지 알겠죠?)
+                            $.ajax({
+                                url: '/find/pw',
+                                dataType: 'json',
+                                type: 'POST',
+                                traditional : true,
+                                data: {'provider_id': res.id, 'email':res.kakao_account.email},
+                                success: function(data) {
+                                    var data = data;
+                                    if(data.status == 'Not_exist_info'){
+                                        window.location.replace("../login");
+                                        alert(data.message);
+                                    }
+                                    else if(data.status == 'exist_info') { window.location.replace("../find/pw"); }
+                                }
+                            })
+                            //console.log(res.properties['nickname']);//<---- 콘솔 로그에 닉네임 출력(properties에 있는 nickname 접근 
+                        // res.properties.nickname으로도 접근 가능 )
+                            //console.log(authObj.access_token);//<---- 콘솔 로그에 토큰값 출력
+                        }
+                    })
+                },
+                fail: function(err) {
+                    showResult(JSON.stringify(err))
+                },
+                })
+            }
+            function showResult(result) {
+                document.getElementById('login-form-result').innerText = result
+            }
+        </script>
+</body>
+</html>

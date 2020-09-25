@@ -34,7 +34,7 @@
                             <p id="check-nick-text" class="check-text"></p>
                             <input type="hidden" name="provider_id" value="<%= session.provider_id %>" readonly>
                             
-                            <button type="submit" class="btn btn-info" type="submit" > 회원가입 </button>
+                            <button type="submit" id="submit-info" class="btn btn-info" type="submit"> 회원가입 </button>
                            
                         </form>
                     </div>
@@ -69,7 +69,7 @@
                 var SC = id.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi);
 
                 if(id == "" || id.search(/\s/) != -1 ) { 
-                    $('#check-id-text').text('공백을 제외해주세요.');
+                    $('#check-id-text').text('사용할 수 없는 아이디입니다.');
                     $('#check-id-text').css('color','red'); 
                     return;
                 }
@@ -111,18 +111,21 @@
                 var SC = pw.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi);
 
                 if(pw == "" || pw.search(/\s/) != -1 || kor != -1 ) { 
-                    $('#check-pw-text').text('공백 또는 한글을 제외해주세요.');
+                    $('#check-pw-text').text('사용할 수 없는 비밀번호 입니다.');
                     $('#check-pw-text').css('color','red'); 
+                    $('#password2').attr('readonly', true);
                     return;
                 }
                 else if ((num < 0 && eng < 0) || (eng < 0 && SC < 0) || (SC < 0 && num < 0)) { 
                     $('#check-pw-text').text('사용할 수 없는 비밀번호 입니다.');
                     $('#check-pw-text').css('color','red'); 
+                    $('#password2').attr('readonly', true);
                     return;
                 }
                 else { 
                     $('#check-pw-text').text('사용 가능한 비밀번호 입니다.');
                     $('#check-pw-text').css('color','green'); 
+                    $('#password2').attr('readonly', false);
                     return;
                 }
             })
@@ -136,16 +139,19 @@
             if(pw1 == "" || pw1.search(/\s/) != -1 || pw2 == "" || pw2.search(/\s/) != -1) { 
                 $('#check-pw-text2').text('비밀번호가 일치하지 않습니다.');
                 $('#check-pw-text2').css('color','red'); 
+                $('#submit-info').attr('disabled', true);
                 return;
             }
             else if (pw1 == pw2) { 
                 $('#check-pw-text2').text('비밀번호가 일치합니다.');
                 $('#check-pw-text2').css('color','green'); 
+                $('#submit-info').attr('disabled', false);
                 return;
             }
             else { 
                 $('#check-pw-text2').text('비밀번호가 일치하지 않습니다.');
                 $('#check-pw-text2').css('color','red'); 
+                $('#submit-info').attr('disabled', true);
                 return;
             }
         })

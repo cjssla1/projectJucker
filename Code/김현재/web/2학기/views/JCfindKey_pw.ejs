@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<%- include ("head") %>
+</head>
+
+<body id="root">
+    <div id="wrapper">
+        <div class="find-container-grey">
+            <div class="result-id">
+                <p class="info-text"> 영문, 숫자, 특수문자 중 2가지 이상을 혼합하여 입력해주세요. </p>
+                <div class="change-text">
+                    <label for="password"> 비밀번호 </label>
+                    <input class="change-pw" type="password" name="password" id="password" required><br>
+                    <p id="check-pw-text" class="check-text"></p>
+                    <label for="password2"> 비밀번호 확인 </label>
+                    <input class="change-pw" type="password" name="password2" id="password2" required>
+                    <p id="check-pw-text2" class="check-text"></p>
+                </div>
+                <button type="submit" id="change-pw" class="close-btn" disabled> 변경 </button>
+               
+            </div>
+        </div>
+    </div>
+	
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+	<script>
+		$(function() {
+			$('ul.tabs li').click(function(){							//선택자를 통해 tabs 메뉴를 클릭 이벤트를 지정해줍니다.
+				var tab_id = $(this).attr('data-tab');
+
+				$('ul.tabs li').removeClass('current');			//선택 되있던 탭의 current css를 제거하고 
+				$('.tab-content').removeClass('current');		
+
+				$(this).addClass('current');								////선택된 탭에 current class를 삽입해줍니다.
+				$("#" + tab_id).addClass('current');
+			})
+		})
+    </script>
+    <script>
+        $(function() {
+            $('#change-pw').click(function(){
+                var pw = $("#password2").val();
+                if(pw.length != 0 ){
+                    $.ajax({
+                    url: '/change',
+                    dataType: 'json',
+                    type: 'POST',
+                    traditional : true,
+                    data: {'password': pw},
+                    success: function(data) {
+                        var data = data;
+                        console.log(data);
+                        if(data.status == 'Not_change_info'){
+                            //window.location.replace("../login");
+                            alert(data.message);
+                        }
+                        else if(data.status == 'change_info') { alert(data.message); window.open('', '_self').close(); }
+                    }
+                    })
+                }
+            })
+        })
+    </script>
+    <script>
+        $(function(){
+            $('#password').focusout(function(){
+                var pw = $("#password").val();
+                var num = pw.search(/[0-9]/g);
+                var eng = pw.search(/[a-z]/ig);
+                var kor = pw.search(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/);
+                var SC = pw.search(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi);
+
+                if(pw == "" || pw.search(/\s/) != -1 || kor != -1 ) { 
+                    $('#check-pw-text').text('사용할 수 없는 비밀번호 입니다.');
+                    $('#check-pw-text').css('color','red');
+                    $('#password2').attr('readonly', true);
+                    return;
+                }
+                else if ((num < 0 && eng < 0) || (eng < 0 && SC < 0) || (SC < 0 && num < 0)) { 
+                    $('#check-pw-text').text('사용할 수 없는 비밀번호 입니다.');
+                    $('#check-pw-text').css('color','red');
+                    $('#password2').attr('readonly', true);
+                    return;
+                }
+                else { 
+                    $('#check-pw-text').text('사용 가능한 비밀번호 입니다.');
+                    $('#check-pw-text').css('color','green'); 
+                    $('#password2').attr('readonly', false);
+                    return;
+                }
+            })
+        })
+    </script>
+    <script>
+    $(function(){
+        $('#password2').focusout(function(){
+            var pw1 = $("#password").val();
+            var pw2 = $("#password2").val();
+            if(pw1 == "" || pw1.search(/\s/) != -1 || pw2 == "" || pw2.search(/\s/) != -1) { 
+                $('#check-pw-text2').text('비밀번호가 일치하지 않습니다.');
+                $('#check-pw-text2').css('color','red');
+                $('#change-pw').attr('disabled', true); 
+                return;
+            }
+            else if (pw1 == pw2) { 
+                $('#check-pw-text2').text('비밀번호가 일치합니다.');
+                $('#check-pw-text2').css('color','green'); 
+                $('#change-pw').attr('disabled', false);
+                return;
+            }
+            else { 
+                $('#check-pw-text2').text('비밀번호가 일치하지 않습니다.');
+                $('#check-pw-text2').css('color','red'); 
+                $('#change-pw').attr('disabled', true);
+                return;
+            }
+        })
+    })
+    </script>
+</body>
+</html>
