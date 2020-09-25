@@ -366,7 +366,7 @@ ul.tabs li.current {
     margin-top: 1px; 
     margin-left: -1px;
 }
-.sub-text > li:hover { background-color: #9c9c9c; }
+.sub-text > li:hover { background-color: #CC9998; }
 .sub-text:hover { color: white; text-decoration: black; }
 
 .board-section {
@@ -378,15 +378,15 @@ ul.tabs li.current {
 }
 .view-information {
     height: 80px;
-    border: 1px solid #919191;
-    border-top: 4px solid #7a7a7a;
+    border: 1px solid #A16E7F;
+    border-top: 4px solid #A16E7F;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    border-bottom: 2px solid #919191;
+    border-bottom: 2px solid #A16E7F;
 }
 
 .view-title { height: 40px; margin: 0 auto;  padding: 10px 0px; }
-.writer-info { height: 40px; margin: 0 auto;  padding: 10px 0px; border-top: 1px solid #919191; }
+.writer-info { height: 40px; margin: 0 auto;  padding: 10px 0px; border-top: 1px solid #A16E7F; }
 .view-title > li  { float: left; font-size: 12px; }
 .writer-info > li { float: left; font-size: 12px; }
 .subject { width: 100px; text-align: center; }
@@ -446,12 +446,12 @@ ul.tabs li.current {
     margin-top: 50px;
     width: 800px;
     height: auto;
-    border-top: 3px solid #7a7a7a;
-    border-left: 1px solid #919191;
-    border-right: 1px solid #919191;
+    border-top: 3px solid #A16E7F;
+    border-left: 1px solid #A16E7F;
+    border-right: 1px solid #A16E7F;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
-    border-bottom: 3px solid #7a7a7a;
+    border-bottom: 3px solid #A16E7F;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
 }
@@ -555,9 +555,9 @@ ul.tabs li.current {
 .empty {font-size: 12px; font-weight: bold; display: inline-block; margin-top: 15px; margin-left: 35px;}
 
 .write-section {
-    border: 1px solid #919191;
+    border: 1px solid #A16E7F;
     border-radius: 20px;
-    border-top: 3px solid #7a7a7a;
+    border-top: 3px solid #A16E7F;
     margin: 0 auto;
     margin-top: 60px;
     width: 902px;
@@ -660,9 +660,10 @@ ul.tabs li.current {
 }
 
 .delete-section {
-    border: 1px solid #919191;
+    background-color: white;
+    border: 1px solid #A16E7F;
     border-radius: 20px;
-    border-top: 3px solid #7a7a7a;
+    border-top: 3px solid #A16E7F;
     margin: 0 auto;
     margin-top: 60px;
     width: 802px;
@@ -670,7 +671,8 @@ ul.tabs li.current {
 }
 
 .delete-pw {
-    border: 2px solid #e03a3a;
+    background-color: #ffe0e0;
+    border: 2px solid #A16E90;
     margin: 0 auto;
     margin-top: 100px;
     width: 500px;
@@ -724,7 +726,7 @@ ul.tabs li.current {
 .login {
     font-size: 14px;
     margin: 0 150px;
-    border-top: 2px solid black;
+    border-top: 2px solid #CC9998;
     border-radius: 20px;
 }
 
@@ -757,6 +759,7 @@ ul.tabs li.current {
     border-top: 1px solid #919191;
     margin-top: 0px;
     margin-bottom: 20px;
+    padding-top: 15px;
 }
 
 .social-img {
@@ -826,6 +829,98 @@ ul.tabs li.current {
 }
 
 #check-id-text, #check-pw-text2, #check-nick-text { margin-bottom: 15px;}
+
+.find-container-grey { 
+    margin: 0 auto; 
+    margin-top: 50px;
+    width: 550px; 
+    height: 300px;
+    background-color: #f0f1f2; 
+}
+
+.find-select {
+    margin: 0 auto;
+    width: 500px;
+    height: 250px;
+    font-size: 12px;
+    text-align: center;
+    padding-top: 15px;
+    background-color: #E5CCB2;
+    border: 1px solid #A16E90;
+    border-radius: 10px;
+}
+
+.find-text{ margin-top: 30px;}
+.find-kakao-btn {
+    width: 70px;
+    height: 30px;
+    margin: 20px 0px;
+    background-color: #f9e000;
+    border: 0;
+    border-radius: 20px;
+}
+
+.result-id {
+    margin: 0 auto;
+    width: 500px;
+    height: 250px;
+    font-size: 14px;
+    text-align: center;
+    padding-top: 50px;
+    background-color: white;
+    border: 1px solid #A16E90;
+    border-radius: 20px;
+}
+.result-id-text {
+    padding: 10px 50px;
+    background-color: #FFE5D4;
+    border: 2px solid #A16E90;
+    border-radius: 10px;
+}
+
+.next-btn{
+    margin-top: 100px;
+    padding-top: 10px;
+    height: 50px;
+}
+
+.close-btn {
+    width: 70px;
+    height: 30px;
+    color: black;
+    border: 1px solid #A16E90;
+    border-radius: 10px;
+}
+
+.next-pw-btn {
+    width: 130px;
+    height: 30px;
+    color: black;
+    border: 1px solid #A16E90;
+    border-radius: 10px;
+}
+
+.change-pw{
+    width:100px;
+    height: 30px;
+    padding-left: 5px;
+}
+
+.change-text {
+    font-size: 13px;
+    padding-top: 15px;
+    padding-left: 20px;
+    width: 300px;
+    height: 120px;
+    background-color: #E5CCB2;
+    border: 2px solid #A16E90;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 90px;
+    text-align: left;
+}
+
+
 
 /* --------------------------------------------- */
 
