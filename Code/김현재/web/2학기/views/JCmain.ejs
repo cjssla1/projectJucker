@@ -37,12 +37,12 @@
 								<% for(var data of results) { %>
 									<tr>
 										<td class="name text-center"><%= data.name %> </td>
-										<% if(data.updown >= 0) { %>
-											<td class="price-up"> +<%= data.updown %>% </td>
+										<% if(data.camount >= 0) { %>
+											<td class="price-up"> +<%= data.camount %>% </td>
 										<% } else { %>
-											<td class="price-down"> <%= data.updown %>% </td> 
+											<td class="price-down"> <%= data.camount %>% </td> 
 										<% } %>
-										<td> <%= data.current %> </td>
+										<td> <%= data.end %> </td>
 										<td> <%= data.aggregate %> </td>
 										<td> <%= data.tran %> </td>
 									</tr>

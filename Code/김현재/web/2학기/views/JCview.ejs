@@ -167,11 +167,13 @@
                         var page_list_size = results_under.page_list_size
                         var page_size = results_under.page_size
                         var curPage = results_under.curPage
+                        var type = results.type
+                        var word = results.word
                         %>
                         
                         <% if(curSet > 1){ %>
                         <li value=(startPage-1) class="previous">
-                            <a href='/board/<%=(startPage-1)%>'> ◀ </a>
+                            <a href='/board/<%=(startPage-1)%>/?type=<%= type %>&word_search=<%= word %>'> ◀ </a>
                         </li>
                         <% } %>
                         
@@ -180,20 +182,20 @@
                             if(i == curPage){
                             %>
                             <li value=i class="selected">
-                                <a href='/board/<%= i %>' class="font-black paging-font"> <%= i %> </a>
+                                <a href='/board/<%= i %>/?type=<%= type %>&word_search=<%= word %>' class="font-black paging-font"> <%= i %> </a>
                             </li> 
                             <%
                             } else{
                             %>
                             <li value=i class="not-selected">
-                                <a href='/board/<%= i %>' class="font-black"> <%= i %> </a>
+                                <a href='/board/<%= i %>/?type=<%= type %>&word_search=<%= word %>' class="font-black"> <%= i %> </a>
                             </li>
                             <% } %>
                         <% } %>
                         
                         <% if(curSet < totalSet){ %>
                         <li value=(endPage+1) class="next">
-                            <a href='/board/<%= (endPage+1) %>'> ▶ </a>
+                            <a href='/board/<%= (endPage+1) %>/?type=<%= type %>&word_search=<%= word %>'> ▶ </a>
                         </li>
                         <% } %>
                     </ul> 
