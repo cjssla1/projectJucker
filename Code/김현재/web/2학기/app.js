@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
+const e = require('express');
 const KakaoStrategy = require("passport-kakao").Strategy;
 const NaverStrategy = require("passport-naver").Strategy;
 const LocalStrategy = require("passport-local").Strategy;
@@ -20,6 +21,8 @@ const client = mysql.createConnection({
     database: "mydb"
 });
 
+let season = 1; // 시즌
+let money = 100000000 // 시즌 돈
 
 //client.connect();
 //client.query('select name, current from stock;', function(err, rows, fields){
@@ -38,7 +41,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 1000 * 60 * 10 //10분
+        maxAge: 1000 * 60 * 100 //100분
     }
 }));
 app.use(passport.initialize());
@@ -65,10 +68,10 @@ app.get('/', function(req, res){
     //console.log(session);
     //if(session.passport) { "@@@@" + console.log(session.passport.user[0]); }
     //console.log(session.passport.user[0].nickname);
-    client.query("SELECT * from web_stock WHERE date_format(day, '%Y-%m-%d') = curdate() ORDER BY aggregate DESC LIMIT 12;", function(err, result, fields){
+    client.query("SELECT * from stockdata JOIN stock WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = stock.symbol ORDER BY aggregate DESC LIMIT 12;", function(err, result, fields){
         if (err)
         {
-            console.log("web_stcok : 현재 날짜 상위 12종목 데이터 추출 오류");
+            console.log("stockdata : 현재 날짜 상위 12종목 데이터 추출 오류");
         }
         else
         {
@@ -130,14 +133,14 @@ app.post('/', function(req, res) {
         }
         else
         {
-            client.query("SELECT current, value FROM web_stock, stockpredict WHERE date_format(day, '%Y-%m-%d') = curdate() AND name = ? AND symbol = ?;", [name, result[0].symbol], function(err, result2, fields){
+            client.query("SELECT end, value FROM stockdata, stockpredict WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = ? AND stockpredict.symbol = ?;", [result[0].symbol, result[0].symbol], function(err, result2, fields){
                 if (err)
                 {
-                    console.log("web_stock : 메인페이지 예측 데이터 추출 오류");
+                    console.log("stockdata : 메인페이지 예측 데이터 추출 오류");
                 }
                 else
                 {
-                    var current_price = result2[0].current;
+                    var current_price = result2[0].end;
                     var predicted_price = result2[0].value;
                     var data = new Array(current_price, predicted_price); 
                     //console.log(data);
@@ -197,7 +200,9 @@ app.get('/board/:page', function (req, res){
                 "totalSet": totalSet,
                 "curSet": curSet,
                 "startPage": startPage,
-                "endPage": endPage
+                "endPage": endPage,
+                "type": type,
+                "word": word
             };
 
             client.query("SELECT *, date_format(time, '%H:%i') AS time FROM board WHERE title LIKE ? OR content LIKE ? OR id LIKE ? ORDER BY pageid DESC LIMIT ?,?;", [T_word, C_word, W_word, no, page_size], function(err, result2, fields){
@@ -286,7 +291,9 @@ app.get('/board/recommend/:page', function (req, res){
                 "totalSet": totalSet,
                 "curSet": curSet,
                 "startPage": startPage,
-                "endPage": endPage
+                "endPage": endPage,
+                "type": type,
+                "word": word
             };
 
             client.query("SELECT *, date_format(time, '%H:%i') AS time FROM board WHERE up >= 3 AND (title LIKE ? OR content LIKE ? OR id LIKE ?) ORDER BY pageid DESC LIMIT ?,?;", [T_word, C_word, W_word, no, page_size], function(err, result2, fields){
@@ -404,7 +411,9 @@ app.get('/board/:page/view/:pageid', function(req, res){
                                                 "totalSet": totalSet,
                                                 "curSet": curSet,
                                                 "startPage": startPage,
-                                                "endPage": endPage
+                                                "endPage": endPage,
+                                                "type": type,
+                                                "word": word
                                             };
                                 
                                             client.query("SELECT *, date_format(time, '%H:%i') AS time FROM board WHERE title LIKE ? OR content LIKE ? OR id LIKE ? ORDER BY pageid DESC LIMIT ?,?;", [T_word, C_word, W_word, no, page_size], function(err, result4, fields){
@@ -535,7 +544,9 @@ app.get('/board/recommend/:page/view/:pageid', function(req, res){
                                                 "totalSet": totalSet,
                                                 "curSet": curSet,
                                                 "startPage": startPage,
-                                                "endPage": endPage
+                                                "endPage": endPage,
+                                                "type": type,
+                                                "word": word
                                             };
                                 
                                             client.query("SELECT *, date_format(time, '%H:%i') AS time FROM board WHERE up >= 3 AND (title LIKE ? OR content LIKE ? OR id LIKE ?) ORDER BY pageid DESC LIMIT ?,?;", [T_word, C_word, W_word, no, page_size], function(err, result4, fields){
@@ -775,14 +786,14 @@ app.post('/delete/:pageid', function(req, res){
 app.get('/login', function(req, res, next) {
     let session = req.session;
     //console.log(session);
-
     res.render("JClogin", {
-        session : session
-    });
+            session : session
+        });
 })
 
 app.post('/login', passport.authenticate('local', {failureRedirect: '/login'}), function(req, res) {
-    res.redirect('/');
+    if (req.session.invest) res.redirect('/deal')
+    else res.redirect('/');
     //let body = req.body;
 
     //client.query("select * from customer where id = ?", [body.userId], function(err, result, fields){
@@ -821,10 +832,18 @@ var isAuthenticated = function (req, res, next) {
         return next();
     else if (req.session.user_id)
         return next();
+    else if (req.session.passport)
+        return next();
+    else res.redirect('/login');
     //if (req.isAuthenticated())
     //  return next();
-    res.redirect('/login');
-  };
+
+};
+
+var investIA = function (req, res, next) {
+    req.session.invest = "O";
+    return next();
+};
 
 app.get('/signup', isAuthenticated, function(req, res) {
     let session = req.session;
@@ -904,7 +923,7 @@ passport.use(new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
 }, function(req, userID, password, done) {
-        client.query("select nickname from customer where id = ? AND pwd = ?", [userID, password], function(err, result, fields){
+        client.query("select id, nickname from customer where id = ? AND pwd = ?", [userID, password], function(err, result, fields){
             if(err){
                 console.log("로그인 인증 오류");
             }
@@ -1098,6 +1117,582 @@ app.post('/change', function(req, res, next){
     });
 });
 
+app.get('/predict/:page', function (req, res){
+    let session = req.session;
+    let page_size = 20; // 한 페이지 당 x개 게시물
+    let page_list_size = 10 // 1 ~ 10개 페이지
+    let no = ""; // limit 변수
+    let type = req.query.type; // T=제목, C=내용, W=작성자, TC=제목+내용
+    let word = req.query.word_search;
+    let T_word;
+
+    //console.log (type, word);
+
+    if (type == "T") {  T_word = "%" + word.toUpperCase() + "%"; }
+    else { T_word = "%%"; }
+    //console.log (T_word, C_word, W_word)
+    
+    client.query("SELECT count(*) AS cnt FROM stockdata JOIN stock WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = stock.symbol AND name LIKE ?;", [T_word], function(err, result, fields){
+        if (err)
+        {
+            console.log(err + "stockdata : 종목 개수 추출");
+        }
+        else
+        {
+            let totalPageCount = result[0].cnt; // 전체 게시물의 숫자
+            let curPage = req.params.page; // 현재 페이지
+
+            if (totalPageCount < 0) { totalPageCount = 0 }
+
+            let totalPage = Math.ceil(totalPageCount / page_size); // 전체 페이지수
+            let totalSet = Math.ceil(totalPage / page_list_size); //전체 세트수
+            let curSet = Math.ceil(curPage / page_list_size) // 현재 세트 번호
+            let startPage = ((curSet - 1) * 10) + 1 // 현재 세트내 출력된 시작 페이지
+            let endPage = (startPage + page_list_size) - 1; // 현재 세트내 출력될 마지막 페이지
+
+            if (curPage < 0) { no = 0 }
+            else { no = (curPage - 1) * 20} // !-- page_size 수정 시 * 뒤의 값 수정 필요 --! 
+
+            //if (curPage > totalSet) { res.redirect(totalSet) }
+            //console.log('[6] startPage : ' + startPage + ' | [7] endPage : ' + endPage)
+
+            let paging = {
+                "curPage": curPage,
+                "page_list_size": page_list_size,
+                "page_size": page_size,
+                "totalPage": totalPage,
+                "totalSet": totalSet,
+                "curSet": curSet,
+                "startPage": startPage,
+                "endPage": endPage,
+                "type": type,
+                "word": word
+            };
+            client.query("SELECT * from stockdata JOIN stock WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = stock.symbol AND name LIKE ? ORDER BY aggregate DESC LIMIT ?,?;", [T_word, no, page_size], function(err, result2, fields){
+                if (err)
+                {
+                    console.log("stockdata : 종목 목록 추출 오류");
+                }
+                else 
+                {
+                    res.render("JCpredict", {
+                        results: paging, // 페이징 
+                        results2: result2, // 자유 게시글 추출
+                        session: session // 세션
+                    });
+                         
+                    /*
+                    res.render("JCboard", {
+                        results: paging, // 페이징 
+                        results2: result2, // 자유 게시글 추출
+                        session: session // 세션    
+                    });
+                    */
+                }
+            });
+
+        }
+    });
+
+})
+
+app.get("/logout", function(req,res,next){
+    req.session.destroy(function(){ 
+        req.session;
+    });
+    res.clearCookie('sid');
+    res.redirect("/")
+})
+
+var startInvest = function (req, res, next) {
+    let session = req.session;
+    client.query("SELECT * from stockdata JOIN stock WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = stock.symbol ORDER BY aggregate DESC LIMIT 1;", function(err, result, fields){
+        if (err){
+            console.log("stockdata : 주식 종목 추출 오류");
+        }
+        else 
+        {
+            client.query("select id, season from myinfo where id = ? and season = ?;", [session.passport.user[0].id, season], function(err, result10, fields){
+                if (err)
+                {
+                    console.log("myinfo : 정보 추출 오류")
+                }
+                else
+                {
+                    if (result10.length === 0)
+                    {
+                        client.query("INSERT INTO myinfo(id, season, smoney, balance, ratio) VALUES (?, ?, ?, ?, ?);", [session.passport.user[0].id, season, money, money, 0], function(err, result11, fields){
+                            if (err) { console.log("myinfo : 정보 입력 오류") }
+                            else
+                            {
+                                client.query("INSERT INTO myhave(id, season, symbol) VALUES (?, ?, ?);", [session.passport.user[0].id, season, result[0].symbol], function(err, result12, fields){
+                                    if (err) { console.log("myhave : 정보 입력 오류") }
+                                    else
+                                    {
+                                        client.query("INSERT INTO history(id, season, smoney, ratio) VALUES (?, ?, ?, ?);", [session.passport.user[0].id, season, money, 0], function(err, result13, fields){
+                                            if (err) { console.log("history : 정보 입력 오류") }
+                                            else { return next(); }
+                                        })
+                                    }
+                                }) 
+                            }
+                        })
+                    }
+                    else { return next(); } 
+                }
+            });
+        }
+    });  
+};
+
+app.get("/deal", investIA, isAuthenticated, startInvest, function(req, res) {
+    let session = req.session;
+    //let season = 1; // 시즌
+    //let money = 100000000 // 시즌돈
+    
+    client.query("SELECT * from stockdata JOIN stock WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = stock.symbol ORDER BY aggregate DESC;", function(err, result, fields){
+        if (err){
+            console.log("stockdata : 주식 종목 추출 오류");
+        }
+        else 
+        {
+            client.query("select id, season from myinfo where id = ? and season = ?;", [session.passport.user[0].id, season], function(err, result10, fields){
+                if (err)
+                {
+                    console.log("myinfo : 정보 추출 오류")
+                }
+                else
+                {
+                    client.query("SELECT id, season, balance, num from myinfo JOIN myhave using(id, season) WHERE myinfo.id = ? AND myinfo.season = ? AND symbol = ?;", [session.passport.user[0].id, season, result[0].symbol],function(err, result2, fields){
+                        if (err)
+                        {
+                            console.log("myinfo : 보유 정보 추출 오류");
+                        }
+                        else
+                        {
+                            res.render("JCdeal", {
+                                results : result,
+                                results2 : result2,
+                                session : session
+                            });
+                        }
+                    })
+                
+                }
+            });
+        }
+    });  
+})
+
+app.post('/deal', function(req, res, next){
+    let id = req.session.passport.user[0].id;
+    let type = req.body.type;
+    let name = req.body.name;
+    let share = req.body.share;
+    let num = req.body.num;
+    let total = req.body.total;
+    name = name.trim(); share = share.trim();
+    /*
+    console.log(id, season);
+    console.log(type);
+    console.log(name);
+    console.log(share);
+    console.log(num);
+    console.log(total);
+    */
+    client.query("SELECT symbol FROM stock WHERE name = ?;", [name], function(err, result, fields){
+        if(err)
+        {
+            console.log("stock : 심볼 추출 오류");
+        }  
+        else
+        {
+            symbol = result[0].symbol;
+            client.query("INSERT INTO transaction VALUES (?, ?, ?, ?, ?, ?, now(), ?);", [id, season, symbol, share, num, total, type], function(err, result, fields){
+                if(err)
+                {
+                    console.log(err + "transaction : 거래 오류");
+                }  
+                else
+                {
+                    
+                    client.query("SELECT * FROM myhave WHERE id = ? AND season = ? AND symbol = ?", [id, season, symbol], function(err, result2, fields){
+                        if(err)
+                        {
+                            console.log(err + "myhave : 조회 오류");
+                        }  
+                        else if (result2.length === 0)
+                        {
+                            client.query("INSERT INTO myhave VALUES (?, ?, ?, ?, ?, ?);", [id, season, symbol, share, num, total], function(err, result2, fields){
+                                if(err)
+                                {
+                                    console.log(err + "myhave : 거래 오류");
+                                }
+                                else 
+                                {
+                                    if (type == "B")
+                                    {
+                                        client.query("UPDATE myinfo SET balance = balance - ? WHERE id = ? AND season = ?;", [total, id, season, symbol], function(err, result4, fields){
+                                            if(err)
+                                            {
+                                                console.log(err + "myinfo : 거래 U 오류");
+                                            }
+                                            else
+                                            {
+                                                client.query("SELECT num, balance FROM myhave, myinfo WHERE myhave.id = ? AND myhave.season = ? AND myhave.symbol = ?;", [id, season, symbol], function(err, result5, fields){
+                                                    if(err)
+                                                    {
+                                                        console.log(err + "myhave : 거래 정보 추출 오류");
+                                                    }
+                                                    else 
+                                                    {   
+                                                        res.send({results5 : result5});
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                    else if( type == "S")
+                                    {
+                                        client.query("UPDATE myinfo SET balance = balance + ? WHERE id = ? AND season = ?;", [total, id, season, symbol], function(err, result4, fields){
+                                            if(err)
+                                            {
+                                                console.log(err + "myinfo : 거래 U 오류");
+                                            }
+                                            else
+                                            {
+                                                client.query("SELECT num, balance FROM myhave, myinfo WHERE myhave.id = ? AND myhave.season = ? AND myhave.symbol = ?;", [id, season, symbol], function(err, result5, fields){
+                                                    if(err)
+                                                    {
+                                                        console.log(err + "myhave : 거래 정보 추출 오류");
+                                                    }
+                                                    else 
+                                                    {   
+                                                        res.send({results5 : result5});
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                }  
+                            });
+                        }
+                        else 
+                        {
+                            if (type == "B")
+                            {
+                                let prev_total = result2[0].share * result2[0].num;
+                                let prev_num = result2[0].num;
+                                let newshare = ((Number(prev_total) + Number(total)) / (Number(prev_num) + Number(num)));
+                                /*
+                                console.log("prev_total : " + prev_total + " total : " + total);
+                                console.log("prev_num : " + prev_num + "num : " + num);
+                                console.log(newshare);*/ 
+                                client.query("UPDATE myhave SET share = ?, num = num + ? WHERE id = ? AND season = ? AND symbol = ?;", [newshare, num, id, season, symbol], function(err, result3, fields){
+                                    if(err)
+                                    {
+                                        console.log(err + "myhave : 거래 U 오류");
+                                    }
+                                    else
+                                    {
+                                        client.query("UPDATE myinfo SET balance = balance - ? WHERE id = ? AND season = ?;", [total, id, season, symbol], function(err, result4, fields){
+                                            if(err)
+                                            {
+                                                console.log(err + "myinfo : 거래 U 오류");
+                                            }
+                                            else
+                                            {
+                                                client.query("SELECT num, balance FROM myhave, myinfo WHERE myhave.id = ? AND myhave.season = ? AND myhave.symbol = ?;", [id, season, symbol], function(err, result5, fields){
+                                                    if(err)
+                                                    {
+                                                        console.log(err + "myhave : 거래 정보 추출 오류");
+                                                    }
+                                                    else 
+                                                    {   
+                                                        res.send({results5 : result5});
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }  
+                                });
+                            }
+                            else if( type == "S")
+                            {
+                                client.query("UPDATE myhave SET num = num - ? WHERE id = ? AND season = ? AND symbol = ?;", [num, id, season, symbol], function(err, result3, fields){
+                                    if(err)
+                                    {
+                                        console.log(err + "myhave : 거래 U 오류");
+                                    }
+                                    else
+                                    {
+                                        client.query("UPDATE myinfo SET balance = balance + ? WHERE id = ? AND season = ?;", [total, id, season, symbol], function(err, result4, fields){
+                                            if(err)
+                                            {
+                                                console.log(err + "myinfo : 거래 U 오류");
+                                            }
+                                            else
+                                            {
+                                                client.query("SELECT num, balance FROM myhave, myinfo WHERE myhave.id = ? AND myhave.season = ? AND myhave.symbol = ?;", [id, season, symbol], function(err, result5, fields){
+                                                    if(err)
+                                                    {
+                                                        console.log(err + "myhave : 거래 정보 추출 오류");
+                                                    }
+                                                    else 
+                                                    {   
+                                                        res.send({results5 : result5});
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }  
+                                });
+                            }
+                        }
+                    });
+
+                }
+            });
+        }
+    });
+});
+
+app.post('/dealNum', function(req, res, next){
+    let id = req.session.passport.user[0].id;
+    let name = req.body.name;
+    name = name.trim();
+
+    client.query("SELECT symbol FROM stock WHERE name = ?;", [name], function(err, result, fields){
+        if(err)
+        {
+            console.log("stock : 심볼 추출 오류");
+        }  
+        else
+        {
+            symbol = result[0].symbol;                                      
+            client.query("SELECT num FROM myhave WHERE id = ? AND season = ? AND symbol = ?;", [id, season, symbol], function(err, result, fields){
+                if(err)
+                {
+                    console.log(err + "myhave : 거래 정보 추출 오류");
+                }
+                else 
+                {   
+                    if(result.length != 0) { 
+                        var status = {
+                            "status": 'find',
+                            "value": result
+                        }
+                        res.send(JSON.stringify(status));  
+                    }
+                    else { 
+                        var status = {
+                            "status": 'no_find',
+                            "value": 0
+                        }
+                        res.send(JSON.stringify(status));  
+                    }
+                }
+            });                 
+        }
+    });
+});
+
+app.post('/dealSearch', function(req, res, next){
+    let word = req.body.word;
+    let search = "%" + word.toUpperCase() + "%";
+
+
+    client.query("SELECT * from stockdata JOIN stock WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = stock.symbol AND stock.name LIKE ? ORDER BY aggregate DESC;", [search], function(err, result, fields){
+        if(err)
+        {
+            console.log("customer : 인증 오류");
+        }  
+        if (result.length === 0) {
+            //req.session.provider_id = provider_id;
+            //req.session.email = email;
+            var status = {
+                "status": 'no_search',
+                "message": '찾을 수 없습니다.'
+            }
+            res.send(JSON.stringify(status));  
+        }
+        else 
+        {
+            //req.session.provider_id = provider_id;
+            res.send({results : result});
+        }
+    });
+});
+
+app.get("/investInfo", investIA, isAuthenticated, startInvest, function(req, res) {
+    let session = req.session;
+    let id = session.passport.user[0].id;
+    //let season = 1; // 시즌
+    //let money = 100000000 // 시즌돈
+    
+    client.query("SELECT stock.name, stockdata.end, myhave.share, myhave.num, truncate(((share - end)/end)*100, 2) AS ratio , truncate(((share - end)/end)*share*myhave.num, 0) AS gain FROM myhave, stock, stockdata WHERE myhave.symbol = stockdata.symbol AND myhave.symbol = stock.symbol AND myhave.id = ? AND myhave.season = ?;", [id, season], function(err, result, fields){
+        if(err)
+        {
+            console.log("myhave : 보유주 정보 추출 오류");
+        }
+        else 
+        {   
+            client.query("SELECT *, DATE_FORMAT(time, '%Y-%m-%d %T') AS day FROM transaction, stock WHERE transaction.symbol = stock.symbol AND id = ? AND season = ?;", [id, season], function(err, result2, fields){
+                if(err)
+                {
+                    console.log("transaction : 거래 기록 추출 오류");
+                }
+                else
+                {
+                    client.query("SELECT * FROM myinfo WHERE id = ? AND season = ?;", [id, season], function(err, result3, fields){
+                        if(err)
+                        {
+                            console.log("myinfo : 내 정보 추출 오류");
+                        }
+                        else
+                        {
+                            var gain_sum = 0;
+                            var gain_ratio = 0;
+                            for(var i of result) {
+                                gain_sum += i.gain;
+                            }
+                            gain_ratio = ((((money+gain_sum) - money) * 100) / money).toFixed(2) ;
+                            
+                            client.query("SELECT * FROM (SELECT *, RANK() OVER(ORDER BY balance DESC) AS cal_ranking FROM myinfo where season = ?) AS A WHERE id = ?;", [season, id], function(err, result4, fields){
+                                if(err)
+                                {
+                                    console.log("myinfo : 랭킹 추출 오류");
+                                }
+                                else
+                                {
+                                    res.render("JCinvest_info", {
+                                        results : result,
+                                        results2 : result2,
+                                        results3 : result3,
+                                        gain_sum : gain_sum,
+                                        gain_ratio : gain_ratio,
+                                        results4 : result4,   
+                                        session : session
+                                    })
+                                }
+                            }); 
+
+                        }
+                    })
+                }
+            });
+        }
+    }); 
+});
+
+app.post('/investInfo', function(req, res, next){
+    let id = req.session.passport.user[0].id;
+    
+    client.query("SELECT date_format(time, '%y-%m-%d') AS day FROM transaction WHERE id = ? AND season = ? GROUP BY day;", [id, season], function(err, result, fields){
+        if(err)
+        {
+            console.log("transaction : 일별 추출 오류");
+        } 
+        else 
+        {
+            console.log(JSON.stringify(result));
+
+            res.send(JSON.stringify(result));
+        }
+        /* 
+        if (result.length === 0) {
+            //req.session.provider_id = provider_id;
+            //req.session.email = email;
+            var status = {
+                "status": 'no_search',
+                "message": '찾을 수 없습니다.'
+            }
+            res.send(JSON.stringify(status));  
+        }
+        else 
+        {
+            //req.session.provider_id = provider_id;
+            res.send({results : result});
+        }*/
+    });
+});
+
+app.get('/rank/:page', investIA, isAuthenticated, startInvest, function (req, res){
+    let session = req.session;
+    let page_size = 20; // 한 페이지 당 x개 게시물
+    let page_list_size = 10 // 1 ~ 10개 페이지
+    let no = ""; // limit 변수
+    let type = req.query.type; // T=제목, C=내용, W=작성자, TC=제목+내용
+    let word = req.query.word_search;
+    let T_word; let S_word;
+
+    console.log (type, word);
+    if (type == "T") {  T_word = "%" + word + "%";  S_word = "%%";}
+    else if (type == "S") {  T_word = "%%";  S_word = "%" + word + "%";}
+    else if (type == "ST") {  T_word = "%" + word + "%";  S_word = "%" + word + "%";}
+    else { T_word = "%%";  S_word = "%1%";}
+
+    //console.log (T_word, C_word, W_word)
+    
+    client.query("SELECT COUNT(*) AS cnt FROM (SELECT myinfo.id, myinfo.season, nickname, RANK() OVER(ORDER BY balance DESC) AS cal_ranking FROM myinfo, customer where customer.id = myinfo.id AND myinfo.season LIKE ? AND customer.nickname LIKE ?) AS A;", [S_word, T_word], function(err, result, fields){
+    /*client.query("SELECT COUNT(*) AS cnt FROM (SELECT *, RANK() OVER(ORDER BY balance DESC) AS cal_ranking FROM myinfo where season LIKE ? OR ) AS A;", [season], function(err, result, fields){*/
+    /*client.query("SELECT count(*) AS cnt FROM stockdata JOIN stock WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = stock.symbol AND name LIKE ?;", [T_word], function(err, result, fields){*/
+        if (err)
+        {
+            console.log(err + "myinfo : 랭킹 수 추출 오류");
+        }
+        else
+        {
+            let totalPageCount = result[0].cnt; // 전체 게시물의 숫자
+            let curPage = req.params.page; // 현재 페이지
+
+            if (totalPageCount < 0) { totalPageCount = 0 }
+
+            let totalPage = Math.ceil(totalPageCount / page_size); // 전체 페이지수
+            let totalSet = Math.ceil(totalPage / page_list_size); //전체 세트수
+            let curSet = Math.ceil(curPage / page_list_size) // 현재 세트 번호
+            let startPage = ((curSet - 1) * 10) + 1 // 현재 세트내 출력된 시작 페이지
+            let endPage = (startPage + page_list_size) - 1; // 현재 세트내 출력될 마지막 페이지
+
+            if (curPage < 0) { no = 0 }
+            else { no = (curPage - 1) * 20} // !-- page_size 수정 시 * 뒤의 값 수정 필요 --! 
+
+            //if (curPage > totalSet) { res.redirect(totalSet) }
+            //console.log('[6] startPage : ' + startPage + ' | [7] endPage : ' + endPage)
+
+            let paging = {
+                "curPage": curPage,
+                "page_list_size": page_list_size,
+                "page_size": page_size,
+                "totalPage": totalPage,
+                "totalSet": totalSet,
+                "curSet": curSet,
+                "startPage": startPage,
+                "endPage": endPage,
+                "type": type,
+                "word": word
+            };
+            client.query("SELECT myinfo.id, myinfo.season, smoney, balance, nickname, balance-smoney AS gain, truncate(((balance-smoney)/ smoney)*100, 2) AS ratio, RANK() OVER(ORDER BY balance DESC) AS cal_ranking FROM myinfo, customer where customer.id = myinfo.id AND myinfo.season LIKE ? AND customer.nickname LIKE ? LIMIT 0,10;", [S_word, T_word, no, page_size], function(err, result2, fields){
+            /*client.query("SELECT * from stockdata JOIN stock WHERE date_format(day, '%Y-%m-%d') = curdate() AND stockdata.symbol = stock.symbol AND name LIKE ? ORDER BY aggregate DESC LIMIT ?,?;", [T_word, no, page_size], function(err, result2, fields){*/
+                if (err)
+                {
+                    console.log("myinfo : 랭킹 추출 오류");
+                }
+                else 
+                {
+                    res.render("JCrank", {
+                        results: paging, // 페이징 
+                        results2: result2, // 랭킹 추출
+                        session: session // 세션
+                    });
+
+                }
+            });
+
+        }
+    });
+
+})
 
 /*app.get("/login/kakao", passport.authenticate("login-kakao")); //login-kakao
 
@@ -1161,7 +1756,7 @@ app.get("/login/kakao/oauth", passport.authenticate("login-kakao", { failureRedi
     })
     
 })
-*/
+
 
 const naverKey = {
     clientID: "eGdywUn24jKDHDSMZ_jI",
@@ -1207,24 +1802,7 @@ app.get("/login/naver/oauth", passport.authenticate("login-naver", {
     successRedirect: '/',
     failureRedirect: '/login'
 }))
-
-/*
-function isAuthenticated(req, res, next) {
-    console.log("@@@@@@@@@@@@@@@@@@@@");
-    console.log(req.isAuthenticated())
-    if (req.isAuthenticated()) { 
-        return next();
-    }
-    res.redirect('/login');
-}*/
-
-app.get("/logout", function(req,res,next){
-    req.session.destroy(function(){ 
-        req.session;
-    });
-    res.clearCookie('sid');
-    res.redirect("/")
-})
+*/
 
 
 /*
@@ -1707,51 +2285,6 @@ app.get("/login/kakao/oauth", function(req, res, next) {
 })
 */
 
-
-app.get('/information', function(req, res, next){
-    res.redirect('/information/1');
-})
-
-app.get('/information/:page', function(req, res, next) {
-    let session = req.session;
-    var page = req.params.page;
-
-
-    const sql = "select * from web_stock where date_format(day, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d') order by aggregate DESC;"
-    client.query(sql, function(err, result, fields){
-        res.render("information", {
-            results: result,
-            page: page,
-            length: result.length-1,
-            page_num:20,
-            pass:true,
-            session : session
-        });
-        console.log(result.length-1)
-    })
-
-})
-
-app.post('/information', function(req, res) {
-    var Vname = req.body.stock_name;
-    //console.log('POST Para = ' + Vname);
-    client.query("select symbol from stock where name = ?", [Vname], function(err, result, fieldds){
-        if (err){
-            console.log(err);
-        }
-        else if (result.length == 0){
-            console.log("데이터 없음");
-        }
-        else {
-            var symbol = result[0].symbol;
-            console.log(symbol);
-            res.send({result:symbol});
-        }
-    })
-    //console.log("zz"+Vname);
-    //res.send({result:Vname})
-
-})
 
 app.listen(3000, function(){
     console.log("실행중");
