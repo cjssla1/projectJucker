@@ -26,8 +26,15 @@
                     <% for(var data of results) { %>
                     <form action="/modify/<%= page %>/<%= data.pageid %>" method="post">
                         <div class="in-info">
-                            <input name="name" id="uname" class="in-name input-normal" placeholder="아이디" maxlength="100" required autofocus />
-                            <input type="password" name="pw" id="upw" class="in-pw input-normal" placeholder="비밀번호" required /> 
+                            <% if(session.passport){ %>
+                                <% if(session.passport.user[0].nickname != results[0].author ){ %>
+                                    <input name="name" id="uname" class="in-name input-normal" placeholder="아이디" maxlength="100" required autofocus />
+                                    <input type="password" name="pw" id="upw" class="in-pw input-normal" placeholder="비밀번호" required /> 
+                                <% } %>
+                            <% } else { %>
+                                <input name="name" id="uname" class="in-name input-normal" placeholder="아이디" maxlength="100" required autofocus />
+                                <input type="password" name="pw" id="upw" class="in-pw input-normal" placeholder="비밀번호" required /> 
+                            <% } %>
                             <input name="title" id="utitle" class="in-title input-normal" placeholder="" value="<%= data.title %>" maxlength="100" required />
                         </div>
                         <div class="in-content">
@@ -65,7 +72,7 @@
             </div>
         </div>
     </div>
-	
+	<%- include ("footer") %>
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>

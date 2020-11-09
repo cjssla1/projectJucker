@@ -25,10 +25,15 @@
             <div class="write-contents">
                 <div class="write-section">
                     <form action="/writer" method="post">
-                        <div class="in-info">     
-                            <input name="name" id="uname" class="in-name input-normal" placeholder="아이디" maxlength="100" required autofocus />                          
-                            <input type="password" name="pw" id="upw" class="in-pw input-normal" placeholder="비밀번호" required />                                                
-                            <input name="title" id="utitle" class="in-title input-normal" placeholder="제목을 입력해 주세요." maxlength="100" required />
+                        <div class="in-info">
+                            <% if(session.passport){ %>
+                                <input name="author" id="author" class="in-name input-normal" placeholder="닉네임 : <%= session.passport.user[0].nickname %>" value="<%= session.passport.user[0].nickname %>" maxlength="100" readonly /> 
+                                <input name="title" id="utitle" class="in-title input-normal" placeholder="제목을 입력해 주세요." maxlength="100" required autofocus/>
+                            <% } else { %> 
+                                <input name="name" id="uname" class="in-name input-normal" placeholder="아이디" maxlength="100" required autofocus />                          
+                                <input type="password" name="pw" id="upw" class="in-pw input-normal" placeholder="비밀번호" required />                                                
+                                <input name="title" id="utitle" class="in-title input-normal" placeholder="제목을 입력해 주세요." maxlength="100" required />
+                            <% } %>
                         </div>
                         <div class="in-content">
                             <textarea id="summernote" name="content"></textarea>
