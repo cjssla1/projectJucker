@@ -25,7 +25,11 @@
                     </ul>
                     <ul class="writer-info">
                         <li class="subject"> 작성자 </li>
-                        <li class="writer-text"> <%=data.id %> </li>
+                        <% if(data.id) { %> 
+                            <li class="writer-text"> <%= data.id %> </li>
+                        <% } else { %> 
+                            <li class="writer-text"> <%= data.author %> </li>
+                        <% } %>
                         <li class="subject-two"> 조회수 : </li>
                         <li class="view-text"> <%=data.view %> </li>
                         <li class="subject-two"> 추천 : </li>
@@ -55,31 +59,32 @@
                     <% for(var data of results2) { %>
                     <div id="comment-body-<%= data.reid %>" class="reply-main">
                         <div class="reply-info">
-                            <span class="reply-id"> <%= data.id %> </span>
+                            <% if(data.id) { %>
+                                <span class="reply-id"> <%= data.id %> </span>
+                            <% } else { %> 
+                                <span class="reply-id"> <%= data.author %> </span>
+                            <% } %>
                             <span class="reply-date"> (<%= data.c_time %>) </span>
                             <a id="confirm-<%= data.reid %>" class="reply-func" href="" onclick="rereply(this.id); return false;"> 댓글 </a>
                         </div>
                         <div class="reply-content">
                             <span class="reply-text"> <%= data.content %> </span>
                         </div>
-                        <!--
-                        <b><%= data.id %></b> <a style="color: darkgrey; font-size: 11px;">(<%= data.c_time %>) <a href="" style="font-size: 11px;">삭제</a> <a id="confirm-<%= data.reid %>" href="" onclick="rereply(this.id); return false;" style="font-size: 11px;">댓글</a> </a> 
-                        <blockquote style="margin: 25px 0px;"> <a> <%= data.content %> </a> </blockquote>
-                        -->
                         <% for(var data2 of results3) { %>
                             <% if(data.reid == data2.reid) { %>
                                 <div class="reply-sub2">
                                     <div class="reply-info">
-                                        <span class="reply-id"> <%= data2.id %> </span>
+                                        <% if(data2.id) { %>
+                                            <span class="reply-id"> <%= data2.id %> </span>
+                                        <% } else { %> 
+                                            <span class="reply-id"> <%= data2.author %> </span>
+                                        <% } %>
                                         <span class="reply-date"> (<%= data2.c_time %>) </span>
                                     </div>
                                     <div class="reply-content">
                                         <span class="reply-text"> <%= data2.content %> </span>
                                     </div>
                                 </div>
-                                <!--
-                                <blockquote style="border-top: 1px dashed green; padding: 10px 40px;"> <b> ┗ <%= data2.id %></b> <a style="color: darkgrey; font-size: 11px;">(<%= data2.c_time %>) <a href="" style="font-size: 11px;">삭제</a> </a> <p style="margin: 15px 0px;"><a> <%= data2.content %> </a></p> </blockquote>
-                                -->
                             <% } %>
                         <% } %>             
                         <div id="reply-input-<%= data.reid %>"></div>   
@@ -87,9 +92,13 @@
                     <% } %>
                     <div class="comment-write">
                         <form action="/view/<%= value %>" method="post"> 
-                            <div class="comment-user-form">   
-                                <input type="text" name="dat_user" id="dat_user" class="comment-user-size" size="10" placeholder="아이디" required>   
-                                <input type="password" name="dat_pw" id="dat_pw" class="comment-user-size" size="10" placeholder="비밀번호" required>     
+                            <div class="comment-user-form">
+                                <% if(session.passport){ %>
+                                    <input type="text" name="dat_author" id="dat_author" class="comment-user-size" size="10" placeholder="닉네임" value="<%= session.passport.user[0].nickname %>" required>  
+                                <% } else { %>
+                                    <input type="text" name="dat_user" id="dat_user" class="comment-user-size" size="10" placeholder="아이디" required>   
+                                    <input type="password" name="dat_pw" id="dat_pw" class="comment-user-size" size="10" placeholder="비밀번호" required> 
+                                <% } %>       
                             </div>
                             <div class="comment-write-form">
                                 <textarea name="dat_content" class="comment-write-size" required></textarea>
@@ -135,7 +144,11 @@
 									<% } %>  
                                 </a>
                             </td>
-                            <td class="board-td"> <%= data.id %> </td>
+                            <% if(data.id) { %> 
+                                <td class="board-td"> <%= data.id %> </td>
+                            <% } else { %> 
+                                <td class="board-td"> <%= data.author %> </td>
+                            <% } %>
                             <td class="board-td"> <%= data.time %> </td>
                             <td class="board-td"> <%= data.up %> </td>
                             <td class="board-td"> <%= data.view %> </td>
@@ -201,10 +214,9 @@
                     </ul> 
                 </div>
             </div>
-            <!-- </div> top-banner -->
         </div>
 	</div>
-
+    <%- include ("footer") %>
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
@@ -262,14 +274,17 @@
                 var parent = $("#"+clicked_id).closest(".reply-main").attr("id");
                 var confirm = parent.charAt(parent.length-1);
 
-                //alert(JSON.stringify(parent));
                 if($('#reply-input-'+ confirm).text().length == 0){
                     const str = `                    
                         <div class="comment-write2">
                             <form action="/view/` + idx + `" method="post"> 
                                 <div class="comment-user-form">   
+                                    <% if(session.passport){ %>
+                                    <input type="text" name="dat_author" id="dat_author" class="comment-user-size" size="10" placeholder="닉네임" value="<%= session.passport.user[0].nickname %>" required>  
+                                <% } else { %>
                                     <input type="text" name="dat_user" id="dat_user" class="comment-user-size" size="10" placeholder="아이디" required>   
-                                    <input type="password" name="dat_pw" id="dat_pw" class="comment-user-size" size="10" placeholder="비밀번호" required>     
+                                    <input type="password" name="dat_pw" id="dat_pw" class="comment-user-size" size="10" placeholder="비밀번호" required> 
+                                <% } %>      
                                 </div>
                                 <div class="comment-write-form">
                                     <textarea name="dat_content" class="comment-write-size2" required></textarea>
