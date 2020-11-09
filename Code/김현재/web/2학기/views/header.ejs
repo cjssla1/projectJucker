@@ -1,13 +1,14 @@
 <header>
-    <a class="logo" href="/">
-        <img src ="/../image/jucker-logo.png" style="height:40px;">
-    </a>
+
     <nav>
+        <a class="logo" href="/">
+            <img src ="/../image/JClogo.png" style="height:35px; margin: 5px 0 0 25px;">
+        </a>
         <ul class="clearfix">
             <% if(session.passport){ %>
-                <li class="first"> <a class="nav-style" > <%= session.passport.user[0].nickname %></a> 
+                <li class="first"> <a class="nav-style" tabindex="-1"> <%= session.passport.user[0].nickname %></a> 
                     <ul>
-                        <a class="nav-style" href="/logout"><li>로그아웃</li></a>
+                        <a class="nav-style" href="/logout" tabindex="-1"><li>로그아웃</li></a>
                     </ul>
                     
                 </li>
@@ -27,15 +28,15 @@
             </li>
             <li class="first"> 모의 투자
                 <ul>
-                    <a class="nav-style" href="/deal"><li>거래</li></a>
-                    <a class="nav-style" href="/investInfo"><li>내정보</li></a>
-                    <a class="nav-style" href="/rank/1"><li>랭킹</li></a>
+                    <a class="nav-style" href="/deal" tabindex="-1" ><li>거래</li></a>
+                    <a class="nav-style" href="/investInfo" tabindex="-1" ><li>내정보</li></a>
+                    <a class="nav-style" href="/rank/1" tabindex="-1" ><li>랭킹</li></a>
                 </ul>
             </li>
             <li class="first"> 커뮤니티
                 <ul>
-                    <a class="nav-style" href="/board/1"><li>자유 게시판</li></a>
-                    <a class="nav-style" href="/board/recommend/1"><li>추천 게시판</li></a>
+                    <a class="nav-style" href="/board/1" tabindex="-1" ><li>자유 게시판</li></a>
+                    <a class="nav-style" href="/board/recommend/1" tabindex="-1" ><li>추천 게시판</li></a>
                 </ul>
             </li>
 
