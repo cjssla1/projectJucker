@@ -18,7 +18,7 @@
 /* header - 메뉴 */
 ul li {list-style:none;}
 .clearfix:after{content:'';display:block; clear:both;}
-.logo{position: absolute; left: 15px; top: 3px;}
+.logo{ float: left;}
 header {	
 	background:linear-gradient(white 50px, rgba(255,255,255,0.5) 50px, rgba(255,255,255,0.5) );
     height:50px; 
@@ -27,7 +27,7 @@ header {
     left:0; right:0; top:0;
     z-index: 1;
 }
-nav {width:100%; margin:0 auto; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 17px;}
+nav {width:1394px; margin:0 auto; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 17px;}
 nav > ul > li {float:right; line-height:50px; margin-right:40px; position: relative;}
 nav > ul > li ul{ width:100%;}
 nav > ul > li:hover {color: #ffcc00;}
@@ -44,7 +44,7 @@ a.nav-style:hover { color: #ffcc00;}
 .predicted-price {
     position: relative;
     margin-top: 50px;
-    height: 450px;
+    height: 350px;
     background-image: url(../image/sky_lines_1400x1050.jpg);
     background-position: center;
     background-repeat: no-repeat;
@@ -56,12 +56,12 @@ a.nav-style:hover { color: #ffcc00;}
     position: relative;
     margin: 0 auto;
     width: 1349px;
-    height: 450px;
+    height: 350px;
 }
 
 .graph-area {
     position: relative;
-    top: 150px;
+    top: 100px;
     left: 20px;
     margin-left: 30px;
     padding: 0px 10px;
@@ -118,13 +118,12 @@ a.nav-style:hover { color: #ffcc00;}
 }
 .top-stock-price {
     float: left;
-    position: relative; 
-    top: 20px; 
-    left: 40px; 
+    margin-top: 20px;
+    margin-left: 40px;
     width: 550px; 
     height: 409px; 
 }
-.card { font-size: 12px; }
+div.card { font-size: 12px; border: 1px solid #59909c; border-radius: 5px; }
 div.card-header { padding: 8px 10px; color: white; }
 div.bg-danger { background-color: #014f60!important; }
 div.card-body { padding: 2px 2px; height: 372px;}
@@ -134,9 +133,8 @@ div.card-body { padding: 2px 2px; height: 372px;}
 
 .top-board {
     float: left;
-    position: relative; 
-    top: 20px; 
-    left: 70px; 
+    margin-top: 20px;
+    margin-left: 40px;
     width: 356px; 
     height: 409px; 
 }
@@ -193,6 +191,28 @@ ul.tabs li.current {
 
 .tab-content.current{ display: inherit; }
 
+.main-rank {
+    float: left;
+    margin-top: 50px;
+    margin-left: 40px;
+    width: 946px; 
+    height: 350px; 
+}
+.main-rank > .card > div.card-body { padding: 2px 2px; height: 310px;}
+
+footer { margin: 0 auto; width: 1349px; height: 150px; background-color: #19212e;}
+
+.creator {
+    color: white;
+    font-size: 13px;
+    text-align: center;
+    padding-top: 30px;
+    float: left;
+    margin-top: 30px;
+    margin-left: 120px;
+    width: 300px; height: 100px;
+}
+
 /* board */
 .sub-container { 
     margin: 0 auto; 
@@ -219,9 +239,8 @@ ul.tabs li.current {
     margin-top: 50px;
     width: 800px;
     height: 50px;
-    border: 1px solid #636363;
     border-radius: 0.5em;
-    background: linear-gradient( 45deg, #d64b5a, blueviolet);
+    background: linear-gradient( 45deg, #f05053, #e1eec3);
 }
 
 .top-banner-font{
@@ -368,8 +387,8 @@ ul.tabs li.current {
     margin-top: 1px; 
     margin-left: -1px;
 }
-.sub-text > li:hover { background-color: #CC9998; }
-.sub-text:hover { color: white; text-decoration: black; }
+.sub-text > li:hover { background-color: #cfcfcf; }
+.sub-text:hover { color: black; text-decoration: black; }
 
 .board-section {
     margin: 0 auto;
@@ -673,8 +692,8 @@ ul.tabs li.current {
 }
 
 .delete-pw {
-    background-color: #ffe0e0;
-    border: 2px solid #A16E90;
+    background-color: #19212e;
+    border: 2px solid #f0c688;
     margin: 0 auto;
     margin-top: 100px;
     width: 500px;
@@ -686,6 +705,7 @@ ul.tabs li.current {
 .del-text {
     display: inline-block;
     font-weight: bold;
+    color: #f0c688;
     margin-top: 50px;
     margin-bottom: 20px;
 }
@@ -927,9 +947,10 @@ ul.tabs li.current {
     margin-top: 30px;
     width: 800px;
     height: 110px;
-    border: 1px solid blueviolet;
-    background-color: #2d2b2e;
-    background: linear-gradient(#545454, #2d2b2e);
+    border: 1px solid #42275a;
+    background-color: #040e2c;
+    /*background: linear-gradient(#545454, #2d2b2e);*/
+    /*background: linear-gradient(#040e2c, #734b6d);*/
     border-radius: 15px;
     border-bottom: 0;
 }
@@ -945,9 +966,10 @@ ul.tabs li.current {
     margin-top: 50px;
     width: 800px;
     height: 50px;
-    border: 1px solid #636363;
+    border: 1px solid #040e2c;
     border-radius: 0.5em;
-    background: linear-gradient( 45deg, #373538, blueviolet);
+    /*background: linear-gradient( 45deg, #373538, blueviolet);*/
+    background: linear-gradient( 45deg, #040e2c, #292E49);
 }
 
 .search-select-predict {
@@ -981,8 +1003,8 @@ ul.tabs li.current {
 }
 
 .board-thead-predict {
-    color: white;
-    box-shadow: 0 0 0 2px #8f8f8f;
+    color: #f0c688;
+    box-shadow: 0 0 0 2px #f0c688;
     border-radius: 30px;
 }
 
@@ -1009,7 +1031,7 @@ ul.tabs li.current {
     padding-left: 130px;
     border: 1px solid #8f8f8f;
     margin-bottom: -1px;
-    background-color: #ededed;
+    background-color: #19212e;
     
 }
 
@@ -1031,6 +1053,12 @@ ul.tabs li.current {
 
 .search-form-invest {
     text-align: center;
+}
+
+.invest-section {
+    margin: 0 auto;
+    width: 1024px;
+    height: 650px;
 }
 
 .invest-left {
@@ -1111,6 +1139,12 @@ ul.tabs li.current {
 .btn-buy { background-color: #E12343; color: white; margin-bottom: 20px;}
 .btn-sell { background-color: #1763B6; color: white; margin-bottom: 20px;}
 
+.invest-info-section {
+    margin: 0 auto;
+    width: 1024px;
+    height: 1200px;
+}
+
 .invest-info-left {
     float: left;
     width: 600px;
@@ -1148,9 +1182,10 @@ ul.tabs li.current {
     margin-bottom: 15px;
     width: 550px;
     height: 40px;
-    border: 1px solid #636363;
+
     border-radius: 10px;
-    background: linear-gradient( 45deg, #3d85c6,blueviolet);
+    /*background: linear-gradient( 45deg, #3d85c6,blueviolet);*/
+    background: linear-gradient( 45deg, #403A3E,#BE5869);
 }
 
 .have-banner-font{
@@ -1178,7 +1213,7 @@ ul.tabs li.current {
     height: 40px;
     border: 1px solid #636363;
     border-radius: 10px;
-    background: linear-gradient( 45deg, #3d85c6,blueviolet);
+    background: linear-gradient( 45deg, #403A3E,#BE5869);
 }
 .record thead{float:left; width: 550px;}
 .record tbody {overflow-y: scroll; overflow-x: hidden; height: 350px; width: 550px; float: left; border: 1px solid #8f8f8f;}
@@ -1201,13 +1236,14 @@ ul.tabs li.current {
     padding-left: 60px;
     width: 350px;
     height: 250px;
-    border: 2px solid 8f8f8f;
     border-radius: 20px;
-    background: linear-gradient( 300deg, #4d4d4d,#262626);
+    /*background: linear-gradient( 125deg, #141E30,#243B55);*/
+    /* #040e2c, #020717 */
+    background: linear-gradient( 125deg, #040e2c,#292E49);
     font-size: 13px;
 }
 
-.info-title { display: block; font-weight: 600; width: 70px; height: 20px; float: left; margin-bottom: 15px; color: #ebebeb;}
+.info-title { display: block; font-weight: 600; width: 70px; height: 20px; float: left; margin-bottom: 15px; color: #f0c688;}
 .rank-td { text-align: center; padding-right: 0px;}
 /* --------------------------------------------- */
 
