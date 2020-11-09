@@ -10,13 +10,12 @@
         <div class="sub-container-grey">
             <div class="login-contents">
                 <div class="login-section">
-                    <b class="logo-title">JUCKER</b>
+                    <img src ="/../image/JClogo.png" style="height:70px; margin: 5px 0 15px 0px;">
                     <div class="login">
                         <form action="/login" method="post">
                             <input class="id" type="text" name="userId" placeholder="아이디" required autofocus ><br>
                             <input class="pw" type="password" name="password" size="30" height="50" placeholder="비밀번호" required><br>
                             <a href='' onclick="window.open('/find', '_blank', 'width=600px, height=400px')"> 아이디찾기 </a> 
-                            <a> | </a>
                             <a href='' onclick="window.open('/findkey', '_blank', 'width=600px, height=400px')"> 비밀번호찾기 </a><br> 
                             <button type="submit" class="btn btn-info" type="submit" >로그인 </button>
                         </form>
@@ -25,21 +24,13 @@
                                 <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="250"/>
                             </a>
                             <p id="login-form-result"></p>
-                            <!-- <a href="/login/kakao/oauth" id="kakao-login-btn">
-                                <img src ="../image/kakao_login.png" class="social-img">
-                            </a>-->
-                            <!--
-                            <a href="/login/naver">
-                                <img src ="../image/naver_login.PNG" class="social-img">
-                            </a>
-                            -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-	
+    <%- include ("footer") %>
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
@@ -64,10 +55,6 @@
                 Kakao.API.request({
                     url: '/v2/user/me',
                     success: function(res) {
-                        //alert(JSON.stringify(res)); //<---- kakao.api.request 에서 불러온 결과값 json형태로 출력
-                        //alert(JSON.stringify(authObj)); //<----Kakao.Auth.createLoginButton에서 불러온 결과값 json형태로 출력
-                        //console.log(res.id);//<---- 콘솔 로그에 id 정보 출력(id는 res안에 있기 때문에  res.id 로 불러온다)
-                        //console.log(res.kakao_account.email);//<---- 콘솔 로그에 email 정보 출력 (어딨는지 알겠죠?)
                         $.ajax({
 							url: '/oauth',
 							dataType: 'json',
@@ -83,9 +70,6 @@
                                 else if(data.status == 'Not_exist_info') { window.location.replace("../signup"); }
                             }
 						})
-                        //console.log(res.properties['nickname']);//<---- 콘솔 로그에 닉네임 출력(properties에 있는 nickname 접근 
-                    // res.properties.nickname으로도 접근 가능 )
-                        //console.log(authObj.access_token);//<---- 콘솔 로그에 토큰값 출력
                     }
                 })
             },
