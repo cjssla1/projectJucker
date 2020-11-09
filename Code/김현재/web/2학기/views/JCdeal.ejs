@@ -17,82 +17,79 @@
                     </ul>
                 </div>
             </div>
-            <div class="invest-left">
-                <div class="invest-search-section">
-                    <!-- <form action="/predict/1" method="GET" class="search-form-invest"> -->
+            <div class="invest-section">
+                <div class="invest-left">
+                    <div class="invest-search-section">
                         <select name="type" class="search-select-predict">
                             <option value="T"> 종목명 </option>
                         </select>
                         <input type="search" class="search-input-predict" name="word_search">
-                        <img src="/../image/search.png" height="30px">
-                    <!-- </form> -->
-                </div>
-                <div class="invest-contents">
-                    <table class="board-table-invest table-striped table-hover invest">
-                        <thead class="board-thead-invest">
-                            <tr>
-                                <th class="board-th" width="176px">종목명</th>
-                                <th class="board-th" width="68px">등락률</th>
-                                <th class="board-th" width="67px">현재가</th>
-                                <th class="board-th" width="67px">시가</th>
-                                <th class="board-th" width="68px">고가</th>
-                                <th class="board-th" width="68px">저가</th>
-                                <th class="board-th" width="86px">거래량</th>
-                            </tr>
-                        </thead>
-                        <tbody class="board-tbody">
-                            <% for(var data of results) { %>
-                                <tr class="board-tr">
-                                    <td class="board-td" width="173px"> <%= data.name %> </td>
-                                    <% if(data.camount >= 0) { %>
-                                        <td class="board-td-p price-up" width="65px"> +<%= data.camount %>% </td>
-                                    <% } else { %>
-                                        <td class="board-td-p price-down" width="64px"> <%= data.camount %>% </td> 
-                                    <% } %>
-                                    <td class="board-td-p" width="64px"> <%= data.end %> </td>
-                                    <td class="board-td-p" width="64px"> <%= data.start %> </td>
-                                    <td class="board-td-p" width="65px"> <%= data.high %> </td>
-                                    <td class="board-td-p" width="65px"> <%= data.low %> </td>
-                                    <td class="board-td-p" width="83px"> <%= data.tran %> </td>
-                                </tr>
-                                <% } %>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="invest-right">
-                <div class="tab_wrap">
-                    <div class="tab_menu_container">
-                        <button class="tab_menu_btn tab_buy on " type="button">매수</button>
-                        <button class="tab_menu_btn tab_sell" type="button">매도</button>
                     </div>
-                    <div class="tab_box_container">
-                        <div class="tab_box on">
-                            <span class="deal-title"> 종목 </span><input  class="deal-value deal-input i-name" value="<%= results[0].name %>" readonly><br>
-                            <span class="deal-title"> 보유주 </span><span class="deal-value i-have"> <%= results2[0].num %> </span><br>
-                            <span class="deal-title under-line"> 보유금액 </span><span class="deal-value under-line i-balance"> <%= results2[0].balance %> 원</span><br>
-                            <span class="deal-title"> 주문단가 </span><input  class="deal-value deal-input i-end" value="<%= results[0].end %>" readonly><br>
-                            <span class="deal-title"> 주문수량 </span><input  class="deal-value deal-input i-num" value="0" ><br>
-                            <span class="deal-title"> 주문금액 </span><span class="deal-value i-total">0</span><br>
-                            <button id="buy-btn" class="deal-submit btn-buy" type="button">매수</button>
+                    <div class="invest-contents">
+                        <table class="board-table-invest table-striped table-hover invest">
+                            <thead class="board-thead-invest">
+                                <tr>
+                                    <th class="board-th" width="176px">종목명</th>
+                                    <th class="board-th" width="68px">등락률</th>
+                                    <th class="board-th" width="67px">현재가</th>
+                                    <th class="board-th" width="67px">시가</th>
+                                    <th class="board-th" width="68px">고가</th>
+                                    <th class="board-th" width="68px">저가</th>
+                                    <th class="board-th" width="86px">거래량</th>
+                                </tr>
+                            </thead>
+                            <tbody class="board-tbody">
+                                <% for(var data of results) { %>
+                                    <tr class="board-tr">
+                                        <td class="board-td" width="173px"> <%= data.name %> </td>
+                                        <% if(data.camount >= 0) { %>
+                                            <td class="board-td-p price-up" width="65px"> +<%= data.camount %>% </td>
+                                        <% } else { %>
+                                            <td class="board-td-p price-down" width="64px"> <%= data.camount %>% </td> 
+                                        <% } %>
+                                        <td class="board-td-p" width="64px"> <%= data.end %> </td>
+                                        <td class="board-td-p" width="64px"> <%= data.start %> </td>
+                                        <td class="board-td-p" width="65px"> <%= data.high %> </td>
+                                        <td class="board-td-p" width="65px"> <%= data.low %> </td>
+                                        <td class="board-td-p" width="83px"> <%= data.tran %> </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="invest-right">
+                    <div class="tab_wrap">
+                        <div class="tab_menu_container">
+                            <button class="tab_menu_btn tab_buy on " type="button">매수</button>
+                            <button class="tab_menu_btn tab_sell" type="button">매도</button>
                         </div>
-                        <div class="tab_box">
-                            <span class="deal-title"> 종목 </span><input  class="deal-value deal-input i-name" value="<%= results[0].name %>" readonly><br>
-                            <span class="deal-title"> 보유주 </span><span class="deal-value i-have"> <%= results2[0].num %> </span><br>
-                            <span class="deal-title under-line"> 보유금액 </span><span class="deal-value under-line i-balance"> <%= results2[0].balance %> 원</span><br>
-                            <span class="deal-title"> 주문단가 </span><input  class="deal-value deal-input i-end" value="<%= results[0].end %>" readonly><br>
-                            <span class="deal-title"> 주문수량 </span><input  class="deal-value deal-input i-num" value="0" ><br>
-                            <span class="deal-title"> 주문금액 </span><span  class="deal-value i-total">0</span><br>
-                            <button id="sell-btn" class="deal-submit btn-sell" type="button">매도</button>
-                        </div>
+                        <div class="tab_box_container">
+                            <div class="tab_box on">
+                                <span class="deal-title"> 종목 </span><input  class="deal-value deal-input i-name" value="<%= results[0].name %>" readonly><br>
+                                <span class="deal-title"> 보유주 </span><span class="deal-value i-have"> <%= results2[0].num %> </span><br>
+                                <span class="deal-title under-line"> 보유금액 </span><span class="deal-value under-line i-balance"> <%= results2[0].balance %> 원</span><br>
+                                <span class="deal-title"> 주문단가 </span><input  class="deal-value deal-input i-end" value="<%= results[0].end %>" readonly><br>
+                                <span class="deal-title"> 주문수량 </span><input  class="deal-value deal-input i-num" value="0" ><br>
+                                <span class="deal-title"> 주문금액 </span><span class="deal-value i-total">0</span><br>
+                                <button id="buy-btn" class="deal-submit btn-buy" type="button">매수</button>
+                            </div>
+                            <div class="tab_box">
+                                <span class="deal-title"> 종목 </span><input  class="deal-value deal-input i-name" value="<%= results[0].name %>" readonly><br>
+                                <span class="deal-title"> 보유주 </span><span class="deal-value i-have"> <%= results2[0].num %> </span><br>
+                                <span class="deal-title under-line"> 보유금액 </span><span class="deal-value under-line i-balance"> <%= results2[0].balance %> 원</span><br>
+                                <span class="deal-title"> 주문단가 </span><input  class="deal-value deal-input i-end" value="<%= results[0].end %>" readonly><br>
+                                <span class="deal-title"> 주문수량 </span><input  class="deal-value deal-input i-num" value="0" ><br>
+                                <span class="deal-title"> 주문금액 </span><span  class="deal-value i-total">0</span><br>
+                                <button id="sell-btn" class="deal-submit btn-sell" type="button">매도</button>
+                            </div>
+                        </div> 
                     </div> 
-                </div> 
+                </div>
             </div>
-
-            <!-- </div> top-banner -->
         </div>
 	</div>
-
+    <%- include ("footer") %>
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
@@ -112,16 +109,14 @@
     <script>
         $(function(){
             $('.tab_menu_btn').on('click',function(){
-            //버튼 색 제거,추가
-            $('.tab_menu_btn').removeClass('on');
-            $(this).addClass('on')
+                $('.tab_menu_btn').removeClass('on');
+                $(this).addClass('on')
             
-            //컨텐츠 제거 후 인덱스에 맞는 컨텐츠 노출
-            var idx = $('.tab_menu_btn').index(this);
-            $('.tab_box').hide();
-            $('.tab_box').eq(idx).show();
-            $('.tab_box').removeClass('on');
-            $('.tab_box').eq(idx).addClass('on')
+                var idx = $('.tab_menu_btn').index(this);
+                $('.tab_box').hide();
+                $('.tab_box').eq(idx).show();
+                $('.tab_box').removeClass('on');
+                $('.tab_box').eq(idx).addClass('on')
             });
         });
     </script>

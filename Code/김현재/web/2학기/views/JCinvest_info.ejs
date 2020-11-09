@@ -17,101 +17,96 @@
                     </ul>
                 </div>
             </div>
-            <div class="invest-info-left">
-                <div class="have-section">
-                    <div class="have-banner">
-                        <span class="have-banner-font"> 보유주 </span>
-                    </div>
-                    <table class="board-table-have table-striped table-hover ihave">
-                        <thead class="board-thead-invest">
-                            <tr>
-                                <th class="board-th" width="180px">종목명</th>
-                                <th class="board-th" width="80px">현재가</th>
-                                <th class="board-th" width="80px">평단가</th>
-                                <th class="board-th" width="70px">보유주</th>
-                                <th class="board-th" width="140px">손익</th>
-                            </tr>
-                        </thead>
-                        <tbody class="board-tbody">  
-                            <% for(var data of results) { %>
-                                <% if(data.num != 0) { %>  
-                                    <tr class="board-tr">
-                                        <td class="board-td" width="180px"> <%= data.name %> </td>
-                                        <td class="board-td-p" width="80px"> <%= data.end %> </td>
-                                        <td class="board-td-p" width="80px"> <%= data.share %> </td>
-                                        <td class="board-td-p" width="70px"> <%= data.num %> </td>
-                                        <% if(data.gain >= 0) { %>
-                                            <td class="board-td-p2 price-up" width="140px"> <%= data.gain %> 원 <br>+<%= data.ratio %>% </td>
-                                        <% } else { %>
-                                            <td class="board-td-p2 price-down" width="140px"> <%= data.gain %> 원 <br><%= data.ratio %>% </td>
-                                        <% } %>
-                                    </tr>
+            <div class="invest-info-section">
+                <div class="invest-info-left">
+                    <div class="have-section">
+                        <div class="have-banner">
+                            <span class="have-banner-font"> 보유주 </span>
+                        </div>
+                        <table class="board-table-have table-striped table-hover ihave">
+                            <thead class="board-thead-invest">
+                                <tr>
+                                    <th class="board-th" width="180px">종목</th>
+                                    <th class="board-th" width="80px">현재가</th>
+                                    <th class="board-th" width="80px">평단가</th>
+                                    <th class="board-th" width="70px">보유주</th>
+                                    <th class="board-th" width="140px">손익</th>
+                                </tr>
+                            </thead>
+                            <tbody class="board-tbody">  
+                                <% for(var data of results) { %>
+                                    <% if(data.num != 0) { %>  
+                                        <tr class="board-tr">
+                                            <td class="board-td" width="180px"> <%= data.name %> </td>
+                                            <td class="board-td-p" width="80px"> <%= data.end %> </td>
+                                            <td class="board-td-p" width="80px"> <%= data.share %> </td>
+                                            <td class="board-td-p" width="70px"> <%= data.num %> </td>
+                                            <% if(data.gain >= 0) { %>
+                                                <td class="board-td-p2 price-up" width="140px"> <%= data.gain %> 원 <br>+<%= data.ratio %>% </td>
+                                            <% } else { %>
+                                                <td class="board-td-p2 price-down" width="140px"> <%= data.gain %> 원 <br><%= data.ratio %>% </td>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
                                 <% } %>
-                            <% } %>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="record-section">
-                    <div class="record-banner">
-                        <span class="have-banner-font"> 거래 기록 </span>
+                            </tbody>
+                        </table>
                     </div>
-                    <table class="board-table-have table-striped table-hover record">
-                        <thead class="board-thead-invest">
-                            <tr>
-                                <th class="board-th" width="170px">종목명</th>
-                                <th class="board-th" width="75px">가격</th>
-                                <th class="board-th" width="60px">수량</th>
-                                <th class="board-th" width="75px">총액</th>
-                                <th class="board-th" width="115px">날짜</th>
-                                <th class="board-th" width="45px">구분</th>
-                            </tr>
-                        </thead>
-                        <tbody class="board-tbody">  
-                            <% for(var data of results2) { %>
-                            <tr class="board-tr">
-                                <td class="board-td" width="170px"> <%= data.name %> </td>
-                                <td class="board-td-p" width="75px"> <%= data.share %> </td>
-                                <td class="board-td-p" width="60px"> <%= data.num %> </td>
-                                <td class="board-td-p" width="75px"> <%= data.total %> </td>
-                                <td class="board-td-p3" width="130px"> <%= data.day %> </td>
-                                <% if(data.type == "B") { %>
-                                    <td class="board-td-p price-up" width="30px"> <%= data.type %> </td>
-                                <% } else { %>
-                                    <td class="board-td-p price-down" width="30px"> <%= data.type %> </td>
-                                <% } %>    
-                            </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+                    <div class="record-section">
+                        <div class="record-banner">
+                            <span class="have-banner-font"> 거래 기록 </span>
+                        </div>
+                        <table class="board-table-have table-striped table-hover record">
+                            <thead class="board-thead-invest">
+                                <tr>
+                                    <th class="board-th" width="170px">종목명</th>
+                                    <th class="board-th" width="75px">가격</th>
+                                    <th class="board-th" width="60px">수량</th>
+                                    <th class="board-th" width="75px">총액</th>
+                                    <th class="board-th" width="115px">날짜</th>
+                                    <th class="board-th" width="45px">구분</th>
+                                </tr>
+                            </thead>
+                            <tbody class="board-tbody">  
+                                <% for(var data of results2) { %>
+                                <tr class="board-tr">
+                                    <td class="board-td" width="170px"> <%= data.name %> </td>
+                                    <td class="board-td-p" width="75px"> <%= data.share %> </td>
+                                    <td class="board-td-p" width="60px"> <%= data.num %> </td>
+                                    <td class="board-td-p" width="75px"> <%= data.total %> </td>
+                                    <td class="board-td-p3" width="130px"> <%= data.day %> </td>
+                                    <% if(data.type == "B") { %>
+                                        <td class="board-td-p price-up" width="30px"> <%= data.type %> </td>
+                                    <% } else { %>
+                                        <td class="board-td-p price-down" width="30px"> <%= data.type %> </td>
+                                    <% } %>    
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="invest-info-right">
+                    <div class="myinfo">
+                        <span class="info-title"> 시즌 </span><input  class="deal-value deal-input i-name" value="<%= results3[0].season %>" readonly><br>
+                        <span class="info-title"> 예수금 </span><input  class="deal-value deal-input i-name" value="<%= results3[0].balance %> 원" readonly><br>
+                        <% if(gain_sum >= 0) { %> 
+                            <span class="info-title"> 평가손익 </span><input  class="deal-value deal-input i-name price-up" value="<%= gain_sum %> 원" readonly><br>
+                        <% } else { %>
+                            <span class="info-title"> 평가손익 </span><input  class="deal-value deal-input i-name price-down" value="<%= gain_sum %> 원" readonly><br>
+                        <% } %>
+                        <% if(gain_ratio >= 0) { %> 
+                            <span class="info-title"> 손익률 </span><input  class="deal-value deal-input i-end price-up" value="<%= gain_ratio %> %" readonly><br>
+                        <% } else { %> 
+                            <span class="info-title"> 손익률 </span><input  class="deal-value deal-input i-end price-down" value="<%= gain_ratio %> %" readonly><br>
+                        <% } %>
+                        <span class="info-title"> 랭킹 </span><input  class="deal-value deal-input i-num" value="<%= results4[0].cal_ranking %>" reaonly><br>
+                    </div>
                 </div>
             </div>
-            <div class="invest-info-right">
-                <div class="myinfo">
-                    <span class="info-title"> 시즌 </span><input  class="deal-value deal-input i-name" value="<%= results3[0].season %>" readonly><br>
-                    <span class="info-title"> 예수금 </span><input  class="deal-value deal-input i-name" value="<%= results3[0].balance %> 원" readonly><br>
-                    <% if(gain_sum >= 0) { %> 
-                        <span class="info-title"> 평가손익 </span><input  class="deal-value deal-input i-name price-up" value="<%= gain_sum %> 원" readonly><br>
-                    <% } else { %>
-                        <span class="info-title"> 평가손익 </span><input  class="deal-value deal-input i-name price-down" value="<%= gain_sum %> 원" readonly><br>
-                    <% } %>
-                    <% if(gain_ratio >= 0) { %> 
-                        <span class="info-title"> 손익률 </span><input  class="deal-value deal-input i-end price-up" value="<%= gain_ratio %> %" readonly><br>
-                    <% } else { %> 
-                        <span class="info-title"> 손익률 </span><input  class="deal-value deal-input i-end price-down" value="<%= gain_ratio %> %" readonly><br>
-                    <% } %>
-                    <span class="info-title"> 랭킹 </span><input  class="deal-value deal-input i-num" value="<%= results4[0].cal_ranking %>" reaonly><br>
-                </div>
-                <!--
-                <div class="profit-loss-graph">
-                    <div id="curve_chart" style="width: 400px; height: 300px"></div>
-                </div>
-                -->
-            </div>
-
-            <!-- </div> top-banner -->
         </div>
 	</div>
-
+    <%- include ("footer") %>
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
@@ -128,47 +123,5 @@
 
 		});
     </script>
-    <!--
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        $(function(){ 
-            $.ajax({
-                url: '/investInfo',
-                dataType: 'json',
-                type: 'POST',
-                traditional : true,
-                success: function(data) {
-                    if(data){
-                        google.charts.load('current', {'packages':['corechart']});
-                        google.charts.setOnLoadCallback(drawChart);
-
-                        function drawChart() {
-                        var data = google.visualization.arrayToDataTable([
-                        ['Year', 'Sales', 'Expenses'],
-                        ['2004',  -100,      400],
-                        ['2005',  1170,      460],
-                        ['2006',  660,       1120],
-                        ['2007',  1030,      540]
-                        ]);
-
-                        var options = {
-                        /*title: 'Company Performance',*/
-                        curveType: 'function',
-                        legend: { position: 'bottom' }
-                        };
-
-                        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-                        chart.draw(data, options);
-                    }
-                    }
-                }
-            })
-
-
-        })
-
-    </script>
-    -->
 </body>
 </html>
