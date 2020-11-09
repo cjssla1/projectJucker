@@ -29,13 +29,13 @@
     <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
 	<script>
 		$(function() {
-			$('ul.tabs li').click(function(){							//선택자를 통해 tabs 메뉴를 클릭 이벤트를 지정해줍니다.
+			$('ul.tabs li').click(function(){					
 				var tab_id = $(this).attr('data-tab');
 
-				$('ul.tabs li').removeClass('current');			//선택 되있던 탭의 current css를 제거하고 
+				$('ul.tabs li').removeClass('current');			
 				$('.tab-content').removeClass('current');		
 
-				$(this).addClass('current');								////선택된 탭에 current class를 삽입해줍니다.
+				$(this).addClass('current');							
 				$("#" + tab_id).addClass('current');
 			})
 		})
@@ -55,7 +55,6 @@
                         var data = data;
                         console.log(data);
                         if(data.status == 'Not_change_info'){
-                            //window.location.replace("../login");
                             alert(data.message);
                         }
                         else if(data.status == 'change_info') { alert(data.message); window.open('', '_self').close(); }
